@@ -73,6 +73,21 @@ Nếu bạn quản lý nhiều thiết bị hoặc muốn tunnel chạy ổn đ�
 ---
 
 ## 🛠️ 4. Tệp cấu hình cục bộ sẵn sàng trong dự án
-- [cloudflared-config.yml](file:///d:/AuraTech_Website/cloudflared-config.yml): Tệp cấu hình Ingress Rules mẫu cho domain `quannguyens.id.vn`.
-- [chay-web-tunnel.bat](file:///d:/AuraTech_Website/chay-web-tunnel.bat): File thực thi 1-click trên Windows.
-- [chay-web-tunnel.ps1](file:///d:/AuraTech_Website/chay-web-tunnel.ps1): Script PowerShell xử lý kiểm tra port máy chủ local và quản trị tunnel.
+- [cloudflared-config.yml](file:///d:/AuraTech_Website/cloudflared-config.yml): Tệp cấu hình Ingress Rules cho domain `quannguyens.id.vn`.
+- [chay-web-tunnel.bat](file:///d:/AuraTech_Website/chay-web-tunnel.bat): File thực thi 1-click trên Windows (có cửa sổ điều khiển).
+- [khoi-dong-ngam.vbs](file:///d:/AuraTech_Website/khoi-dong-ngam.vbs): Khởi động Node.js & Tunnel chạy ngầm ẩn hoàn toàn (không hiện cửa sổ đen).
+- [cai-dat-tu-khoi-dong-cung-windows.bat](file:///d:/AuraTech_Website/cai-dat-tu-khoi-dong-cung-windows.bat): Thiết lập tự khởi động website cùng Windows.
+- [dung-web-tunnel.bat](file:///d:/AuraTech_Website/dung-web-tunnel.bat): Dừng an toàn website và tunnel khi không sử dụng.
+- [kiem-tra-trang-thai.bat](file:///d:/AuraTech_Website/kiem-tra-trang-thai.bat): Kiểm tra nhanh trạng thái máy chủ, tunnel và mã HTTP.
+
+---
+
+## ⚠️ 5. Xử lý sự cố: Error 1033 (Cloudflare Tunnel error)
+- **Hiện tượng:** Truy cập `https://quannguyens.id.vn` hiển thị "Error 1033 - Cloudflare Tunnel error".
+- **Nguyên nhân:** Cloudflare không tìm thấy tiến trình `cloudflared tunnel run auratech` đang kết nối từ máy tính của bạn (do bạn tắt cửa sổ lệnh, máy tính Sleep/Tắt nguồn hoặc chưa bật).
+- **Cách khắc phục nhanh:**
+  1. Nhấp đúp chuột vào file [chay-web-tunnel.bat](file:///d:/AuraTech_Website/chay-web-tunnel.bat) (hoặc [khoi-dong-ngam.vbs](file:///d:/AuraTech_Website/khoi-dong-ngam.vbs)).
+  2. Chờ 3-5 giây và tải lại trang `https://quannguyens.id.vn`.
+- **Khắc phục vĩnh viễn (Khuyên dùng):**
+  - Chạy file [cai-dat-tu-khoi-dong-cung-windows.bat](file:///d:/AuraTech_Website/cai-dat-tu-khoi-dong-cung-windows.bat) để Windows luôn tự bật website khi mở máy.
+  - HOẶC triển khai trực tiếp thư mục `Website_Source` lên **Cloudflare Pages** để website chạy 24/7 trên Cloud không cần bật máy tính.
