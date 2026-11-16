@@ -1,9 +1,10 @@
 # Cloudflare Tunnel Configuration cho AuraTech / QNSTech Website
+# Tunnel: auratech
 # Domain: quannguyens.id.vn
 # Local Service: http://localhost:3000
 
-tunnel: auratech
-credentials-file: C:\Users\ASUS\.cloudflared\auratech.json
+tunnel: 96cf5861-3d07-4ea4-a866-1f133a8a9fe9
+credentials-file: C:\Users\ASUS\.cloudflared\96cf5861-3d07-4ea4-a866-1f133a8a9fe9.json
 
 ingress:
   - hostname: quannguyens.id.vn

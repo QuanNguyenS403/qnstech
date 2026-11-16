@@ -35,7 +35,8 @@ Write-Host "  [3] Dang nhap Cloudflare (`cloudflared tunnel login`) va khoi tao 
 Write-Host "  [4] Thoat" -ForegroundColor Gray
 Write-Host "==========================================================================" -ForegroundColor White
 
-$choice = Read-Host "Nhap lua chon cua ban (1-4)"
+$choice = Read-Host "Nhap lua chon cua ban [Mac dinh: 1]"
+if ([string]::IsNullOrWhiteSpace($choice)) { $choice = "1" }
 
 switch ($choice) {
     "1" {
