@@ -138,3 +138,26 @@ Ngay sau mục Bento Grid, trang chủ được trang bị khu vực dòng thờ
 | **8** | **Tài khoản (Auth)** | `auth.html` | Chuyển đổi tab Đăng nhập / Đăng ký mượt mà, Lưu phiên tài khoản hiển thị trực tiếp lên thanh điều hướng |
 | **9** | **Giỏ hàng (Cart)** | `cart.html` | Tăng giảm số lượng, Xóa món hàng, Nhập mã giảm giá 10% (`AURATECH10`, `NEU2026`), Form đặt hàng & Thông báo thành công |
 | **10** | **Tuyển dụng (Careers)** | `careers.html` | Danh sách cơ hội việc làm R&D, Phúc lợi ESOP & Bảo hiểm, Biểu mẫu nộp hồ sơ ứng tuyển trực tuyến |
+
+---
+
+## 5. Hướng dẫn Cấu hình & Triển khai Domain quannguyens.id.vn
+
+### 🌐 1. Các file cấu hình hệ thống đã sẵn sàng trong dự án:
+- **`Website_Source/CNAME`**: Tự động gán domain `quannguyens.id.vn` khi deploy lên GitHub Pages / Cloudflare Pages.
+- **`Website_Source/robots.txt`**: Khai báo công cụ tìm kiếm Googlebot và liên kết sitemap.
+- **`Website_Source/sitemap.xml`**: Cấu trúc 10 trang chuẩn SEO cho domain `https://quannguyens.id.vn/`.
+- **`vercel.json`**: Cấu hình triển khai 1-click không cần build trên nền tảng Vercel Edge Network.
+- **`server.js`**: Hỗ trợ chạy Node.js lắng nghe cổng và liên kết domain tự động.
+
+### 🚀 2. Các phương án trỏ tên miền thực tế:
+1. **Phương án A: Vercel / Cloudflare Pages (Miễn phí, Tốc độ cao nhất, Tự động SSL HTTPS)**:
+   - Đẩy mã nguồn lên kho chứa GitHub `QuanNguyenS403/auratech-website` (sử dụng lệnh `gh repo create`).
+   - Đăng nhập Vercel/Cloudflare Pages, import repo và gán Custom Domain `quannguyens.id.vn`.
+   - Vào trang quản trị tên miền tại PA Việt Nam (hoặc dotvndns.vn), cập nhật bản ghi:
+     - Loại `A`: `@` trỏ về IP của Vercel `76.76.21.21` (hoặc CNAME theo hướng dẫn).
+     - Loại `CNAME`: `www` trỏ về `cname.vercel-dns.com`.
+2. **Phương án B: Hosting cPanel / FTP tại PA Việt Nam**:
+   - Nếu bạn có sẵn hosting đi kèm tên miền tại PA Việt Nam, chỉ cần tải toàn bộ nội dung trong thư mục `Website_Source/` lên thư mục gốc `public_html/`.
+3. **Phương án C: Cloudflare Tunnel từ máy tính nội bộ**:
+   - Chạy lệnh `cloudflared tunnel run` để ánh xạ trực tiếp từ `localhost:3000` ra internet với tên miền `quannguyens.id.vn`.
