@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Cơ hội nghề nghiệp và tuyển dụng nhân tài tại QNSTech Vietnam - Môi trường R&D công nghệ âm thanh & smart living hàng đầu.">
+  <title>Tuyển dụng Nhân tài (Careers Page) | Cơ hội Nghề nghiệp tại QNSTech</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="canonical" href="https://quannguyens.id.vn/careers.html">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://quannguyens.id.vn/careers.html">
+  <meta property="og:site_name" content="QNSTech Vietnam">
+  <meta property="og:title" content="Tuyển dụng Nhân tài | Cơ hội Nghề nghiệp tại QNSTech">
+  <meta property="og:description" content="Cơ hội nghề nghiệp và tuyển dụng nhân tài tại QNSTech Vietnam.">
+  <meta property="og:image" content="https://quannguyens.id.vn/assets/images/hero-showcase.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://quannguyens.id.vn/careers.html">
+  <meta name="twitter:title" content="Tuyển dụng Nhân tài | QNSTech Vietnam">
+  <meta name="twitter:description" content="Cơ hội nghề nghiệp và tuyển dụng nhân tài tại QNSTech Vietnam.">
+  <meta name="twitter:image" content="https://quannguyens.id.vn/assets/images/hero-showcase.jpg">
+  <!-- External Stylesheet dùng chung cho toàn bộ 10 trang (Yêu cầu II.6) -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- GSAP & Lenis Smooth Motion Engine (Local Offline Bundle) -->
+  <script src="assets/js/libs/gsap.min.js"></script>
+  <script src="assets/js/libs/ScrollTrigger.min.js"></script>
+  <script src="assets/js/libs/lenis.min.js"></script>
+  <!-- Internal Stylesheet đặc thù cho từng trang trong trường hợp đặc biệt (Yêu cầu II.6) -->
+  <style>
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 900px) {
+      .process-steps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .process-steps {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="main-header-wrapper" class="header-wrapper">
+    <!-- Top Announcement Bar (Minimalist Luxury) -->
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <div class="topbar-promo">
+          <span class="topbar-badge">KEYNOTE 2026</span>
+          <span>Hệ sinh thái Âm thanh Không gian &amp; Chuẩn Matter 2.0 chính thức ra mắt.</span>
+          <a href="index.html#keynote-section"
+            style="color:var(--accent-cyan); font-weight:700; margin-left:0.35rem;">Khám phá ngay →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Consistent Sticky Navigation Bar -->
+    <header class="site-header">
+      <div class="container nav-container">
+        <a href="index.html" class="brand-logo" aria-label="QNSTech Trang chủ">
+          <!-- Logo sử dụng ảnh SVG chuẩn -->
+          <img src="assets/images/logo.svg" alt="QNSTech SVG Logo">
+        </a>
+
+        <nav aria-label="Điều hướng chính">
+          <ul class="nav-menu js-nav-menu">
+            <li><a href="index.html" class="nav-link">Trang chủ</a></li>
+            <li><a href="products.html" class="nav-link ">Sản phẩm</a></li>
+            <li><a href="index.html#timeline-section" class="nav-link">Hành trình</a></li>
+            <li><a href="index.html#spatial-studio-section" class="nav-link">Spatial Lab</a></li>
+            <li><a href="contact.html" class="nav-link ">Liên hệ</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-actions">
+          <!-- Quick Command Palette Button (Ctrl+K text removed) -->
+          <button type="button" class="icon-btn js-cmd-toggle" title="Tìm kiếm nhanh">
+            <span>🔍</span>
+          </button>
+
+          <!-- Interactive Web Audio SFX Toggle -->
+          <button type="button" class="icon-btn js-sound-toggle" title="Bật/Tắt âm thanh tương tác UI">
+            <span class="js-sound-icon">🔊</span>
+          </button>
+
+          <a href="auth.html" class="icon-btn " title="Đăng nhập / Đăng ký">
+            <span>👤</span>
+            <span class="js-auth-label">Tài khoản</span>
+          </a>
+          <a href="cart.html" class="icon-btn " title="Giỏ hàng của bạn">
+            <span>🛒</span>
+            <span>Giỏ hàng</span>
+            <span class="cart-badge js-cart-count">2</span>
+          </a>
+          <button type="button" class="mobile-toggle js-mobile-toggle" aria-label="Mở menu trên di động">
+            ☰
+          </button>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+
+    <section class="page-banner">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Trang chủ</a> <span>/</span> <span>Tuyển dụng (Careers Page)</span>
+        </div>
+        <span class="kicker">Careers at AuraTech</span>
+        <h1 class="section-title">Gia nhập Đội ngũ Kiến tạo Tương lai Công nghệ Bán lẻ Số</h1>
+        <p class="section-desc">Cung cấp thông tin chi tiết về các cơ hội việc làm hiện có, chính sách phúc lợi nhân sự,
+          quy trình tuyển dụng 4 bước và biểu mẫu nộp hồ sơ trực tuyến.</p>
+      </div>
+    </section>
+
+    <!-- HR Policy & Perks -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header center">
+          <span class="kicker">Why Join Us</span>
+          <h2 class="section-title">Chính sách Nhân sự &amp; Đãi ngộ Toàn diện</h2>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div style="font-size:1.8rem; margin-bottom:0.6rem;">💰</div>
+            <h3 style="font-size:1.18rem; margin-bottom:0.45rem;">Thu nhập Cạnh tranh &amp; ESOP</h3>
+            <p style="font-size:0.9rem; color:var(--text-secondary);">Lương tháng 13, thưởng hiệu suất 2 đợt/năm và
+              quyền mua cổ phiếu ưu đãi (ESOP) cho nhân sự gắn bó.</p>
+          </div>
+          <div class="card">
+            <div style="font-size:1.8rem; margin-bottom:0.6rem;">🏥</div>
+            <h3 style="font-size:1.18rem; margin-bottom:0.45rem;">Bảo hiểm Sức khỏe Cao cấp</h3>
+            <p style="font-size:0.9rem; color:var(--text-secondary);">Gói bảo hiểm sức khỏe toàn diện PVI Care cho nhân
+              viên và người thân, khám sức khỏe tổng quát định kỳ.</p>
+          </div>
+          <div class="card">
+            <div style="font-size:1.8rem; margin-bottom:0.6rem;">💻</div>
+            <h3 style="font-size:1.18rem; margin-bottom:0.45rem;">Trang bị Góc làm việc Đỉnh cao</h3>
+            <p style="font-size:0.9rem; color:var(--text-secondary);">Cấp phát MacBook Pro / Workstation cùng trọn bộ
+              tai nghe AuraSonic ANC Pro và bàn phím cơ AuraKey.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recruitment Process -->
+    <section class="section"
+      style="background:var(--bg-secondary); border-top:1px solid var(--border-color); border-bottom:1px solid var(--border-color);">
+      <div class="container">
+        <div class="section-header center">
+          <span class="kicker">Hiring Process</span>
+          <h2 class="section-title">Quy trình Tuyển dụng Minh bạch &amp; Nhanh chóng (7 Ngày)</h2>
+        </div>
+
+        <div class="process-steps">
+          <div class="card">
+            <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan); margin-bottom:0.4rem;">BƯỚC 01
+            </div>
+            <h3 style="font-size:1.1rem; margin-bottom:0.4rem;">Ứng tuyển Hồ sơ (CV)</h3>
+            <p style="font-size:0.88rem; color:var(--text-secondary);">Gửi CV trực tiếp qua biểu mẫu trên Website hoặc
+              email hr@quannguyens.id.vn. Phản hồi trong 48 giờ.</p>
+          </div>
+          <div class="card">
+            <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan); margin-bottom:0.4rem;">BƯỚC 02
+            </div>
+            <h3 style="font-size:1.1rem; margin-bottom:0.4rem;">Trao đổi Định hướng</h3>
+            <p style="font-size:0.88rem; color:var(--text-secondary);">Cuộc gọi ngắn 20 phút cùng chuyên viên Talent
+              Acquisition để tìm hiểu kỳ vọng và văn hóa làm việc.</p>
+          </div>
+          <div class="card">
+            <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan); margin-bottom:0.4rem;">BƯỚC 03
+            </div>
+            <h3 style="font-size:1.1rem; margin-bottom:0.4rem;">Phỏng vấn Chuyên môn</h3>
+            <p style="font-size:0.88rem; color:var(--text-secondary);">Thảo luận giải pháp thực tế cùng Trưởng bộ phận
+              R&amp;D hoặc Thiết kế (không ra bài test đánh đố).</p>
+          </div>
+          <div class="card">
+            <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan); margin-bottom:0.4rem;">BƯỚC 04
+            </div>
+            <h3 style="font-size:1.1rem; margin-bottom:0.4rem;">Nhận Offer &amp; Onboarding</h3>
+            <p style="font-size:0.88rem; color:var(--text-secondary);">Nhận thư mời làm việc chính thức và chào đón bạn
+              gia nhập ngôi nhà chung AuraTech.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Open Positions & Application Form -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="kicker">Open Positions</span>
+            <h2 class="section-title">Các Vị trí Đang Tuyển dụng</h2>
+          </div>
+        </div>
+
+        <div id="careers-jobs-list" style="display:flex; flex-direction:column; gap:1.25rem; margin-bottom:3rem;"></div>
+
+        <!-- Direct Online Application Form -->
+        <div class="card" style="max-width:780px; margin:0 auto; padding:2.25rem;">
+          <span class="kicker">Apply Online</span>
+          <h2 style="font-size:1.5rem; margin-bottom:0.4rem;">Biểu mẫu Nộp Đơn Ứng tuyển Trực tuyến</h2>
+          <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1.5rem;">Điền thông tin bên dưới, bộ
+            phận Nhân sự (HR) của AuraTech sẽ liên hệ lại với bạn trong vòng 48 giờ.</p>
+
+          <form id="careers-apply-form">
+            <div class="grid-2" style="gap:1rem;">
+              <div class="form-group">
+                <label class="form-label" for="apply-fullname">Họ và tên ứng viên *</label>
+                <input type="text" id="apply-fullname" class="form-control" placeholder="Nguyễn Văn A" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="apply-email">Email liên hệ *</label>
+                <input type="email" id="apply-email" class="form-control" placeholder="ungvien@email.com" required>
+              </div>
+            </div>
+
+            <div class="grid-2" style="gap:1rem;">
+              <div class="form-group">
+                <label class="form-label" for="apply-phone">Số điện thoại *</label>
+                <input type="tel" id="apply-phone" class="form-control" placeholder="09xx xxx xxx" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="apply-position">Vị trí ứng tuyển *</label>
+                <select id="apply-position" class="form-control">
+                  <option value="Chuyên viên Phát triển Giao diện Web (Senior Front-End Engineer)">Chuyên viên Phát
+                    triển Giao diện Web (Senior Front-End Engineer)</option>
+                  <option value="Kỹ sư Thuật toán Xử lý Tín hiệu & Phần mềm Nhúng (DSP & Embedded Engineer)">Kỹ sư Thuật
+                    toán Xử lý Tín hiệu &amp; Phần mềm Nhúng (DSP &amp; Embedded Engineer)</option>
+                  <option value="Chuyên viên Thiết kế Trải nghiệm Người dùng (Product UI/UX Designer)">Chuyên viên Thiết
+                    kế Trải nghiệm Người dùng (Product UI/UX Designer)</option>
+                  <option value="Chuyên viên Tư vấn Giải pháp Nhà thông minh (Smart Home Solution Architect)">Chuyên
+                    viên Tư vấn Giải pháp Nhà thông minh (Smart Home Solution Architect)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="apply-portfolio">Liên kết CV / Portfolio / GitHub / LinkedIn *</label>
+              <input type="url" id="apply-portfolio" class="form-control"
+                placeholder="https://github.com/username hoặc link Google Drive CV" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="apply-note">Giới thiệu ngắn gọn về bản thân &amp; Kinh nghiệm nổi
+                bật</label>
+              <textarea id="apply-note" class="form-control"
+                placeholder="Chia sẻ mục tiêu nghề nghiệp và các dự án bạn tâm đắc nhất..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">🚀 Gửi Hồ sơ Ứng tuyển</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Consistent Footer (Yêu cầu II.1 & II.5) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="brand-logo" style="margin-bottom:1rem; display:inline-block;">
+            <img src="assets/images/logo.svg" alt="QNSTech Logo">
+          </a>
+          <p style="color:var(--text-secondary); font-size:0.92rem; margin-bottom:1.1rem;">
+            Tiên phong nghiên cứu và cung cấp hệ sinh thái thiết bị Âm thanh Spatial Audio 360°, Thiết bị đeo thông minh
+            và Giải pháp Nhà thông minh chuẩn Matter tại Việt Nam.
+          </p>
+          <div style="font-size:0.86rem; color:var(--text-muted);">
+            📍 Trụ sở R&amp;D: Hai Bà Trưng, Hà Nội<br>
+            ✉️ Email: support@quannguyens.id.vn • Hotline: 1900 6886
+          </div>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Khám phá</h3>
+          <ul class="footer-links">
+            <li><a href="index.html">Trang chủ (Homepage)</a></li>
+            <li><a href="products.html">Sản phẩm &amp; Dịch vụ</a></li>
+            <li><a href="product-detail.html">Chi tiết sản phẩm</a></li>
+            <li><a href="index.html#timeline-section">Hành trình R&amp;D</a></li>
+            <li><a href="index.html#spatial-studio-section">Spatial Lab</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Khách hàng &amp; Tuyển dụng</h3>
+          <ul class="footer-links">
+            <li><a href="cart.html">Giỏ hàng &amp; Thanh toán</a></li>
+            <li><a href="auth.html">Đăng nhập / Đăng ký</a></li>
+            <li><a href="faq.html">Câu hỏi thường gặp (FAQ)</a></li>
+            <li><a href="careers.html">Cơ hội nghề nghiệp (Careers)</a></li>
+            <li><a href="contact.html">Liên hệ &amp; Bản đồ chỉ đường</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="footer-title">Đăng ký nhận bản tin Công nghệ</h3>
+          <p style="color:var(--text-secondary); font-size:0.88rem; margin-bottom:0.9rem;">
+            Nhận thông báo sớm nhất về sản phẩm mới và mã ưu đãi độc quyền dành cho sinh viên &amp; kỹ sư công nghệ.
+          </p>
+          <form onsubmit="event.preventDefault(); showToast('Đăng ký nhận bản tin AuraTech thành công!'); this.reset();"
+            style="display:flex; gap:0.5rem;">
+            <input type="email" class="form-control" placeholder="Nhập email của bạn..." required>
+            <button type="submit" class="btn btn-primary btn-sm">Gửi</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- GLOBAL COMMAND PALETTE (CTRL+K) -->
+  <div id="cmd-palette-backdrop" class="command-palette-backdrop">
+    <div class="command-palette-modal">
+      <div class="command-palette-search">
+        <span>🔍</span>
+        <input type="text" id="cmd-palette-input" placeholder="Gõ để tìm nhanh sản phẩm, bài viết hoặc trang..."
+          autocomplete="off">
+        <button type="button" class="icon-btn" onclick="toggleCommandPalette(false)">✕</button>
+      </div>
+      <div id="cmd-palette-results" class="command-palette-results"></div>
+      <div class="command-palette-footer">
+        <div>Dùng phím <span class="kbd-tag">↑</span> <span class="kbd-tag">↓</span> để chọn, <span
+            class="kbd-tag">Enter</span> để mở</div>
+        <div>Nhấn <span class="kbd-tag">ESC</span> để đóng</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application Script -->
+  <script src="assets/js/app.js"></script>
+</body>
+
+</html>

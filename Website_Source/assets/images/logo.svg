@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60" role="img" aria-label="QNSTech Logo">
+  <defs>
+    <linearGradient id="auraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="50%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#E2FD52" />
+    </linearGradient>
+    <linearGradient id="accentGlow" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#818CF8" />
+    </linearGradient>
+  </defs>
+  <!-- Outer Hexagon Tech Ring -->
+  <polygon points="30,6 50,17 50,41 30,52 10,41 10,17" fill="none" stroke="url(#auraGrad)" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- Inner Sound Wave Nodes -->
+  <path d="M20,33 L25,22 L30,36 L35,18 L40,29" fill="none" stroke="url(#accentGlow)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="30" cy="12" r="2.5" fill="#00F0FF"/>
+  <circle cx="30" cy="46" r="2.5" fill="#E2FD52"/>
+  <!-- Brand Typography -->
+  <text x="64" y="36" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="25" font-weight="900" fill="#F8FAFC" letter-spacing="-0.5">QNS<tspan fill="url(#auraGrad)">TECH</tspan></text>
+  <text x="65" y="49" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="8.5" font-weight="700" fill="#8E9BAE" letter-spacing="2.8">SMART AUDIO &amp; TECH</text>
+</svg>
