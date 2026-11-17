@@ -43,7 +43,8 @@
   <!-- External Stylesheet dùng chung cho toàn bộ 10 trang -->
   <link rel="stylesheet" href="assets/css/style.css">
 
-  <!-- GSAP & Lenis Smooth Motion Engine (Local Offline Bundle) -->
+  <!-- 3D WebGL Engine, GSAP & Lenis Smooth Motion Engine (Local Offline Bundle) -->
+  <script src="assets/js/libs/three.min.js"></script>
   <script src="assets/js/libs/gsap.min.js"></script>
   <script src="assets/js/libs/ScrollTrigger.min.js"></script>
   <script src="assets/js/libs/lenis.min.js"></script>
@@ -157,354 +158,108 @@
   <main>
 
     <!-- ==========================================================================
-         MASTERPIECE SCROLLYTELLING: 5-PHASE VIDEO EXPERIENCE (AWWWARDS / TIKTOK)
+         CINEMATIC 3D ROBOTIC ASSEMBLY SCROLLYTELLING (1150vh EXPERIENCE)
+         Devices: AuraPhone Titanium Pro, AuraSonic ANC Pro, AuraSphere 360°
          ========================================================================== -->
     <section id="scrolly-masterpiece" class="scrolly-section">
-      <div class="scrolly-pinned-viewport">
-        <!-- Spacetime 4D Canvas & Relativistic Grid Mesh -->
-        <div class="spacetime-grid-mesh" id="spacetime-grid"></div>
-        <canvas id="hyperspace-canvas" class="hyperspace-canvas"></canvas>
+      <div class="assembly-3d-viewport" id="assembly-3d-viewport">
+        <!-- WebGL 3D Canvas will be mounted here by assembly-3d-engine.js -->
 
-        <!-- Relativistic Spacetime Telemetry HUD -->
-        <div class="spacetime-telemetry-hud" id="spacetime-hud">
-          <div class="hud-header">
-            <span class="hud-pulse-dot"></span>
-            <span class="hud-title">4D SPATIAL TELEMETRY</span>
-            <span class="hud-badge" id="hud-mode">WARP: HYPER-3D</span>
-          </div>
-          <div class="hud-grid">
-            <div class="hud-item">
-              <span class="hud-label">AXIS X</span>
-              <span class="hud-val" id="hud-x">+0.00</span>
-            </div>
-            <div class="hud-item">
-              <span class="hud-label">AXIS Y</span>
-              <span class="hud-val" id="hud-y">+0.00</span>
-            </div>
-            <div class="hud-item">
-              <span class="hud-label">DEPTH Z</span>
-              <span class="hud-val" id="hud-z">-400px</span>
-            </div>
-            <div class="hud-item">
-              <span class="hud-label">CHRONO T</span>
-              <span class="hud-val" id="hud-t">1.00D</span>
-            </div>
-          </div>
-          <div class="hud-warp-bar-wrap">
-            <div class="hud-warp-label">
-              <span>WARP DILATION</span>
-              <span id="hud-warp-percent">1.00x</span>
-            </div>
-            <div class="hud-warp-track">
-              <div class="hud-warp-bar" id="hud-warp-bar"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4D Hypercube Tesseract Widget -->
-        <div class="tesseract-4d-widget" id="tesseract-4d" title="4D Tesseract Quantum Node">
-          <div class="tesseract-stage">
-            <div class="tesseract-cube outer-cube">
-              <div class="cube-face front"></div>
-              <div class="cube-face back"></div>
-              <div class="cube-face right"></div>
-              <div class="cube-face left"></div>
-              <div class="cube-face top"></div>
-              <div class="cube-face bottom"></div>
-            </div>
-            <div class="tesseract-cube inner-cube">
-              <div class="cube-face front"></div>
-              <div class="cube-face back"></div>
-              <div class="cube-face right"></div>
-              <div class="cube-face left"></div>
-              <div class="cube-face top"></div>
-              <div class="cube-face bottom"></div>
-            </div>
-          </div>
-          <div class="tesseract-label">TESSERACT 4D</div>
-        </div>
-
-        <!-- Ambient Watermark Typography from Video -->
-        <div class="scrolly-watermark-title">QNSTech</div>
-        <div class="scrolly-watermark-secondary">SPATIAL</div>
-
-        <!-- Symmetrical Left Wing (Phase 3: Color Swatches) -->
-        <div class="scrolly-wing-left" id="scrolly-wing-left">
-          <div class="wing-swatches-box">
-            <span class="wing-swatches-label">Colors</span>
-            <div class="wing-swatch-list">
-              <div class="wing-swatch-circle active" style="background:#111111;" title="Đen Vũ Trụ (Obsidian)"
-                onclick="switchScrollyDeviceColor('black', this)"></div>
-              <div class="wing-swatch-circle" style="background:#5A636E;" title="Xám Titan (Titanium)"
-                onclick="switchScrollyDeviceColor('titanium', this)"></div>
-              <div class="wing-swatch-circle" style="background:#E8E4DA;" title="Trắng Kem (Alabaster Cream)"
-                onclick="switchScrollyDeviceColor('cream', this)"></div>
-              <div class="wing-swatch-circle" style="background:#5C1D24;" title="Đỏ Mận (Maroon Wine)"
-                onclick="switchScrollyDeviceColor('maroon', this)"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Symmetrical Right Wing (Phase 3: Promo Cards) -->
-        <div class="scrolly-wing-right" id="scrolly-wing-right">
-          <div class="wing-promo-lime" onclick="showToast('Đã lưu mã ưu đãi độc quyền AuraClub vào tài khoản!')">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <h4>AuraClub VIP</h4>
-              <span style="font-weight:900; font-size:1.1rem;">›</span>
-            </div>
-            <p>Bảo hành 3 năm &amp; Quyền ưu tiên sở hữu phiên bản giới hạn.</p>
-          </div>
-
-          <div class="wing-promo-glass" onclick="copyCouponCode('AURATECH10')">
-            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
-              <span style="font-weight:800; font-size:1.1rem; color:var(--accent-cyan);">%</span>
-              <h4>Ưu đãi 10% Online</h4>
-            </div>
-            <p>Nhập mã độc quyền <strong>AURATECH10</strong> tại bước thanh toán.</p>
-          </div>
-        </div>
-
-        <!-- Synchronized Lookbook Preview Cards (Phase 4) -->
-        <div class="scrolly-lookbook-card-left" id="scrolly-lookbook-left">
-          <img src="assets/images/prod-headphones-thumb3.jpg" alt="Acoustic Precision Studio"
-            style="width:100%; aspect-ratio:4/5; object-fit:cover;">
-          <div style="padding:0.9rem; background:rgba(255,255,255,0.95); backdrop-filter:blur(10px);">
-            <div style="font-size:0.7rem; color:#888; font-weight:800; letter-spacing:0.05em;">ACOUSTIC LAB</div>
-            <h4 style="font-size:0.92rem; font-weight:800; margin:0.15rem 0; color:#111;">Màng Loa Beryllium</h4>
-            <div style="font-size:0.78rem; font-weight:700; color:#0284C7;">THD &lt; 0.05% • 96kHz Lossless</div>
-          </div>
-        </div>
-
-        <div class="scrolly-lookbook-card-right" id="scrolly-lookbook-right">
-          <img src="assets/images/prod-watch-thumb2.jpg" alt="AuraWatch Titanium S3"
-            style="width:100%; aspect-ratio:4/5; object-fit:cover;">
-          <div style="padding:0.9rem; background:rgba(255,255,255,0.95); backdrop-filter:blur(10px);">
-            <div style="font-size:0.7rem; color:#888; font-weight:800; letter-spacing:0.05em;">TITANIUM GRADE 5</div>
-            <h4 style="font-size:0.92rem; font-weight:800; margin:0.15rem 0; color:#111;">AuraWatch Ultra S3</h4>
-            <div style="font-size:0.78rem; font-weight:700; color:#16A34A;">Pin 14 Ngày • Kháng Nước 100M</div>
-          </div>
-        </div>
-
-        <!-- 3D Transform Stage -->
-        <div class="scrolly-stage-3d" id="scrolly-stage-3d">
-          <div class="scrolly-grid-stage">
-            <!-- Left Column: Stacked Visual & Lime Cards -->
-            <div class="scrolly-left-column" id="scrolly-left-column">
-              <div class="scrolly-card-visual">
-                <img src="assets/images/prod-headphones-thumb4.jpg" alt="AuraSonic ANC Pro Studio Stack">
-                <div class="glass-size-bar">
-                  <div class="glass-size-btn" onclick="selectScrollySize('Studio', this)">Studio</div>
-                  <div class="glass-size-btn" onclick="selectScrollySize('Spatial', this)">Spatial</div>
-                  <div class="glass-size-btn active" onclick="selectScrollySize('ANC 50dB', this)">ANC 50dB</div>
-                  <div class="glass-size-btn" onclick="selectScrollySize('Carbon', this)">Carbon</div>
-                </div>
-              </div>
-
-              <!-- Lime Outfit/Ecosystem Bundle Card -->
-              <div class="scrolly-card-lime">
-                <div class="lime-bundle-item" onclick="addToCart('aura-anc-pro', 1)">
-                  <span class="lime-bundle-icon">🎧</span>
-                  <span class="lime-bundle-price">7.49M</span>
-                </div>
-                <div class="lime-bundle-item" onclick="addToCart('aura-watch-ultra', 1)">
-                  <span class="lime-bundle-icon">⌚</span>
-                  <span class="lime-bundle-price">14.99M</span>
-                </div>
-                <div class="lime-bundle-item" onclick="addToCart('aura-vision-vr', 1)">
-                  <span class="lime-bundle-icon">👓</span>
-                  <span class="lime-bundle-price">24.99M</span>
-                </div>
-                <div class="lime-bundle-item" onclick="addToCart('aura-home-hub', 1)">
-                  <span class="lime-bundle-icon">🏠</span>
-                  <span class="lime-bundle-price">4.99M</span>
-                </div>
+        <!-- Cybernetic Industrial HUD Overlay -->
+        <div class="assembly-hud-container">
+          <!-- Top Telemetry & Stage Stepper Bar -->
+          <div class="assembly-top-bar">
+            <div class="assembly-bay-badge">
+              <span class="hud-pulse-dot"></span>
+              <div class="bay-text-group">
+                <span class="bay-title">AURA ROBOTIC ASSEMBLY BAY</span>
+                <span class="bay-sub">PRECISION 3NM NANO ENGINEERING</span>
               </div>
             </div>
 
-            <!-- Right Column: Realistic iPhone 16 Pro Device Mockup with 4D Spatial Audio Hologram -->
-            <div class="scrolly-device-column" id="scrolly-device-column">
-              <!-- 4D Holographic Audio Rings -->
-              <div class="spatial-4d-rings" id="spatial-4d-rings">
-                <div class="spatial-ring ring-1"></div>
-                <div class="spatial-ring ring-2"></div>
-                <div class="spatial-ring ring-3"></div>
+            <!-- 5-Phase Interactive Stage Stepper -->
+            <nav class="assembly-step-nav" aria-label="Tiến trình lắp ráp 3D">
+              <button type="button" class="assembly-step-pill active" onclick="jumpToAssemblyStage(0)">
+                <span class="step-num">01</span>
+                <span class="step-label">Khung Vỏ &amp; Chip</span>
+              </button>
+              <button type="button" class="assembly-step-pill" onclick="jumpToAssemblyStage(1)">
+                <span class="step-num">02</span>
+                <span class="step-label">Lắp Ráp Robot</span>
+              </button>
+              <button type="button" class="assembly-step-pill" onclick="jumpToAssemblyStage(2)">
+                <span class="step-num">03</span>
+                <span class="step-label">Màng Loa Beryllium</span>
+              </button>
+              <button type="button" class="assembly-step-pill" onclick="jumpToAssemblyStage(3)">
+                <span class="step-num">04</span>
+                <span class="step-label">Loa Không Gian 360°</span>
+              </button>
+              <button type="button" class="assembly-step-pill" onclick="jumpToAssemblyStage(4)">
+                <span class="step-num">05</span>
+                <span class="step-label">Hệ Sinh Thái 2026</span>
+              </button>
+            </nav>
+
+            <!-- Live Progress Widget -->
+            <div class="assembly-progress-widget">
+              <div class="prog-meta">
+                <span>TIẾN ĐỘ LẮP RÁP</span>
+                <strong id="assembly-percent-text">0%</strong>
               </div>
-
-              <!-- Floating Holographic Depth Tags -->
-              <div class="spatial-depth-badge badge-top" id="badge-spatial-audio">
-                <span class="badge-icon">✦</span>
-                <span class="badge-text">SPATIAL 360° AUDIO</span>
+              <div class="prog-track">
+                <div class="prog-bar" id="assembly-live-progress"></div>
               </div>
-              <div class="spatial-depth-badge badge-bottom" id="badge-lossless">
-                <span class="badge-icon">⚡</span>
-                <span class="badge-text">96kHz / 24-BIT LOSSLESS</span>
+            </div>
+          </div>
+
+          <!-- Floating High-Tech Technical Callout Card -->
+          <div class="assembly-floating-callout" id="assembly-floating-callout">
+            <div class="callout-tag">
+              <span class="callout-sparkle">✦</span>
+              <span>KIẾN TRÚC THIẾT BỊ ĐỘT PHÁ</span>
+            </div>
+            <h3 class="callout-title" id="assembly-callout-title">CÔNG NGHỆ 3NM • KHUNG TITANIUM GRADE 5</h3>
+            <p class="callout-desc" id="assembly-callout-desc">
+              AuraPhone Pro: Mô phỏng phân rã 3D đa tầng vi mạch bán dẫn, cảm biến camera sapphire và khung sườn Titanium hàng không.
+            </p>
+            <div class="callout-specs-row">
+              <span class="spec-pill">⚡ 48 TOPS Neural NPU</span>
+              <span class="spec-pill">🎧 Beryllium Diaphragm</span>
+              <span class="spec-pill">🌐 Matter 2.0 Mesh</span>
+            </div>
+          </div>
+
+          <!-- Bottom Control & Exploration Dock -->
+          <div class="assembly-bottom-dock">
+            <!-- Device Focus Selector -->
+            <div class="assembly-dock-group">
+              <span class="dock-label">TIÊU ĐIỂM 3D:</span>
+              <div class="device-focus-pills">
+                <button type="button" class="device-focus-btn active" data-target="all" onclick="focusAssemblyDevice('all')">Toàn Cảnh</button>
+                <button type="button" class="device-focus-btn" data-target="phone" onclick="focusAssemblyDevice('phone')">Điện Thoại</button>
+                <button type="button" class="device-focus-btn" data-target="headphones" onclick="focusAssemblyDevice('headphones')">Tai Nghe</button>
+                <button type="button" class="device-focus-btn" data-target="speaker" onclick="focusAssemblyDevice('speaker')">Loa 360°</button>
               </div>
+            </div>
 
-              <div class="iphone-chassis" id="scrolly-iphone">
-                <!-- Dynamic Island -->
-                <div class="iphone-dynamic-island">
-                  <div class="dynamic-island-sensor"></div>
-                  <div class="dynamic-island-camera"></div>
-                </div>
-
-                <!-- iOS Status Bar -->
-                <div class="iphone-status-bar">
-                  <span>9:41</span>
-                  <div class="iphone-status-icons">
-                    <span>📶</span>
-                    <span>5G</span>
-                    <span>🔋</span>
-                  </div>
-                </div>
-
-                <!-- Screen Viewport -->
-                <div class="iphone-screen-viewport">
-                  <!-- Layer 1: App Feed View (Phase 1 & 2) -->
-                  <div class="iphone-view-layer active" id="iphone-layer-feed">
-                    <div class="app-header">
-                      <span class="app-logo">QNSTech</span>
-                      <div style="display:flex; gap:0.5rem; font-size:0.85rem;">
-                        <span>🔍</span>
-                        <span>🔔</span>
-                      </div>
-                    </div>
-                    <div class="app-nav-tabs">
-                      <span class="active">Flagship</span>
-                      <span>Spatial Audio</span>
-                      <span>Wearables</span>
-                      <span>Matter Hub</span>
-                    </div>
-
-                    <div class="app-hero-card">
-                      <img src="assets/images/prod-headphones.jpg" alt="AuraSonic ANC Pro">
-                      <div class="app-hero-card-overlay">
-                        <div class="app-hero-card-title">AuraSonic ANC Pro<br>Titanium Edition</div>
-                        <div style="font-size:0.75rem; color:#666;">Chống ồn 50dB • Màng loa Beryllium</div>
-                      </div>
-                      <button type="button" class="app-shop-now-pill"
-                        onclick="document.getElementById('iphone-layer-feed').classList.remove('active'); document.getElementById('iphone-layer-pdp').classList.add('active');">Khám
-                        phá</button>
-                    </div>
-
-                    <div style="padding:0.4rem 1.1rem;">
-                      <div style="font-size:0.82rem; font-weight:800; margin-bottom:0.5rem; color:#111;">Hệ Sinh Thái
-                        Tiêu Biểu</div>
-                      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.5rem;">
-                        <div
-                          style="border-radius:12px; overflow:hidden; background:#F5F5F3; padding:5px; text-align:center;">
-                          <img src="assets/images/prod-watch.jpg" alt="AuraWatch"
-                            style="aspect-ratio:1/1; object-fit:cover; border-radius:8px;">
-                          <div style="font-size:0.65rem; font-weight:800; margin-top:3px; color:#111;">AuraWatch S3
-                          </div>
-                          <div style="font-size:0.62rem; color:#0284C7; font-weight:700;">14.99M</div>
-                        </div>
-                        <div
-                          style="border-radius:12px; overflow:hidden; background:#F5F5F3; padding:5px; text-align:center;">
-                          <img src="assets/images/prod-vr.jpg" alt="AuraVision"
-                            style="aspect-ratio:1/1; object-fit:cover; border-radius:8px;">
-                          <div style="font-size:0.65rem; font-weight:800; margin-top:3px; color:#111;">Vision XR</div>
-                          <div style="font-size:0.62rem; color:#0284C7; font-weight:700;">24.99M</div>
-                        </div>
-                        <div
-                          style="border-radius:12px; overflow:hidden; background:#F5F5F3; padding:5px; text-align:center;">
-                          <img src="assets/images/prod-hub.jpg" alt="AuraHub"
-                            style="aspect-ratio:1/1; object-fit:cover; border-radius:8px;">
-                          <div style="font-size:0.65rem; font-weight:800; margin-top:3px; color:#111;">Hub Max 10</div>
-                          <div style="font-size:0.62rem; color:#0284C7; font-weight:700;">4.99M</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Layer 2: Center Stage Product Detail View (Phase 3) -->
-                  <div class="iphone-view-layer" id="iphone-layer-pdp">
-                    <div class="app-pdp-view">
-                      <img src="assets/images/prod-headphones.jpg" id="iphone-pdp-main-img" class="app-pdp-model-img"
-                        alt="AuraSonic ANC Pro">
-
-                      <div class="app-pdp-glass-drawer">
-                        <div
-                          style="font-size:0.68rem; color:#888; font-weight:800; text-transform:uppercase; letter-spacing:0.05em;">
-                          AURATECH FLAGSHIP</div>
-                        <div class="app-pdp-title" id="iphone-pdp-title">AuraSonic ANC Pro X1</div>
-                        <div class="app-pdp-price" id="iphone-pdp-price">7.490.000₫</div>
-
-                        <div style="display:flex; gap:0.4rem; margin-bottom:0.75rem;">
-                          <span
-                            style="padding:0.2rem 0.55rem; border-radius:6px; background:#FFFFFF; font-size:0.68rem; font-weight:700; color:#111;">Spatial
-                            360°</span>
-                          <span
-                            style="padding:0.2rem 0.55rem; border-radius:6px; background:#111111; color:#FFF; font-size:0.68rem; font-weight:700;">ANC
-                            50dB</span>
-                          <span
-                            style="padding:0.2rem 0.55rem; border-radius:6px; background:#FFFFFF; font-size:0.68rem; font-weight:700; color:#111;">LDAC</span>
-                        </div>
-
-                        <button type="button" class="app-pdp-buy-btn"
-                          onclick="addToCart('aura-anc-pro', 1); showToast('Đã thêm sản phẩm từ điện thoại vào giỏ hàng!');">Mua
-                          ngay</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Layer 3: Synchronized Lookbook Video / Visual (Phase 4) -->
-                  <div class="iphone-view-layer" id="iphone-layer-lookbook">
-                    <div style="position:relative; width:100%; height:100%;">
-                      <img src="assets/images/hero-showcase.jpg" style="width:100%; height:100%; object-fit:cover;"
-                        alt="AuraTech Spatial Living 2026">
-                      <div
-                        style="position:absolute; bottom:2rem; left:1.5rem; right:1.5rem; color:#FFFFFF; text-shadow:0 2px 10px rgba(0,0,0,0.5);">
-                        <div
-                          style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:#E2FD52; font-weight:800;">
-                          AUTUMN KEYNOTE 2026</div>
-                        <h3 style="font-size:1.5rem; font-weight:800; margin:0.25rem 0;">Spatial Living</h3>
-                        <p style="font-size:0.8rem; opacity:0.9;">Tái định hình thẩm mỹ công nghệ &amp; âm thanh không
-                          gian tương lai.</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Layer 4: Outro Accessories Drawer (Phase 5) -->
-                  <div class="iphone-view-layer" id="iphone-layer-bundle">
-                    <div
-                      style="position:relative; width:100%; height:100%; background:#0C1017; color:#FFFFFF; padding:1.2rem; display:flex; flex-direction:column; justify-content:space-between;">
-                      <div>
-                        <div
-                          style="font-size:0.72rem; color:#E2FD52; font-weight:800; text-transform:uppercase; letter-spacing:0.05em;">
-                          FLAGSHIP BUNDLE 2026</div>
-                        <h3 style="font-size:1.35rem; font-weight:800; margin:0.3rem 0;">AuraTech Signature Kit</h3>
-                        <p style="font-size:0.78rem; color:#8E9BAE; margin-bottom:1rem;">Trọn bộ 3 thiết bị âm thanh
-                          &amp; công nghệ đỉnh cao.</p>
-
-                        <div style="display:flex; flex-direction:column; gap:0.55rem;">
-                          <div
-                            style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:#141B26; border-radius:10px; border:1px solid rgba(255,255,255,0.06);">
-                            <span style="font-size:0.78rem;">🎧 Tai nghe AuraSonic Pro X1</span>
-                            <strong style="color:#E2FD52; font-size:0.82rem;">7.490.000₫</strong>
-                          </div>
-                          <div
-                            style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:#141B26; border-radius:10px; border:1px solid rgba(255,255,255,0.06);">
-                            <span style="font-size:0.78rem;">⌚ Đồng hồ AuraWatch Ultra</span>
-                            <strong style="color:#E2FD52; font-size:0.82rem;">14.990.000₫</strong>
-                          </div>
-                          <div
-                            style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:#141B26; border-radius:10px; border:1px solid rgba(255,255,255,0.06);">
-                            <span style="font-size:0.78rem;">👓 Kính AuraVision XR Pro</span>
-                            <strong style="color:#E2FD52; font-size:0.82rem;">24.990.000₫</strong>
-                          </div>
-                        </div>
-                      </div>
-
-                      <button type="button" class="app-pdp-buy-btn"
-                        onclick="addToCart('aura-anc-pro', 1); addToCart('aura-watch-ultra', 1); addToCart('aura-vision-vr', 1); showToast('Đã thêm trọn bộ sưu tập vào giỏ hàng!');">Thêm
-                        trọn bộ vào giỏ</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- iPhone Home Indicator -->
-                <div class="iphone-home-indicator"></div>
+            <!-- Manual Exploded View Slider -->
+            <div class="assembly-dock-group slider-group">
+              <span class="dock-label">PHÂN RÃ LINH KIỆN:</span>
+              <div class="slider-wrapper">
+                <span class="slider-val-hint">Gắn liền</span>
+                <input type="range" id="assembly-explode-slider" min="0" max="100" value="0" aria-label="Mức độ phân rã 3D">
+                <span class="slider-val-hint">Tách rời</span>
               </div>
+              <button type="button" id="assembly-reset-btn" class="assembly-reset-btn" onclick="resetAssemblyToScroll()" style="display:none;" title="Trở lại chế độ cuộn tự động">
+                ↺ Chế độ Cuộn
+              </button>
+            </div>
+
+            <!-- Scroll Guidance Cue -->
+            <div class="assembly-scroll-cue">
+              <span>Cuộn chuột để trải nghiệm tự động lắp ráp</span>
+              <span class="cue-arrow">↓</span>
             </div>
           </div>
         </div>
@@ -959,7 +714,8 @@
     </div>
   </div>
 
-  <!-- Main Application Script -->
+  <!-- Next-Gen 3D Robotic Assembly Engine & Main Application Script -->
+  <script src="assets/js/assembly-3d-engine.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
 

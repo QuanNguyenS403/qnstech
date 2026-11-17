@@ -2029,7 +2029,12 @@ function initHyperspaceCanvas() {
 
 function initScrollytellingMasterpiece() {
   const section = document.getElementById("scrolly-masterpiece");
-  const stage = document.getElementById("scrolly-stage-3d");
+  if (!section) return;
+
+  // Next-Gen 3D Robotic Assembly Engine handles #scrolly-masterpiece
+  if (typeof window.init3DAssemblyEngine === "function") {
+    return;
+  }
   const leftCol = document.getElementById("scrolly-left-column");
   const deviceCol = document.getElementById("scrolly-device-column");
   const iphone = document.getElementById("scrolly-iphone");
