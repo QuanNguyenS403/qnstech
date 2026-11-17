@@ -158,111 +158,12 @@
   <main>
 
     <!-- ==========================================================================
-         CINEMATIC 3D ROBOTIC ASSEMBLY SCROLLYTELLING (1150vh EXPERIENCE)
+         CINEMATIC 3D ROBOTIC ASSEMBLY SCROLLYTELLING (1150vh PURE 3D EXPERIENCE)
          Devices: AuraPhone Titanium Pro, AuraSonic ANC Pro, AuraSphere 360°
          ========================================================================== -->
     <section id="scrolly-masterpiece" class="scrolly-section">
       <div class="assembly-3d-viewport" id="assembly-3d-viewport">
-        <!-- WebGL 3D Canvas will be mounted here by assembly-3d-engine.js -->
-
-        <!-- Cybernetic Industrial HUD Overlay -->
-        <div class="assembly-hud-container">
-          <!-- Top Telemetry & Stage Stepper Bar -->
-          <div class="assembly-top-bar">
-            <div class="assembly-bay-badge">
-              <span class="hud-pulse-dot"></span>
-              <div class="bay-text-group">
-                <span class="bay-title">AURA ROBOTIC ASSEMBLY BAY</span>
-                <span class="bay-sub">PRECISION 3NM NANO ENGINEERING</span>
-              </div>
-            </div>
-
-            <!-- 5-Phase Interactive Stage Stepper -->
-            <nav class="assembly-step-nav" aria-label="Tiến trình lắp ráp 3D">
-              <button type="button" class="assembly-step-pill active" onclick="jumpToAssemblyStage(0)">
-                <span class="step-num">01</span>
-                <span class="step-label">Khung Vỏ &amp; Chip</span>
-              </button>
-              <button type="button" class="assembly-step-pill" onclick="jumpToAssemblyStage(1)">
-                <span class="step-num">02</span>
-                <span class="step-label">Lắp Ráp Robot</span>
-              </button>
-              <button type="button" class="assembly-step-pill" onclick="jumpToAssemblyStage(2)">
-                <span class="step-num">03</span>
-                <span class="step-label">Màng Loa Beryllium</span>
-              </button>
-              <button type="button" class="assembly-step-pill" onclick="jumpToAssemblyStage(3)">
-                <span class="step-num">04</span>
-                <span class="step-label">Loa Không Gian 360°</span>
-              </button>
-              <button type="button" class="assembly-step-pill" onclick="jumpToAssemblyStage(4)">
-                <span class="step-num">05</span>
-                <span class="step-label">Hệ Sinh Thái 2026</span>
-              </button>
-            </nav>
-
-            <!-- Live Progress Widget -->
-            <div class="assembly-progress-widget">
-              <div class="prog-meta">
-                <span>TIẾN ĐỘ LẮP RÁP</span>
-                <strong id="assembly-percent-text">0%</strong>
-              </div>
-              <div class="prog-track">
-                <div class="prog-bar" id="assembly-live-progress"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Floating High-Tech Technical Callout Card -->
-          <div class="assembly-floating-callout" id="assembly-floating-callout">
-            <div class="callout-tag">
-              <span class="callout-sparkle">✦</span>
-              <span>KIẾN TRÚC THIẾT BỊ ĐỘT PHÁ</span>
-            </div>
-            <h3 class="callout-title" id="assembly-callout-title">CÔNG NGHỆ 3NM • KHUNG TITANIUM GRADE 5</h3>
-            <p class="callout-desc" id="assembly-callout-desc">
-              AuraPhone Pro: Mô phỏng phân rã 3D đa tầng vi mạch bán dẫn, cảm biến camera sapphire và khung sườn Titanium hàng không.
-            </p>
-            <div class="callout-specs-row">
-              <span class="spec-pill">⚡ 48 TOPS Neural NPU</span>
-              <span class="spec-pill">🎧 Beryllium Diaphragm</span>
-              <span class="spec-pill">🌐 Matter 2.0 Mesh</span>
-            </div>
-          </div>
-
-          <!-- Bottom Control & Exploration Dock -->
-          <div class="assembly-bottom-dock">
-            <!-- Device Focus Selector -->
-            <div class="assembly-dock-group">
-              <span class="dock-label">TIÊU ĐIỂM 3D:</span>
-              <div class="device-focus-pills">
-                <button type="button" class="device-focus-btn active" data-target="all" onclick="focusAssemblyDevice('all')">Toàn Cảnh</button>
-                <button type="button" class="device-focus-btn" data-target="phone" onclick="focusAssemblyDevice('phone')">Điện Thoại</button>
-                <button type="button" class="device-focus-btn" data-target="headphones" onclick="focusAssemblyDevice('headphones')">Tai Nghe</button>
-                <button type="button" class="device-focus-btn" data-target="speaker" onclick="focusAssemblyDevice('speaker')">Loa 360°</button>
-              </div>
-            </div>
-
-            <!-- Manual Exploded View Slider -->
-            <div class="assembly-dock-group slider-group">
-              <span class="dock-label">PHÂN RÃ LINH KIỆN:</span>
-              <div class="slider-wrapper">
-                <span class="slider-val-hint">Gắn liền</span>
-                <input type="range" id="assembly-explode-slider" min="0" max="100" value="0" aria-label="Mức độ phân rã 3D">
-                <span class="slider-val-hint">Tách rời</span>
-              </div>
-              <button type="button" id="assembly-reset-btn" class="assembly-reset-btn" onclick="resetAssemblyToScroll()" style="display:none;" title="Trở lại chế độ cuộn tự động">
-                ↺ Chế độ Cuộn
-              </button>
-            </div>
-
-            <!-- Scroll Guidance Cue -->
-            <div class="assembly-scroll-cue">
-              <span>Cuộn chuột để trải nghiệm tự động lắp ráp</span>
-              <span class="cue-arrow">↓</span>
-            </div>
-          </div>
-        </div>
+        <!-- Pure WebGL 3D Canvas mounted by assembly-3d-engine.js -->
       </div>
     </section>
 

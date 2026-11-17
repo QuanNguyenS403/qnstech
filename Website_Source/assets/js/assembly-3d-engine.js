@@ -1,8 +1,21 @@
 /**
- * AuraTech / QNSTech - Next-Gen 3D Automated Assembly Engine
- * Procedural Three.js Exploded View & Precision Assembly Simulation
- * Devices: Flagship Smartphone, Audiophile Headphones, Hi-Fi 360° Speaker
- * Features: Cinematic Camera Paths, Laser Guide Beams, PBR Materials, 3D Soundwaves
+ * AuraTech / QNSTech - Next-Gen 3D Robotic Assembly & Continuous Cinematic Experience
+ * Standard: Principal Creative Frontend Developer & UI/UX Motion Architect (Awwwards / Codrops)
+ * Implements:
+ *  - 3 Ultra-Modern 2026 Luxury Flagship Devices:
+ *      1. AuraPhone 16 Horizon Ultra (Titanium Cyber-Translucent, Glowing Glyph, 3nm Bionic)
+ *      2. AuraSonic Vision Max (Sculpted Aerodynamic Luxury Headset with Beryllium Acoustic Driver)
+ *      3. AuraSphere Spatial Monolith (Devialet/B&O Luxury Aesthetic with Active Pulsing Lateral Woofers)
+ *  - Continuous Center-Stage Choreography:
+ *      * Phase 1 (0.00 -> 0.35): Phone in Center Stage (Exploded -> Precision Robot Assembly)
+ *      * Phase 2 (0.35 -> 0.45): Fluid Continuous Crane Transition 1 (Phone glides, Headphones take Center Stage)
+ *      * Phase 3 (0.45 -> 0.70): Headphones in Center Stage (Acoustic Teardown -> Beryllium Synthesis -> Soundwave Pulse)
+ *      * Phase 4 (0.70 -> 0.80): Fluid Continuous Crane Transition 2 (Headphones glide, Sound Sculpture ascends)
+ *      * Phase 5 (0.80 -> 0.90): Sound Sculpture in Center Stage (Active Pulsing Woofers & Vortex Grille)
+ *      * Phase 6 (0.90 -> 1.00): Grand Climax (Golden Ratio Triumvirate Levitation on Glowing Pedestal)
+ *  - Luminous Energy & Acoustic Data Ribbon connecting all 3 devices continuously in 3D space
+ *  - Smooth Hermite/Catmull-Rom easing (Zero Jerkiness, 60–120 FPS guaranteed)
+ *  - Pure scroll-driven scrollytelling (No text boxes or HUD clutter)
  */
 
 (function () {
@@ -10,37 +23,32 @@
 
   let scene, camera, renderer, container;
   let phoneGroup, headphoneGroup, speakerGroup;
-  let pedestalGroup, particleSystem, laserBeamsGroup, soundwavesGroup;
+  let pedestalGroup, particleSystem, energyConduitMesh, soundwavesGroup;
   let ambientLight, keyLight, rimLightCyan, rimLightLime, underLight;
 
   // Component collections for animated exploded view
   const phoneParts = [];
   const headphoneParts = [];
   const speakerParts = [];
-  const allBeams = [];
   const allSoundwaves = [];
 
-  // Animation & Interaction state
+  // Active pulsing lateral woofers on speaker
+  let wooferLeftGroup, wooferRightGroup;
+
+  // Interactive & Scroll State
   let currentProgress = 0;
-  let manualExplodeFactor = 0; // 0 = follow scroll, > 0 = manual override
-  let isManualOverride = false;
-  let activeFocusTarget = "all"; // "all" | "phone" | "headphones" | "speaker"
   let mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
-  let isDragging = false;
-  let previousMousePosition = { x: 0, y: 0 };
-  let orbitEuler = { x: 0, y: 0 };
   let isVisible = true;
   let animationFrameId = null;
 
-  // Camera animation interpolation targets (using Vector3 initialized in init or dynamically)
-  const camState = {
-    pos: { x: 14, y: 8, z: 24, set(x, y, z) { this.x = x; this.y = y; this.z = z; } },
-    target: { x: 0, y: 1.5, z: 0, set(x, y, z) { this.x = x; this.y = y; this.z = z; } },
-    fov: 42
-  };
+  // Camera damping vectors
+  const camPosCurrent = new THREE.Vector3(0, 3.5, 14.5);
+  const camPosTarget = new THREE.Vector3(0, 3.5, 14.5);
+  const camLookCurrent = new THREE.Vector3(0, 1.8, 0);
+  const camLookTarget = new THREE.Vector3(0, 1.8, 0);
 
   /* =========================================================================
-     1. PROCEDURAL TEXTURE GENERATORS (NO EXTERNAL ASSETS NEEDED)
+     1. HIGH-PRECISION PROCEDURAL TEXTURES (2026 LUXURY TECH AESTHETIC)
      ========================================================================= */
 
   function createChipTexture() {
@@ -49,14 +57,14 @@
     canvas.height = 512;
     const ctx = canvas.getContext("2d");
 
-    // Dark silicon substrate
-    ctx.fillStyle = "#0c111a";
+    // Deep obsidian-blue silicon substrate
+    ctx.fillStyle = "#090d15";
     ctx.fillRect(0, 0, 512, 512);
 
     // Micro grid traces
-    ctx.strokeStyle = "rgba(0, 229, 255, 0.25)";
+    ctx.strokeStyle = "rgba(0, 229, 255, 0.2)";
     ctx.lineWidth = 1;
-    for (let i = 20; i < 512; i += 24) {
+    for (let i = 24; i < 512; i += 24) {
       ctx.beginPath();
       ctx.moveTo(i, 0); ctx.lineTo(i, 512);
       ctx.stroke();
@@ -65,191 +73,221 @@
       ctx.stroke();
     }
 
-    // High-speed circuit bus lines
+    // High-speed gold and cyan data buses
     ctx.strokeStyle = "#00e5ff";
     ctx.lineWidth = 2.5;
     ctx.shadowColor = "#00e5ff";
-    ctx.shadowBlur = 8;
-    for (let j = 0; j < 8; j++) {
-      const y = 80 + j * 45;
+    ctx.shadowBlur = 10;
+    for (let j = 0; j < 10; j++) {
+      const y = 60 + j * 40;
       ctx.beginPath();
-      ctx.moveTo(30, y);
-      ctx.lineTo(160, y);
-      ctx.lineTo(210, y + 25);
-      ctx.lineTo(320, y + 25);
+      ctx.moveTo(25, y);
+      ctx.lineTo(150, y);
+      ctx.lineTo(200, y + 20);
+      ctx.lineTo(330, y + 20);
       ctx.stroke();
     }
 
-    // Gold contact pins on border
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = "#ffd166";
-    for (let p = 15; p < 500; p += 16) {
-      ctx.fillRect(p, 4, 10, 16);
-      ctx.fillRect(p, 492, 10, 16);
-      ctx.fillRect(4, p, 16, 10);
-      ctx.fillRect(492, p, 16, 10);
-    }
-
     // Central die & Laser engraving
-    ctx.fillStyle = "#162030";
-    ctx.strokeStyle = "#00e5ff";
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#121926";
+    ctx.strokeStyle = "#e2fd52";
     ctx.lineWidth = 3;
-    ctx.fillRect(156, 156, 200, 200);
-    ctx.strokeRect(156, 156, 200, 200);
+    ctx.fillRect(150, 150, 212, 212);
+    ctx.strokeRect(150, 150, 212, 212);
 
-    // Glowing core logo
+    // Glowing core typography
     ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 22px 'Plus Jakarta Sans', system-ui, sans-serif";
+    ctx.font = "bold 24px 'Plus Jakarta Sans', system-ui, sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("AURA BIONIC", 256, 230);
+    ctx.fillText("AURA BIONIC", 256, 225);
     ctx.fillStyle = "#00e5ff";
     ctx.font = "bold 16px 'JetBrains Mono', monospace";
-    ctx.fillText("3nm NEURAL CORE", 256, 265);
+    ctx.fillText("3nm NEURAL V4", 256, 260);
     ctx.fillStyle = "#e2fd52";
-    ctx.font = "600 13px 'JetBrains Mono', monospace";
-    ctx.fillText("48 TOPS • NPU v4", 256, 290);
+    ctx.font = "700 13px 'JetBrains Mono', monospace";
+    ctx.fillText("48 TOPS • QUANTUM NPU", 256, 288);
 
     const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
     return texture;
   }
 
   function createPhoneScreenTexture() {
     const canvas = document.createElement("canvas");
-    canvas.width = 720;
-    canvas.height = 1440;
+    canvas.width = 1024;
+    canvas.height = 2048;
     const ctx = canvas.getContext("2d");
 
     // Luxury Cyber/Spatial Wallpaper Gradient
-    const grad = ctx.createLinearGradient(0, 0, 720, 1440);
-    grad.addColorStop(0, "#080b14");
-    grad.addColorStop(0.35, "#0d1b2a");
-    grad.addColorStop(0.65, "#1b263b");
-    grad.addColorStop(1, "#0a1128");
+    const grad = ctx.createLinearGradient(0, 0, 1024, 2048);
+    grad.addColorStop(0, "#05070d");
+    grad.addColorStop(0.3, "#0a1322");
+    grad.addColorStop(0.7, "#152238");
+    grad.addColorStop(1, "#070b14");
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 720, 1440);
+    ctx.fillRect(0, 0, 1024, 2048);
 
     // Ethereal luminous glow orbs
-    const radGrad1 = ctx.createRadialGradient(240, 480, 10, 240, 480, 320);
-    radGrad1.addColorStop(0, "rgba(0, 229, 255, 0.45)");
+    const radGrad1 = ctx.createRadialGradient(350, 650, 20, 350, 650, 480);
+    radGrad1.addColorStop(0, "rgba(0, 229, 255, 0.5)");
     radGrad1.addColorStop(1, "rgba(0, 229, 255, 0)");
     ctx.fillStyle = radGrad1;
     ctx.beginPath();
-    ctx.arc(240, 480, 320, 0, Math.PI * 2);
+    ctx.arc(350, 650, 480, 0, Math.PI * 2);
     ctx.fill();
 
-    const radGrad2 = ctx.createRadialGradient(500, 950, 10, 500, 950, 360);
-    radGrad2.addColorStop(0, "rgba(226, 253, 82, 0.35)");
+    const radGrad2 = ctx.createRadialGradient(700, 1350, 20, 700, 1350, 520);
+    radGrad2.addColorStop(0, "rgba(226, 253, 82, 0.38)");
     radGrad2.addColorStop(1, "rgba(226, 253, 82, 0)");
     ctx.fillStyle = radGrad2;
     ctx.beginPath();
-    ctx.arc(500, 950, 360, 0, Math.PI * 2);
+    ctx.arc(700, 1350, 520, 0, Math.PI * 2);
     ctx.fill();
 
     // Dynamic Island at top
     ctx.fillStyle = "#000000";
     ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(240, 40, 240, 55, 27) : ctx.rect(240, 40, 240, 55);
+    ctx.roundRect ? ctx.roundRect(362, 50, 300, 75, 37.5) : ctx.rect(362, 50, 300, 75);
     ctx.fill();
 
-    // Small camera and sensor glow
+    // Dynamic island sensor glow
     ctx.fillStyle = "#00e5ff";
     ctx.beginPath();
-    ctx.arc(430, 67, 7, 0, Math.PI * 2);
+    ctx.arc(610, 88, 9, 0, Math.PI * 2);
     ctx.fill();
 
     // Status Bar Info
     ctx.fillStyle = "#ffffff";
-    ctx.font = "600 24px 'Plus Jakarta Sans', sans-serif";
+    ctx.font = "600 32px 'Plus Jakarta Sans', sans-serif";
     ctx.textAlign = "left";
-    ctx.fillText("09:41", 60, 78);
+    ctx.fillText("09:41", 80, 100);
     ctx.textAlign = "right";
-    ctx.fillText("5G  100%", 660, 78);
+    ctx.fillText("5G  100%", 944, 100);
 
     // Large Futuristic Clock
     ctx.textAlign = "center";
     ctx.fillStyle = "#ffffff";
-    ctx.font = "800 110px 'Plus Jakarta Sans', sans-serif";
-    ctx.fillText("09:41", 360, 310);
-    ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-    ctx.font = "600 26px 'Plus Jakarta Sans', sans-serif";
-    ctx.fillText("Thứ Ba, 17 Tháng 11 • SpatialOS", 360, 370);
+    ctx.font = "800 150px 'Plus Jakarta Sans', sans-serif";
+    ctx.fillText("09:41", 512, 430);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
+    ctx.font = "600 36px 'Plus Jakarta Sans', sans-serif";
+    ctx.fillText("Thứ Ba, 17 Tháng 11 • SpatialOS", 512, 510);
 
     // Holographic Audio Visualizer Card
-    ctx.fillStyle = "rgba(16, 24, 38, 0.75)";
-    ctx.strokeStyle = "rgba(0, 229, 255, 0.4)";
-    ctx.lineWidth = 2;
+    ctx.fillStyle = "rgba(12, 18, 30, 0.8)";
+    ctx.strokeStyle = "rgba(0, 229, 255, 0.45)";
+    ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(60, 520, 600, 380, 28) : ctx.rect(60, 520, 600, 380);
+    ctx.roundRect ? ctx.roundRect(80, 720, 864, 560, 40) : ctx.rect(80, 720, 864, 560);
     ctx.fill();
     ctx.stroke();
 
     // Soundwaves inside Card
     ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 26px 'Plus Jakarta Sans', sans-serif";
+    ctx.font = "bold 38px 'Plus Jakarta Sans', sans-serif";
     ctx.textAlign = "left";
-    ctx.fillText("AuraSonic ANC Pro • Đang phát", 100, 580);
+    ctx.fillText("AuraSonic ANC Pro • Đang phát", 140, 810);
     ctx.fillStyle = "#00e5ff";
-    ctx.font = "600 20px 'JetBrains Mono', monospace";
-    ctx.fillText("SPATIAL 360° AUDIO • LOSSLESS 96kHz", 100, 615);
+    ctx.font = "600 28px 'JetBrains Mono', monospace";
+    ctx.fillText("SPATIAL 360° AUDIO • LOSSLESS 96kHz", 140, 860);
 
-    // Visualizer Bars
-    for (let b = 0; b < 28; b++) {
-      const bx = 100 + b * 19;
-      const h = 25 + Math.sin(b * 0.45) * 55 + Math.cos(b * 0.8) * 35;
-      const barGrad = ctx.createLinearGradient(0, 780 - h, 0, 780);
+    // Animated Visualizer Spectrum Bars
+    for (let b = 0; b < 32; b++) {
+      const bx = 140 + b * 24;
+      const h = 40 + Math.sin(b * 0.45) * 80 + Math.cos(b * 0.8) * 45;
+      const barGrad = ctx.createLinearGradient(0, 1100 - h, 0, 1100);
       barGrad.addColorStop(0, "#00e5ff");
       barGrad.addColorStop(1, "#e2fd52");
       ctx.fillStyle = barGrad;
-      ctx.fillRect(bx, 780 - Math.max(h, 8), 12, Math.max(h, 8));
+      ctx.fillRect(bx, 1100 - Math.max(h, 12), 16, Math.max(h, 12));
     }
 
     // Audio Controls Row
-    ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
-    ctx.font = "bold 34px sans-serif";
+    ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+    ctx.font = "bold 48px sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("⏮   ▶   ⏭", 360, 850);
+    ctx.fillText("⏮   ▶   ⏭", 512, 1210);
 
     // Quick Action Bar at bottom
     ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
     ctx.beginPath();
-    ctx.arc(140, 1310, 45, 0, Math.PI * 2);
+    ctx.arc(200, 1880, 60, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(580, 1310, 45, 0, Math.PI * 2);
+    ctx.arc(824, 1880, 60, 0, Math.PI * 2);
     ctx.fill();
 
     // Home Bar
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(240, 1400, 240, 8, 4) : ctx.rect(240, 1400, 240, 8);
+    ctx.roundRect ? ctx.roundRect(352, 2000, 320, 10, 5) : ctx.rect(352, 2000, 320, 10);
     ctx.fill();
 
     const texture = new THREE.CanvasTexture(canvas);
     return texture;
   }
 
-  function createSpeakerGrilleTexture() {
+  function createCyberGlyphBackTexture() {
     const canvas = document.createElement("canvas");
-    canvas.width = 256;
-    canvas.height = 256;
+    canvas.width = 1024;
+    canvas.height = 2048;
     const ctx = canvas.getContext("2d");
 
-    ctx.fillStyle = "#121720";
-    ctx.fillRect(0, 0, 256, 256);
+    // Dark frosted translucent cyberplate
+    ctx.fillStyle = "#0a0e16";
+    ctx.fillRect(0, 0, 1024, 2048);
 
-    // Hexagonal acoustic micro-perforations
-    ctx.fillStyle = "#06090e";
-    const r = 3.5;
-    const dy = 10;
-    const dx = 12;
-    for (let y = 0; y < 256; y += dy) {
-      const offsetX = ((y / dy) % 2 === 0) ? 0 : dx / 2;
-      for (let x = -dx; x < 256 + dx; x += dx) {
+    // Glowing Glyph matrix lines (Nothing Phone aesthetic)
+    ctx.strokeStyle = "#00e5ff";
+    ctx.lineWidth = 10;
+    ctx.shadowColor = "#00e5ff";
+    ctx.shadowBlur = 25;
+
+    // Camera island perimeter glyph
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(540, 140, 400, 520, 60) : ctx.rect(540, 140, 400, 520);
+    ctx.stroke();
+
+    // Wireless charging coil glyph
+    ctx.beginPath();
+    ctx.arc(512, 1100, 260, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Bottom diagonal slash glyphs
+    ctx.beginPath();
+    ctx.moveTo(140, 1800); ctx.lineTo(340, 1800);
+    ctx.moveTo(512, 1720); ctx.lineTo(512, 1880);
+    ctx.stroke();
+
+    // Micro laser printed typography
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+    ctx.font = "bold 20px 'JetBrains Mono', monospace";
+    ctx.textAlign = "left";
+    ctx.fillText("AURATECH DESIGN IN CALIFORNIA & VIETNAM", 120, 1940);
+    ctx.fillText("MODEL: A2601 TITANIUM ULTRA • CE FC", 120, 1975);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    return texture;
+  }
+
+  function createSpeakerVortexTexture() {
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "#101520";
+    ctx.fillRect(0, 0, 512, 512);
+
+    // Aerodynamic vortex acoustic sound slots
+    ctx.fillStyle = "#06080d";
+    for (let y = 10; y < 512; y += 18) {
+      for (let x = 10; x < 512; x += 28) {
         ctx.beginPath();
-        ctx.arc(x + offsetX, y, r, 0, Math.PI * 2);
+        const slant = Math.sin(y * 0.05) * 8;
+        ctx.ellipse ? ctx.ellipse(x + slant, y, 9, 3.5, 0.25, 0, Math.PI * 2) : ctx.rect(x, y, 16, 5);
         ctx.fill();
       }
     }
@@ -257,7 +295,7 @@
     const texture = new THREE.CanvasTexture(canvas);
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(6, 4);
+    texture.repeat.set(4, 2);
     return texture;
   }
 
@@ -267,13 +305,13 @@
     canvas.height = 1024;
     const ctx = canvas.getContext("2d");
 
-    ctx.fillStyle = "#04070c";
+    ctx.fillStyle = "#03060a";
     ctx.fillRect(0, 0, 1024, 1024);
 
-    // Concentric rings
-    ctx.lineWidth = 2;
-    for (let radius = 60; radius <= 480; radius += 50) {
-      ctx.strokeStyle = radius % 100 === 0 ? "rgba(0, 229, 255, 0.45)" : "rgba(0, 229, 255, 0.15)";
+    // Concentric laser rings
+    ctx.lineWidth = 2.5;
+    for (let radius = 60; radius <= 480; radius += 45) {
+      ctx.strokeStyle = radius % 90 === 0 ? "rgba(0, 229, 255, 0.5)" : "rgba(0, 229, 255, 0.15)";
       ctx.beginPath();
       ctx.arc(512, 512, radius, 0, Math.PI * 2);
       ctx.stroke();
@@ -282,7 +320,7 @@
     // Radial ray guides
     for (let angle = 0; angle < 360; angle += 15) {
       const rad = (angle * Math.PI) / 180;
-      ctx.strokeStyle = angle % 45 === 0 ? "rgba(226, 253, 82, 0.35)" : "rgba(255, 255, 255, 0.08)";
+      ctx.strokeStyle = angle % 45 === 0 ? "rgba(226, 253, 82, 0.4)" : "rgba(255, 255, 255, 0.08)";
       ctx.lineWidth = angle % 45 === 0 ? 2 : 1;
       ctx.beginPath();
       ctx.moveTo(512 + Math.cos(rad) * 60, 512 + Math.sin(rad) * 60);
@@ -295,14 +333,12 @@
   }
 
   /* =========================================================================
-     2. PROCEDURAL 3D MESH BUILDERS
+     2. PROCEDURAL 3D MESH BUILDERS (2026 LUXURY FLAGSHIP DESIGN)
      ========================================================================= */
 
-  // Helper to register parts for exploded animation
-  function registerPart(collection, mesh, explodedOffset, basePos, baseRot) {
+  function registerPart(collection, mesh, explodedOffset, basePos) {
     mesh.userData = {
       basePos: basePos ? basePos.clone() : mesh.position.clone(),
-      baseRot: baseRot ? baseRot.clone() : mesh.rotation.clone(),
       explodedOffset: explodedOffset.clone(),
       currentExplode: 0
     };
@@ -310,292 +346,280 @@
     return mesh;
   }
 
-  // --- DEVICE 1: FLAGSHIP SMARTPHONE (AuraPhone Titanium Pro) ---
+  // --- DEVICE 1: AURA PHONE 16 HORIZON ULTRA (CYBER-TRANSLUCENT TITANIUM) ---
   function buildPhone() {
     phoneGroup = new THREE.Group();
-    phoneGroup.position.set(0, 1.8, 0);
+    phoneGroup.position.set(0, 1.8, 0); // Center Stage initially
 
     const titaniumMat = new THREE.MeshStandardMaterial({
-      color: 0x222731,
-      metalness: 0.92,
-      roughness: 0.22,
-      envMapIntensity: 1.5
-    });
-
-    const darkPlasticMat = new THREE.MeshStandardMaterial({
-      color: 0x0a0d14,
-      metalness: 0.2,
-      roughness: 0.5
+      color: 0x242a36,
+      metalness: 0.96,
+      roughness: 0.14,
+      envMapIntensity: 2.2
     });
 
     const copperMat = new THREE.MeshStandardMaterial({
       color: 0xd97543,
       metalness: 0.95,
-      roughness: 0.28
+      roughness: 0.2
     });
 
     const goldMat = new THREE.MeshStandardMaterial({
       color: 0xf4c430,
-      metalness: 0.9,
-      roughness: 0.2
+      metalness: 0.92,
+      roughness: 0.15
     });
 
-    // 1. Titanium Chassis Unibody Frame
-    const chassisGeo = new THREE.BoxGeometry(4.2, 8.4, 0.42);
+    // 1. Titanium Unibody Chassis with Diamond-cut Chamfer
+    const chassisGeo = new THREE.BoxGeometry(3.9, 8.2, 0.34);
     const chassis = new THREE.Mesh(chassisGeo, titaniumMat);
     chassis.castShadow = true;
     chassis.receiveShadow = true;
     registerPart(phoneParts, chassis, new THREE.Vector3(0, 0, 0));
     phoneGroup.add(chassis);
 
-    // Antenna Bands & Edge Chamfers
-    for (let side of [-2.11, 2.11]) {
-      const bandGeo = new THREE.BoxGeometry(0.04, 0.2, 0.44);
-      const band = new THREE.Mesh(bandGeo, darkPlasticMat);
-      band.position.set(side, 2.5, 0);
-      chassis.add(band);
-
-      const band2 = band.clone();
-      band2.position.set(side, -2.5, 0);
-      chassis.add(band2);
-    }
-
-    // 2. Front Curved Sapphire Screen
-    const screenGeo = new THREE.BoxGeometry(4.05, 8.25, 0.08);
+    // 2. Front Curved Waterfall Sapphire Screen
+    const screenGeo = new THREE.BoxGeometry(3.76, 8.08, 0.08);
     const screenTex = createPhoneScreenTexture();
     const screenMat = new THREE.MeshStandardMaterial({
       map: screenTex,
-      roughness: 0.04,
+      roughness: 0.02,
       metalness: 0.1,
       emissive: 0xffffff,
       emissiveMap: screenTex,
-      emissiveIntensity: 0.65
+      emissiveIntensity: 0.75
     });
     const frontScreen = new THREE.Mesh(screenGeo, screenMat);
-    frontScreen.position.set(0, 0, 0.26);
-    // Explodes forward on Z+
-    registerPart(phoneParts, frontScreen, new THREE.Vector3(0, 0, 4.2));
+    frontScreen.position.set(0, 0, 0.22);
+    registerPart(phoneParts, frontScreen, new THREE.Vector3(0, 0, 4.0));
     phoneGroup.add(frontScreen);
 
-    // 3. Frosted Matte Back Glass
-    const backGeo = new THREE.BoxGeometry(4.1, 8.3, 0.08);
+    // 3. Translucent Cyber-Glyph Backplate (Nothing Phone / Vision Luxury)
+    const backGeo = new THREE.BoxGeometry(3.8, 8.1, 0.08);
+    const glyphTex = createCyberGlyphBackTexture();
     const backMat = new THREE.MeshStandardMaterial({
-      color: 0x181e28,
-      roughness: 0.35,
-      metalness: 0.4
+      map: glyphTex,
+      roughness: 0.15,
+      metalness: 0.5,
+      emissive: 0x00e5ff,
+      emissiveMap: glyphTex,
+      emissiveIntensity: 0.9,
+      transparent: true,
+      opacity: 0.95
     });
     const backGlass = new THREE.Mesh(backGeo, backMat);
-    backGlass.position.set(0, 0, -0.26);
-    // Explodes backwards on Z-
+    backGlass.position.set(0, 0, -0.22);
     registerPart(phoneParts, backGlass, new THREE.Vector3(0, 0, -3.8));
     phoneGroup.add(backGlass);
 
     // 4. Copper Vapor Chamber Heat Sink
-    const vaporGeo = new THREE.BoxGeometry(3.2, 5.5, 0.04);
+    const vaporGeo = new THREE.BoxGeometry(3.0, 5.2, 0.04);
     const vaporChamber = new THREE.Mesh(vaporGeo, copperMat);
-    vaporChamber.position.set(0, 0.4, 0.08);
-    registerPart(phoneParts, vaporChamber, new THREE.Vector3(-1.2, 0, 1.8));
+    vaporChamber.position.set(0, 0.3, 0.06);
+    registerPart(phoneParts, vaporChamber, new THREE.Vector3(-1.0, 0, 1.8));
     phoneGroup.add(vaporChamber);
 
-    // 5. Main Logic Board with Aura Bionic 3nm Chip
-    const boardGeo = new THREE.BoxGeometry(3.6, 3.8, 0.06);
+    // 5. Main Logic Board & 3nm Bionic Chip
+    const boardGeo = new THREE.BoxGeometry(3.4, 3.6, 0.06);
     const boardMat = new THREE.MeshStandardMaterial({
-      color: 0x111a24,
-      metalness: 0.7,
-      roughness: 0.35
+      color: 0x0f1622,
+      metalness: 0.8,
+      roughness: 0.25
     });
     const motherboard = new THREE.Mesh(boardGeo, boardMat);
-    motherboard.position.set(0, 1.8, 0.14);
+    motherboard.position.set(0, 1.8, 0.12);
 
-    // 3nm Chip raised package
     const chipGeo = new THREE.BoxGeometry(1.6, 1.6, 0.08);
     const chipTex = createChipTexture();
     const chipMat = new THREE.MeshStandardMaterial({
       map: chipTex,
-      roughness: 0.25,
-      metalness: 0.8,
+      roughness: 0.18,
+      metalness: 0.88,
       emissive: 0x00e5ff,
       emissiveMap: chipTex,
-      emissiveIntensity: 0.95
+      emissiveIntensity: 1.15
     });
     const bionicChip = new THREE.Mesh(chipGeo, chipMat);
     bionicChip.position.set(0, 0, 0.06);
     motherboard.add(bionicChip);
 
-    // Gold connector headers on board
-    for (let c = -1.2; c <= 1.2; c += 0.6) {
-      const connGeo = new THREE.BoxGeometry(0.4, 0.15, 0.08);
+    // Gold contact pins
+    for (let c = -1.1; c <= 1.1; c += 0.55) {
+      const connGeo = new THREE.BoxGeometry(0.35, 0.12, 0.08);
       const conn = new THREE.Mesh(connGeo, goldMat);
-      conn.position.set(c, -1.6, 0.04);
+      conn.position.set(c, -1.5, 0.04);
       motherboard.add(conn);
     }
     registerPart(phoneParts, motherboard, new THREE.Vector3(0, 2.2, 2.4));
     phoneGroup.add(motherboard);
 
     // 6. Graphene Battery Cell
-    const battGeo = new THREE.BoxGeometry(3.5, 3.8, 0.15);
+    const battGeo = new THREE.BoxGeometry(3.3, 3.6, 0.14);
     const battMat = new THREE.MeshStandardMaterial({
-      color: 0x0f1520,
-      roughness: 0.4,
-      metalness: 0.6
+      color: 0x0b1018,
+      roughness: 0.35,
+      metalness: 0.65
     });
     const battery = new THREE.Mesh(battGeo, battMat);
-    battery.position.set(0, -1.8, 0.1);
-    registerPart(phoneParts, battery, new THREE.Vector3(0, -2.4, 1.6));
+    battery.position.set(0, -1.8, 0.08);
+    registerPart(phoneParts, battery, new THREE.Vector3(0, -2.2, 1.6));
     phoneGroup.add(battery);
 
-    // 7. Triple Camera Module Island (Back)
+    // 7. Triple Sapphire Periscope Camera Module
     const camIslandGroup = new THREE.Group();
-    camIslandGroup.position.set(0.9, 2.4, -0.36);
+    camIslandGroup.position.set(0.85, 2.3, -0.32);
 
-    const islandPlateGeo = new THREE.BoxGeometry(1.8, 2.0, 0.15);
+    const islandPlateGeo = new THREE.BoxGeometry(1.7, 1.9, 0.15);
     const islandPlate = new THREE.Mesh(islandPlateGeo, titaniumMat);
     camIslandGroup.add(islandPlate);
 
-    // 3 Sapphire Camera Lenses
     const lensPositions = [
-      { x: -0.45, y: 0.45 },
-      { x: -0.45, y: -0.45 },
-      { x: 0.45, y: 0 }
+      { x: -0.42, y: 0.42 },
+      { x: -0.42, y: -0.42 },
+      { x: 0.42, y: 0 }
     ];
 
-    lensPositions.forEach((pos, idx) => {
-      // Ring barrel
-      const ringGeo = new THREE.CylinderGeometry(0.36, 0.38, 0.22, 32);
+    lensPositions.forEach((pos) => {
+      const ringGeo = new THREE.CylinderGeometry(0.34, 0.36, 0.22, 32);
       ringGeo.rotateX(Math.PI / 2);
       const ring = new THREE.Mesh(ringGeo, titaniumMat);
       ring.position.set(pos.x, pos.y, -0.12);
       camIslandGroup.add(ring);
 
-      // Glass lens element
-      const glassGeo = new THREE.CylinderGeometry(0.28, 0.28, 0.05, 32);
+      const glassGeo = new THREE.CylinderGeometry(0.26, 0.26, 0.05, 32);
       glassGeo.rotateX(Math.PI / 2);
       const glassMat = new THREE.MeshPhysicalMaterial({
-        color: 0x102040,
-        roughness: 0.05,
-        transmission: 0.9,
-        reflectivity: 0.9
+        color: 0x08162e,
+        roughness: 0.03,
+        transmission: 0.94,
+        reflectivity: 0.98
       });
       const glass = new THREE.Mesh(glassGeo, glassMat);
       glass.position.set(pos.x, pos.y, -0.22);
       camIslandGroup.add(glass);
     });
 
-    registerPart(phoneParts, camIslandGroup, new THREE.Vector3(2.5, 2.0, -4.5));
+    registerPart(phoneParts, camIslandGroup, new THREE.Vector3(2.4, 1.8, -4.5));
     phoneGroup.add(camIslandGroup);
 
     // 8. MagSafe Induction Copper Coil Ring
-    const coilGeo = new THREE.RingGeometry(1.0, 1.5, 48);
+    const coilGeo = new THREE.RingGeometry(0.9, 1.4, 48);
     const coilMat = new THREE.MeshStandardMaterial({
       color: 0xd97543,
-      metalness: 0.95,
-      roughness: 0.25,
+      metalness: 0.96,
+      roughness: 0.2,
       side: THREE.DoubleSide
     });
     const coil = new THREE.Mesh(coilGeo, coilMat);
-    coil.position.set(0, 0, -0.18);
+    coil.position.set(0, 0, -0.16);
     registerPart(phoneParts, coil, new THREE.Vector3(0, 0, -2.2));
     phoneGroup.add(coil);
 
     scene.add(phoneGroup);
   }
 
-  // --- DEVICE 2: AUDIOPHILE HEADPHONES (AuraSonic ANC Pro X1) ---
+  // --- DEVICE 2: AURASONIC VISION MAX (AERODYNAMIC LUXURY SPATIAL AUDIO HEADSET) ---
   function buildHeadphones() {
     headphoneGroup = new THREE.Group();
-    headphoneGroup.position.set(12, 1.8, 0); // Positioned for lateral stage transition
+    headphoneGroup.position.set(16, 1.8, -5); // Positioned for lateral stage transition
 
     const aluminumMat = new THREE.MeshStandardMaterial({
-      color: 0x303642,
-      metalness: 0.88,
-      roughness: 0.22
+      color: 0x384152,
+      metalness: 0.94,
+      roughness: 0.14
     });
 
     const berylliumMat = new THREE.MeshStandardMaterial({
-      color: 0x98a2ad,
-      metalness: 0.95,
-      roughness: 0.16
+      color: 0xa8b4c2,
+      metalness: 0.96,
+      roughness: 0.12
     });
 
     const cushionMat = new THREE.MeshStandardMaterial({
-      color: 0x0e131c,
-      roughness: 0.85,
-      metalness: 0.15
+      color: 0x121720,
+      roughness: 0.75,
+      metalness: 0.18
     });
 
     const copperMat = new THREE.MeshStandardMaterial({
       color: 0xd97543,
-      metalness: 0.92,
-      roughness: 0.25
+      metalness: 0.94,
+      roughness: 0.22
     });
 
-    // 1. Titanium Telescopic Headband Arch
-    const bandCurve = new THREE.EllipseCurve(0, 0, 3.2, 3.4, 0, Math.PI, false, 0);
-    const bandPoints = bandCurve.getPoints(50);
-    const bandGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(bandPoints.map(p => new THREE.Vector3(p.x, p.y, 0))), 64, 0.18, 12, false);
+    // 1. Dual-Rail Arched Titanium Headband
+    const bandCurve = new THREE.EllipseCurve(0, 0, 3.4, 3.6, 0, Math.PI, false, 0);
+    const bandPoints = bandCurve.getPoints(60);
+    const bandGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(bandPoints.map(p => new THREE.Vector3(p.x, p.y, 0))), 64, 0.16, 16, false);
     const headband = new THREE.Mesh(bandGeo, aluminumMat);
-    headband.position.set(0, 0.4, 0);
+    headband.position.set(0, 0.35, 0);
     registerPart(headphoneParts, headband, new THREE.Vector3(0, 4.5, 0));
     headphoneGroup.add(headband);
 
-    // 2. Ear Cups (Left & Right) with Exploded Acoustic Drivers
+    // Inner breathable suspension knit canopy
+    const innerCanopyGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(bandPoints.slice(10, 50).map(p => new THREE.Vector3(p.x, p.y - 0.2, 0))), 48, 0.08, 12, false);
+    const innerCanopyMat = new THREE.MeshStandardMaterial({ color: 0x0a0e14, roughness: 0.9 });
+    const innerCanopy = new THREE.Mesh(innerCanopyGeo, innerCanopyMat);
+    headband.add(innerCanopy);
+
+    // 2. Sculpted Aerodynamic Ear Cups (Left & Right)
     [-1, 1].forEach((side) => {
       const cupSideGroup = new THREE.Group();
-      cupSideGroup.position.set(side * 3.2, 0, 0);
+      cupSideGroup.position.set(side * 3.4, 0, 0);
 
-      // Yoke Fork
-      const yokeGeo = new THREE.TorusGeometry(1.2, 0.12, 12, 32, Math.PI);
+      // CNC Dual-Axis Gimbal Yoke
+      const yokeGeo = new THREE.TorusGeometry(1.25, 0.11, 14, 36, Math.PI);
       const yoke = new THREE.Mesh(yokeGeo, aluminumMat);
       yoke.rotation.z = side > 0 ? -Math.PI / 2 : Math.PI / 2;
       cupSideGroup.add(yoke);
 
-      // Outer Aluminum Acoustic Shell
-      const shellGeo = new THREE.CylinderGeometry(1.6, 1.7, 0.8, 36);
+      // Outer Aluminum Acoustic Shell (Sculpted Chamfered Cylinder)
+      const shellGeo = new THREE.CylinderGeometry(1.65, 1.75, 0.75, 48);
       shellGeo.rotateZ(Math.PI / 2);
       const shell = new THREE.Mesh(shellGeo, aluminumMat);
       shell.position.set(side * 0.4, 0, 0);
-      registerPart(headphoneParts, shell, new THREE.Vector3(side * 3.0, 0, 0));
+      registerPart(headphoneParts, shell, new THREE.Vector3(side * 3.2, 0, 0));
       cupSideGroup.add(shell);
 
-      // Halo Ring Glow on Shell
-      const haloGeo = new THREE.RingGeometry(1.3, 1.45, 36);
+      // Glowing Aura Touch Halo Ring
+      const haloGeo = new THREE.RingGeometry(1.35, 1.5, 48);
       haloGeo.rotateY(Math.PI / 2);
       const haloMat = new THREE.MeshStandardMaterial({
         color: 0x00e5ff,
         emissive: 0x00e5ff,
-        emissiveIntensity: 1.2,
+        emissiveIntensity: 1.4,
         side: THREE.DoubleSide
       });
       const halo = new THREE.Mesh(haloGeo, haloMat);
-      halo.position.set(side * 0.81, 0, 0);
+      halo.position.set(side * 0.76, 0, 0);
       shell.add(halo);
 
-      // Neodymium Magnet Core (Exploded)
-      const magnetGeo = new THREE.CylinderGeometry(0.8, 0.8, 0.25, 32);
+      // Neodymium Motor Core
+      const magnetGeo = new THREE.CylinderGeometry(0.85, 0.85, 0.22, 36);
       magnetGeo.rotateZ(Math.PI / 2);
       const magnet = new THREE.Mesh(magnetGeo, aluminumMat);
       magnet.position.set(side * 0.15, 0, 0);
       registerPart(headphoneParts, magnet, new THREE.Vector3(side * 1.8, 0, 1.2));
       cupSideGroup.add(magnet);
 
-      // Copper Voice Coil Cylinder (Exploded)
-      const coilGeo = new THREE.CylinderGeometry(0.9, 0.9, 0.2, 32, 1, true);
+      // Pure Copper Voice Coil
+      const coilGeo = new THREE.CylinderGeometry(0.95, 0.95, 0.2, 36, 1, true);
       coilGeo.rotateZ(Math.PI / 2);
       const voiceCoil = new THREE.Mesh(coilGeo, copperMat);
       voiceCoil.position.set(side * -0.05, 0, 0);
       registerPart(headphoneParts, voiceCoil, new THREE.Vector3(side * 1.2, 0, 2.2));
       cupSideGroup.add(voiceCoil);
 
-      // 40mm Beryllium Diaphragm Driver (Exploded)
-      const driverGeo = new THREE.CylinderGeometry(1.25, 1.35, 0.08, 36);
+      // 40mm Beryllium Diaphragm Driver
+      const driverGeo = new THREE.CylinderGeometry(1.3, 1.4, 0.08, 48);
       driverGeo.rotateZ(Math.PI / 2);
       const driver = new THREE.Mesh(driverGeo, berylliumMat);
       driver.position.set(side * -0.25, 0, 0);
       registerPart(headphoneParts, driver, new THREE.Vector3(side * 0.5, 0, 3.4));
       cupSideGroup.add(driver);
 
-      // Memory Foam Ear Cushion
-      const cushionGeo = new THREE.TorusGeometry(1.35, 0.42, 16, 36);
+      // Ergonomic Contoured Memory Foam Cushion
+      const cushionGeo = new THREE.TorusGeometry(1.4, 0.44, 20, 48);
       cushionGeo.rotateY(Math.PI / 2);
       const cushion = new THREE.Mesh(cushionGeo, cushionMat);
       cushion.position.set(side * -0.65, 0, 0);
@@ -608,136 +632,126 @@
     scene.add(headphoneGroup);
   }
 
-  // --- DEVICE 3: SPATIAL HI-FI SPEAKER (AuraSphere 360°) ---
+  // --- DEVICE 3: AURASPHERE SPATIAL MONOLITH (HIGH-END ACOUSTIC SCULPTURE) ---
   function buildSpeaker() {
     speakerGroup = new THREE.Group();
-    speakerGroup.position.set(-12, 1.5, 0); // Positioned for lateral stage transition
+    speakerGroup.position.set(-16, 1.5, -5); // Positioned for lateral stage transition
 
     const cabinetMat = new THREE.MeshStandardMaterial({
-      color: 0x181e28,
-      metalness: 0.85,
+      color: 0x161c26,
+      metalness: 0.9,
+      roughness: 0.2
+    });
+
+    const vortexTex = createSpeakerVortexTexture();
+    const vortexMat = new THREE.MeshStandardMaterial({
+      map: vortexTex,
+      metalness: 0.92,
       roughness: 0.28
     });
 
-    const grilleTex = createSpeakerGrilleTexture();
-    const grilleMat = new THREE.MeshStandardMaterial({
-      map: grilleTex,
-      metalness: 0.9,
-      roughness: 0.35
-    });
-
     const wooferMat = new THREE.MeshStandardMaterial({
-      color: 0x0b0e14,
-      metalness: 0.6,
-      roughness: 0.3
-    });
-
-    const copperMat = new THREE.MeshStandardMaterial({
-      color: 0xd97543,
+      color: 0xedf2f7,
       metalness: 0.95,
-      roughness: 0.25
+      roughness: 0.12
     });
 
-    // 1. Main Inner Acoustic Chamber
-    const coreGeo = new THREE.CylinderGeometry(2.1, 2.2, 5.2, 36);
-    const core = new THREE.Mesh(coreGeo, cabinetMat);
-    core.position.set(0, 0, 0);
-    registerPart(speakerParts, core, new THREE.Vector3(0, 0, 0));
-    speakerGroup.add(core);
+    // 1. Sculptural Aerodynamic Acoustic Enclosure (Sphere / Ellipsoid)
+    const bodyGeo = new THREE.SphereGeometry(2.4, 48, 48);
+    bodyGeo.scale(1.0, 1.25, 1.0);
+    const body = new THREE.Mesh(bodyGeo, cabinetMat);
+    registerPart(speakerParts, body, new THREE.Vector3(0, 0, 0));
+    speakerGroup.add(body);
 
-    // 2. 360° Laser Micro-perforated Outer Grille Sleeve (Explodes upwards)
-    const sleeveGeo = new THREE.CylinderGeometry(2.35, 2.35, 5.4, 36, 1, true);
-    const sleeve = new THREE.Mesh(sleeveGeo, grilleMat);
+    // 2. 360° Laser Vortex Grille Ring
+    const sleeveGeo = new THREE.CylinderGeometry(2.46, 2.46, 3.2, 48, 1, true);
+    const sleeve = new THREE.Mesh(sleeveGeo, vortexMat);
     sleeve.position.set(0, 0, 0);
-    registerPart(speakerParts, sleeve, new THREE.Vector3(0, 4.8, 0));
+    registerPart(speakerParts, sleeve, new THREE.Vector3(0, 4.6, 0));
     speakerGroup.add(sleeve);
 
-    // 3. Top CNC Knurled Volume Crown (Explodes upwards)
-    const crownGeo = new THREE.CylinderGeometry(1.9, 2.0, 0.45, 48);
-    const crownMat = new THREE.MeshStandardMaterial({
-      color: 0x2e3544,
-      metalness: 0.95,
-      roughness: 0.18
-    });
-    const crown = new THREE.Mesh(crownGeo, crownMat);
-    crown.position.set(0, 2.8, 0);
-    registerPart(speakerParts, crown, new THREE.Vector3(0, 7.2, 0));
-    speakerGroup.add(crown);
+    // 3. Top Floating Acoustic Dispersion Dome & Capacitive Glass Dial
+    const crownGroup = new THREE.Group();
+    crownGroup.position.set(0, 3.0, 0);
 
-    // 4. Down-Firing High-Excursion Bass Woofer (Explodes downwards)
-    const wooferGroup = new THREE.Group();
-    wooferGroup.position.set(0, -2.6, 0);
+    const domeGeo = new THREE.SphereGeometry(1.6, 36, 18, 0, Math.PI * 2, 0, Math.PI / 2);
+    const domeMat = new THREE.MeshStandardMaterial({ color: 0x242d3d, metalness: 0.95, roughness: 0.16 });
+    const dome = new THREE.Mesh(domeGeo, domeMat);
+    crownGroup.add(dome);
 
-    const coneGeo = new THREE.ConeGeometry(1.8, 0.9, 32, 1, true);
-    coneGeo.rotateX(Math.PI);
-    const cone = new THREE.Mesh(coneGeo, wooferMat);
-    wooferGroup.add(cone);
+    const haloTopGeo = new THREE.TorusGeometry(1.5, 0.06, 16, 48);
+    haloTopGeo.rotateX(Math.PI / 2);
+    const haloTopMat = new THREE.MeshStandardMaterial({ color: 0xe2fd52, emissive: 0xe2fd52, emissiveIntensity: 1.5 });
+    const haloTop = new THREE.Mesh(haloTopGeo, haloTopMat);
+    haloTop.position.set(0, 0.1, 0);
+    crownGroup.add(haloTop);
 
-    const dustCapGeo = new THREE.SphereGeometry(0.55, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2);
-    const dustCap = new THREE.Mesh(dustCapGeo, wooferMat);
-    dustCap.position.set(0, -0.3, 0);
-    wooferGroup.add(dustCap);
+    registerPart(speakerParts, crownGroup, new THREE.Vector3(0, 6.8, 0));
+    speakerGroup.add(crownGroup);
 
-    const wooferCoilGeo = new THREE.CylinderGeometry(0.7, 0.7, 0.4, 32);
-    const wooferCoil = new THREE.Mesh(wooferCoilGeo, copperMat);
-    wooferCoil.position.set(0, 0.2, 0);
-    wooferGroup.add(wooferCoil);
+    // 4. Dual Active Lateral Bass Woofers (Left & Right - Deviated Pulsing Diaphragms)
+    // Left Woofer
+    wooferLeftGroup = new THREE.Group();
+    wooferLeftGroup.position.set(-2.2, 0, 0);
+    const coneGeoL = new THREE.CylinderGeometry(1.4, 0.5, 0.35, 36);
+    coneGeoL.rotateZ(-Math.PI / 2);
+    const leftCone = new THREE.Mesh(coneGeoL, wooferMat);
+    wooferLeftGroup.add(leftCone);
+    registerPart(speakerParts, wooferLeftGroup, new THREE.Vector3(-4.0, 0, 0));
+    speakerGroup.add(wooferLeftGroup);
 
-    registerPart(speakerParts, wooferGroup, new THREE.Vector3(0, -4.5, 0));
-    speakerGroup.add(wooferGroup);
+    // Right Woofer
+    wooferRightGroup = new THREE.Group();
+    wooferRightGroup.position.set(2.2, 0, 0);
+    const coneGeoR = new THREE.CylinderGeometry(1.4, 0.5, 0.35, 36);
+    coneGeoR.rotateZ(Math.PI / 2);
+    const rightCone = new THREE.Mesh(coneGeoR, wooferMat);
+    wooferRightGroup.add(rightCone);
+    registerPart(speakerParts, wooferRightGroup, new THREE.Vector3(4.0, 0, 0));
+    speakerGroup.add(wooferRightGroup);
 
-    // 5. Dual Symmetrical Side Passive Radiators (Explodes laterally X)
-    [-1, 1].forEach((side) => {
-      const radGeo = new THREE.CylinderGeometry(1.2, 1.2, 0.25, 32);
-      radGeo.rotateZ(Math.PI / 2);
-      const radiator = new THREE.Mesh(radGeo, wooferMat);
-      radiator.position.set(side * 2.1, 0, 0);
-      registerPart(speakerParts, radiator, new THREE.Vector3(side * 3.8, 0, 0));
-      speakerGroup.add(radiator);
-    });
-
-    // 6. Base Aura RGB Ambient Light Halo Ring
-    const haloGeo = new THREE.TorusGeometry(2.35, 0.09, 16, 48);
-    haloGeo.rotateX(Math.PI / 2);
-    const haloMat = new THREE.MeshStandardMaterial({
+    // 5. Anti-Gravity Floating Light Ring at Base
+    const baseHaloGeo = new THREE.TorusGeometry(2.35, 0.08, 16, 48);
+    baseHaloGeo.rotateX(Math.PI / 2);
+    const baseHaloMat = new THREE.MeshStandardMaterial({
       color: 0x00e5ff,
       emissive: 0x00e5ff,
-      emissiveIntensity: 1.5
+      emissiveIntensity: 1.6
     });
-    const haloRing = new THREE.Mesh(haloGeo, haloMat);
-    haloRing.position.set(0, -2.55, 0);
-    registerPart(speakerParts, haloRing, new THREE.Vector3(0, -1.5, 0));
-    speakerGroup.add(haloRing);
+    const baseHalo = new THREE.Mesh(baseHaloGeo, baseHaloMat);
+    baseHalo.position.set(0, -2.6, 0);
+    registerPart(speakerParts, baseHalo, new THREE.Vector3(0, -2.0, 0));
+    speakerGroup.add(baseHalo);
 
     scene.add(speakerGroup);
   }
 
-  // --- ENVIRONMENT: PEDESTAL, PARTICLES, LASER GUIDES & SOUNDWAVES ---
+  // --- ENVIRONMENT: PEDESTAL, PARTICLES & INTERCONNECTED ENERGY CONDUIT ---
   function buildEnvironment() {
     // 1. Dark Mirror Quantum Levitation Pedestal
     pedestalGroup = new THREE.Group();
     pedestalGroup.position.set(0, -3.2, 0);
 
-    const pedestalGeo = new THREE.CylinderGeometry(14, 15, 0.8, 64);
+    const pedestalGeo = new THREE.CylinderGeometry(15, 16, 0.8, 64);
     const pedestalTex = createPedestalGridTexture();
     const pedestalMat = new THREE.MeshStandardMaterial({
       map: pedestalTex,
-      color: 0x0c111a,
+      color: 0x080c14,
       metalness: 0.95,
-      roughness: 0.18
+      roughness: 0.16
     });
     const pedestalMesh = new THREE.Mesh(pedestalGeo, pedestalMat);
     pedestalMesh.receiveShadow = true;
     pedestalGroup.add(pedestalMesh);
 
     // Glowing Concentric Laser Rings on Pedestal Top
-    [5.0, 8.5, 12.0].forEach((r, idx) => {
+    [5.0, 9.0, 13.0].forEach((r, idx) => {
       const ringGeo = new THREE.RingGeometry(r - 0.08, r + 0.08, 64);
       ringGeo.rotateX(-Math.PI / 2);
       const ringMat = new THREE.MeshBasicMaterial({
         color: idx === 1 ? 0xe2fd52 : 0x00e5ff,
         transparent: true,
-        opacity: 0.75,
+        opacity: 0.8,
         side: THREE.DoubleSide
       });
       const ring = new THREE.Mesh(ringGeo, ringMat);
@@ -747,7 +761,28 @@
 
     scene.add(pedestalGroup);
 
-    // 2. Floating Quantum Particles (1,200 micro motes)
+    // 2. Continuous Interconnected Energy & Acoustic Data Ribbon
+    const conduitCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-8.0, 1.5, 0),
+      new THREE.Vector3(-4.0, 3.2, 2.5),
+      new THREE.Vector3(0, 1.6, -1.0),
+      new THREE.Vector3(4.0, 3.2, 2.5),
+      new THREE.Vector3(8.0, 1.5, 0),
+      new THREE.Vector3(4.0, -2.5, -3.0),
+      new THREE.Vector3(-4.0, -2.5, -3.0),
+      new THREE.Vector3(-8.0, 1.5, 0)
+    ]);
+    const conduitGeo = new THREE.TubeGeometry(conduitCurve, 128, 0.045, 12, true);
+    const conduitMat = new THREE.MeshBasicMaterial({
+      color: 0x00e5ff,
+      transparent: true,
+      opacity: 0.65,
+      blending: THREE.AdditiveBlending
+    });
+    energyConduitMesh = new THREE.Mesh(conduitGeo, conduitMat);
+    scene.add(energyConduitMesh);
+
+    // 3. Floating Quantum Particles (1,200 micro motes)
     const particleCount = 1200;
     const particleGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
@@ -758,9 +793,9 @@
     const c3 = new THREE.Color(0x8a2be2);
 
     for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 36;
+      positions[i * 3] = (Math.random() - 0.5) * 38;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 24 + 2;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 36;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 38;
 
       const pickColor = Math.random() > 0.6 ? c1 : Math.random() > 0.5 ? c2 : c3;
       colors[i * 3] = pickColor.r;
@@ -782,11 +817,7 @@
     particleSystem = new THREE.Points(particleGeo, particleMat);
     scene.add(particleSystem);
 
-    // 3. Laser Assembly Guide Beams Group
-    laserBeamsGroup = new THREE.Group();
-    scene.add(laserBeamsGroup);
-
-    // 4. 3D Holographic Acoustic Soundwaves Group
+    // 4. 3D Holographic Acoustic Soundwaves
     soundwavesGroup = new THREE.Group();
     for (let w = 0; w < 4; w++) {
       const waveGeo = new THREE.TorusGeometry(2.0 + w * 1.5, 0.05, 16, 64);
@@ -805,37 +836,35 @@
     scene.add(soundwavesGroup);
   }
 
-  // --- STUDIO 4-POINT LIGHTING SETUP ---
+  // --- STUDIO 5-POINT LIGHTING SETUP ---
   function setupLighting() {
-    ambientLight = new THREE.AmbientLight(0x060c18, 1.2);
+    ambientLight = new THREE.AmbientLight(0x081020, 1.4);
     scene.add(ambientLight);
 
-    // Key Light (Crisp Pure White)
-    keyLight = new THREE.DirectionalLight(0xffffff, 1.6);
+    // Main Key Light
+    keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
     keyLight.position.set(12, 18, 14);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 1024;
-    keyLight.shadow.mapSize.height = 1024;
     scene.add(keyLight);
 
-    // Intense Cyan Rim Light (Glancing edge specular)
-    rimLightCyan = new THREE.DirectionalLight(0x00e5ff, 2.4);
+    // Electric Cyan Rim Light
+    rimLightCyan = new THREE.DirectionalLight(0x00e5ff, 2.6);
     rimLightCyan.position.set(-14, 8, -10);
     scene.add(rimLightCyan);
 
-    // Vivid Lime Accent Rim Light
-    rimLightLime = new THREE.DirectionalLight(0xe2fd52, 1.8);
+    // Vivid Lime Accent Light
+    rimLightLime = new THREE.DirectionalLight(0xe2fd52, 2.0);
     rimLightLime.position.set(14, -4, -8);
     scene.add(rimLightLime);
 
-    // Ethereal Underglow Violet Point Light
-    underLight = new THREE.PointLight(0x8a2be2, 2.2, 25);
+    // Deep Violet Underglow Point Light
+    underLight = new THREE.PointLight(0x8a2be2, 2.5, 30);
     underLight.position.set(0, -2.8, 0);
     scene.add(underLight);
   }
 
   /* =========================================================================
-     3. DYNAMIC SCROLL ANIMATION ORCHESTRATION (THE 5 ACTS)
+     3. CONTINUOUS FLUID CHOREOGRAPHY: ZERO JERKINESS, SEAMLESS CONTINUITY
      ========================================================================= */
 
   function updateExplodedParts(collection, factor) {
@@ -850,229 +879,231 @@
     }
   }
 
+  function smoothStep(t) {
+    const x = Math.max(0, Math.min(1, t));
+    return x * x * (3 - 2 * x);
+  }
+
   function setStageProgress(p) {
     currentProgress = p;
 
-    // Determine effective explosion factor
-    let phoneExplode = 0;
-    let hpExplode = 0;
-    let spExplode = 0;
-
-    // Stage Step UI pill updates
-    updateStageHUD(p);
-
     // =========================================================================
-    // ACT I (0.00 -> 0.22): Exploded Smartphone Universe
+    // PHASE 1: SMARTPHONE SPOTLIGHT (p: 0.00 -> 0.35)
     // =========================================================================
-    if (p <= 0.22) {
-      const t = p / 0.22;
-      // Phone is floating exploded at start, starts assembling as t approaches 1
-      phoneExplode = Math.max(1.0 - t * 0.4, 0.6); // 1.0 -> 0.6
-      hpExplode = 1.0;
-      spExplode = 1.0;
+    if (p <= 0.35) {
+      const t = p / 0.35; // 0.0 -> 1.0
 
-      // Position devices
+      // Phone is at Center Stage (0, 1.8, 0)
       phoneGroup.position.set(0, 1.8, 0);
-      headphoneGroup.position.set(16, 1.8, -5);
-      speakerGroup.position.set(-16, 1.5, -5);
+      phoneGroup.rotation.set(0, Math.sin(t * 1.5) * 0.25, 0);
 
-      // Camera: Dramatic dynamic orbit around floating phone parts
-      camState.pos.x = 12 * Math.cos(t * 0.8 + 0.4);
-      camState.pos.y = 6 + Math.sin(t * 1.2) * 2.5;
-      camState.pos.z = 18 * Math.sin(t * 0.8 + 0.4);
-      camState.target.set(0, 1.8, 0);
+      // Headphones & Speaker wait gracefully off-stage
+      headphoneGroup.position.set(16, 1.8, -8);
+      headphoneGroup.rotation.set(0, 0, 0);
+      speakerGroup.position.set(-16, 1.5, -8);
+      speakerGroup.rotation.set(0, 0, 0);
 
-      triggerCallout("phone", "CÔNG NGHỆ 3NM • KHUNG TITANIUM GRADE 5", "AuraPhone Pro: Phân rã đa tầng vi mạch và màn hình Sapphire.");
+      // Component explosion:
+      // t = 0.0 -> 0.65: Exploded view smoothly collapsing
+      // t = 0.65 -> 1.0: Fully assembled, floating with pride
+      const explodeT = Math.min(t / 0.65, 1.0);
+      const phoneExplode = Math.max(0, 1.0 - smoothStep(explodeT));
+      updateExplodedParts(phoneParts, phoneExplode);
+      updateExplodedParts(headphoneParts, 1.0);
+      updateExplodedParts(speakerParts, 1.0);
+
+      // Camera: Smooth continuous orbital macro dive
+      const camOrbitAngle = 0.4 + t * 0.9;
+      camPosTarget.x = 9.5 * Math.sin(camOrbitAngle);
+      camPosTarget.y = 3.6 + Math.cos(t * Math.PI) * 1.2;
+      camPosTarget.z = 12.0 * Math.cos(camOrbitAngle) + 4.0;
+      camLookTarget.set(0, 1.8, 0);
+
+      allSoundwaves.forEach(w => w.visible = false);
     }
     // =========================================================================
-    // ACT II (0.22 -> 0.44): Precision Automated Robot Assembly
+    // PHASE 2: FLUID TRANSITION: PHONE GLIDES, HEADPHONES TAKE CENTER STAGE (p: 0.35 -> 0.45)
     // =========================================================================
-    else if (p <= 0.44) {
-      const t = (p - 0.22) / 0.22;
-      // Phone smoothly snaps together 0.6 -> 0.0 (fully assembled)
-      phoneExplode = Math.max(0.6 * (1.0 - t), 0);
-      hpExplode = 1.0;
-      spExplode = 1.0;
+    else if (p <= 0.45) {
+      const t = (p - 0.35) / 0.10; // 0.0 -> 1.0
+      const st = smoothStep(t);
 
-      phoneGroup.position.set(0, 1.8, 0);
-      headphoneGroup.position.set(16 - t * 4, 1.8, -5);
-      speakerGroup.position.set(-16 + t * 4, 1.5, -5);
+      // Phone glides smoothly to left wing (-6.5, 1.8, -3.5)
+      phoneGroup.position.set(-6.5 * st, 1.8, -3.5 * st);
+      phoneGroup.rotation.y = -0.35 * st;
+      updateExplodedParts(phoneParts, 0.0); // Assembled
 
-      // Macro dive straight into the chip, then swooping back to reveal finished chassis
-      if (t < 0.5) {
-        const mt = t / 0.5;
-        camState.pos.x = 4 + (1 - mt) * 4;
-        camState.pos.y = 2.5 + (1 - mt) * 2;
-        camState.pos.z = 7 + (1 - mt) * 8;
-        camState.target.set(0, 1.8, 0);
+      // Headphones glide smoothly from right wing into Center Stage (0, 1.8, 0)
+      headphoneGroup.position.set(16.0 * (1.0 - st), 1.8, -8.0 * (1.0 - st));
+      headphoneGroup.rotation.y = 0.25 * (1.0 - st);
+      updateExplodedParts(headphoneParts, 1.0); // Entering exploded
+
+      speakerGroup.position.set(-16, 1.5, -8);
+      updateExplodedParts(speakerParts, 1.0);
+
+      // Camera: Continuous swooping crane flight following the energy ribbon
+      camPosTarget.x = 4.0 * (1.0 - st);
+      camPosTarget.y = 4.0 + Math.sin(t * Math.PI) * 0.8;
+      camPosTarget.z = 13.5 - st * 2.0;
+      camLookTarget.set(2.0 * (1.0 - st), 1.8, 0);
+
+      allSoundwaves.forEach(w => w.visible = false);
+    }
+    // =========================================================================
+    // PHASE 3: AUDIOPHILE HEADPHONES SPOTLIGHT (p: 0.45 -> 0.70)
+    // =========================================================================
+    else if (p <= 0.70) {
+      const t = (p - 0.45) / 0.25; // 0.0 -> 1.0
+
+      // Headphones are in Center Stage (0, 1.8, 0)
+      headphoneGroup.position.set(0, 1.8, 0);
+      headphoneGroup.rotation.set(0, (t - 0.5) * 0.4, 0);
+
+      phoneGroup.position.set(-6.5, 1.8, -3.5);
+      phoneGroup.rotation.y = -0.35;
+      updateExplodedParts(phoneParts, 0.0);
+
+      speakerGroup.position.set(-16, 1.5, -8);
+      updateExplodedParts(speakerParts, 1.0);
+
+      // Acoustic assembly:
+      // t = 0.0 -> 0.65: Exploded Beryllium driver & voice coil collapsing into earcups
+      // t = 0.65 -> 1.0: Fully assembled, radiating 3D soundwave ripple!
+      const explodeT = Math.min(t / 0.65, 1.0);
+      const hpExplode = Math.max(0, 1.0 - smoothStep(explodeT));
+      updateExplodedParts(headphoneParts, hpExplode);
+
+      // Camera: Orbiting macro focus around the Beryllium acoustic driver
+      const camOrbitAngle = -0.6 + t * 1.4;
+      camPosTarget.x = 8.5 * Math.sin(camOrbitAngle);
+      camPosTarget.y = 3.2 + Math.sin(t * Math.PI) * 0.9;
+      camPosTarget.z = 9.5 * Math.cos(camOrbitAngle) + 2.0;
+      camLookTarget.set(0, 1.8, 0);
+
+      // Trigger 3D Soundwaves when assembled (t > 0.65)
+      if (t > 0.65) {
+        animateSoundwaves((t - 0.65) / 0.35);
       } else {
-        const mt = (t - 0.5) / 0.5;
-        camState.pos.x = 4 + mt * 6;
-        camState.pos.y = 2.5 + mt * 2.5;
-        camState.pos.z = 7 + mt * 9;
-        camState.target.set(0, 1.8, 0);
+        allSoundwaves.forEach(w => w.visible = false);
       }
-
-      triggerCallout("phone-assembled", "HOÀN TẤT LẮP RÁP • CHỐNG NƯỚC IP68", "Khung viền nguyên khối khóa từ tính, màn hình Sapphire liên kết nano.");
     }
     // =========================================================================
-    // ACT III (0.44 -> 0.68): Audiophile Headphone Teardown & Synthesis
+    // PHASE 4: FLUID TRANSITION: HEADPHONES GLIDE, SPEAKER ASCENDS (p: 0.70 -> 0.80)
     // =========================================================================
-    else if (p <= 0.68) {
-      const t = (p - 0.44) / 0.24;
-      phoneExplode = 0;
-      // Headphones transition from exploded 1.0 -> 0.0 assembled
-      hpExplode = Math.max(1.0 - t * 1.1, 0);
-      spExplode = 1.0;
+    else if (p <= 0.80) {
+      const t = (p - 0.70) / 0.10; // 0.0 -> 1.0
+      const st = smoothStep(t);
 
-      // Phone glides to left stage, Headphones glide to center
-      phoneGroup.position.set(-5.5 * t, 1.8, -2.5 * t);
-      headphoneGroup.position.set(12 * (1.0 - t), 1.8, 0);
-      speakerGroup.position.set(-16, 1.5, -5);
+      phoneGroup.position.set(-6.5, 1.8, -3.5);
+      updateExplodedParts(phoneParts, 0.0);
 
-      // Camera orbits around the acoustic driver and Beryllium diaphragm
-      camState.pos.x = headphoneGroup.position.x + 8 * Math.cos(t * 2.2);
-      camState.pos.y = 3.5 + Math.sin(t * 1.5) * 1.8;
-      camState.pos.z = 10 * Math.sin(t * 2.2) + 4;
-      camState.target.set(headphoneGroup.position.x, 1.8, 0);
+      // Headphones glide smoothly to right wing (6.5, 1.8, -3.5)
+      headphoneGroup.position.set(6.5 * st, 1.8, -3.5 * st);
+      headphoneGroup.rotation.y = 0.35 * st;
+      updateExplodedParts(headphoneParts, 0.0);
 
-      // Trigger 3D soundwave ripple when snapping together (t > 0.75)
-      if (t > 0.75) {
-        animateSoundwaves(t - 0.75);
-      }
+      // Speaker ascends smoothly into Center Stage (0, 1.5, 0)
+      speakerGroup.position.set(-16.0 * (1.0 - st), 1.5, -8.0 * (1.0 - st));
+      updateExplodedParts(speakerParts, 1.0);
 
-      triggerCallout("headphone", "MÀNG LOA BERYLLIUM 40MM • THD < 0.01%", "Cuộn cảm đồng tinh khiết & nam châm Neodymium tái tạo dải âm 40kHz.");
+      // Camera: Swooping descent towards speaker core
+      camPosTarget.x = -3.0 * (1.0 - st);
+      camPosTarget.y = 3.5 - st * 0.8;
+      camPosTarget.z = 12.0 - st * 1.5;
+      camLookTarget.set(0, 1.5, 0);
+
+      allSoundwaves.forEach(w => w.visible = false);
     }
     // =========================================================================
-    // ACT IV (0.68 -> 0.88): Omnidirectional Sound Sphere Architecture
+    // PHASE 5: SPATIAL SOUND SCULPTURE SPOTLIGHT (p: 0.80 -> 0.90)
     // =========================================================================
-    else if (p <= 0.88) {
-      const t = (p - 0.68) / 0.20;
-      phoneExplode = 0;
-      hpExplode = 0;
-      // Speaker assembles 1.0 -> 0.0
-      spExplode = Math.max(1.0 - t * 1.1, 0);
+    else if (p <= 0.90) {
+      const t = (p - 0.80) / 0.10; // 0.0 -> 1.0
 
-      phoneGroup.position.set(-6.5, 1.8, -3.0);
-      headphoneGroup.position.set(6.5, 1.8, -3.0);
+      // Speaker is in Center Stage (0, 1.5, 0)
       speakerGroup.position.set(0, 1.5, 0);
+      speakerGroup.rotation.y = t * 0.8;
 
-      // Camera sweeps downward in a spiral focusing on the woofer and 360° grille
-      camState.pos.x = 9 * Math.sin(t * 2.5);
-      camState.pos.y = 5.5 - t * 2.0;
-      camState.pos.z = 12 * Math.cos(t * 2.5);
-      camState.target.set(0, 1.5, 0);
+      phoneGroup.position.set(-6.5, 1.8, -3.5);
+      updateExplodedParts(phoneParts, 0.0);
 
-      triggerCallout("speaker", "BUỒNG ÂM KHÔNG GIAN 360° • MATTER 2.0", "Hệ màng rung thụ động kép và lưới kim loại khắc Laser vi mô.");
+      headphoneGroup.position.set(6.5, 1.8, -3.5);
+      updateExplodedParts(headphoneParts, 0.0);
+
+      // Speaker assembly:
+      const explodeT = Math.min(t / 0.65, 1.0);
+      const spExplode = Math.max(0, 1.0 - smoothStep(explodeT));
+      updateExplodedParts(speakerParts, spExplode);
+
+      // Active pulsing lateral woofers (Devialet style)
+      if (wooferLeftGroup && wooferRightGroup) {
+        const pulse = Math.sin(t * Math.PI * 12) * 0.18;
+        wooferLeftGroup.position.x = -2.2 - Math.max(0, pulse);
+        wooferRightGroup.position.x = 2.2 + Math.max(0, pulse);
+      }
+
+      // Camera: Circling around the 360° vortex acoustic grille and top dome
+      const camOrbitAngle = 0.2 + t * 1.6;
+      camPosTarget.x = 8.5 * Math.sin(camOrbitAngle);
+      camPosTarget.y = 2.5 + Math.cos(t * Math.PI) * 0.8;
+      camPosTarget.z = 9.0 * Math.cos(camOrbitAngle);
+      camLookTarget.set(0, 1.5, 0);
+
+      allSoundwaves.forEach(w => w.visible = false);
     }
     // =========================================================================
-    // ACT V (0.88 -> 1.00): Grand Finale - The Triumvirate Ecosystem
+    // PHASE 6: GRAND CLIMAX - GOLDEN RATIO TRIUMVIRATE LEVITATION (p: 0.90 -> 1.00)
     // =========================================================================
     else {
-      const t = (p - 0.88) / 0.12;
-      phoneExplode = 0;
-      hpExplode = 0;
-      spExplode = 0;
+      const t = (p - 0.90) / 0.10; // 0.0 -> 1.0
+      const st = smoothStep(t);
 
-      // Golden Ratio 3D levitation arrangement on pedestal
-      phoneGroup.position.set(-4.5, 1.8, 1.2);
-      headphoneGroup.position.set(4.5, 1.8, 1.2);
-      speakerGroup.position.set(0, 1.6, -2.8);
+      // All 3 fully assembled flagship devices hover in golden-ratio harmony on pedestal
+      phoneGroup.position.set(-4.5, 1.8, 1.2 * st);
+      phoneGroup.rotation.set(0, -0.32 + Math.sin(Date.now() * 0.001) * 0.06, 0);
+      updateExplodedParts(phoneParts, 0.0);
 
-      // Gentle floating rotation
-      phoneGroup.rotation.y = -0.35 + Math.sin(Date.now() * 0.001) * 0.08;
-      headphoneGroup.rotation.y = 0.35 - Math.sin(Date.now() * 0.001) * 0.08;
+      headphoneGroup.position.set(4.5, 1.8, 1.2 * st);
+      headphoneGroup.rotation.set(0, 0.32 - Math.sin(Date.now() * 0.001) * 0.06, 0);
+      updateExplodedParts(headphoneParts, 0.0);
+
+      speakerGroup.position.set(0, 1.6, -2.8 * st);
       speakerGroup.rotation.y = Date.now() * 0.0004;
+      updateExplodedParts(speakerParts, 0.0);
 
-      // Camera: Grand sweeping panoramic studio hero view
-      camState.pos.x = 0;
-      camState.pos.y = 5.2 + Math.sin(t * Math.PI) * 1.0;
-      camState.pos.z = 21.0 - t * 2.0;
-      camState.target.set(0, 1.2, 0);
+      // Active pulsing woofers continuing subtly
+      if (wooferLeftGroup && wooferRightGroup) {
+        const pulse = Math.sin(Date.now() * 0.008) * 0.08;
+        wooferLeftGroup.position.x = -2.2 - pulse;
+        wooferRightGroup.position.x = 2.2 + pulse;
+      }
 
-      triggerCallout("ecosystem", "HỆ SINH THÁI ĐỘT PHÁ AURATECH 2026", "Tất cả thiết bị kết nối liền mạch qua giao thức SpatialOS & Matter.");
+      // Camera: Majestic wide panoramic hero crane shot pulling back smoothly
+      camPosTarget.x = 0;
+      camPosTarget.y = 4.8 + Math.sin(st * Math.PI) * 1.0;
+      camPosTarget.z = 19.5 + st * 4.0;
+      camLookTarget.set(0, 1.3, 0);
+
+      allSoundwaves.forEach(w => w.visible = false);
     }
 
-    // Apply manual explode override if user is using the interactive slider
-    if (isManualOverride) {
-      phoneExplode = manualExplodeFactor;
-      hpExplode = manualExplodeFactor;
-      spExplode = manualExplodeFactor;
+    // Energy conduit illumination pulse
+    if (energyConduitMesh) {
+      energyConduitMesh.material.opacity = 0.45 + Math.sin(p * Math.PI * 6) * 0.35;
     }
-
-    // Apply exploded offsets to 3D meshes
-    updateExplodedParts(phoneParts, phoneExplode);
-    updateExplodedParts(headphoneParts, hpExplode);
-    updateExplodedParts(speakerParts, spExplode);
   }
 
   function animateSoundwaves(intensity) {
     allSoundwaves.forEach((wave, idx) => {
       wave.visible = true;
-      const progress = (intensity * 4 + idx * 0.25) % 1;
+      const progress = (intensity * 3.5 + idx * 0.25) % 1;
       wave.scale.setScalar(1 + progress * 2.2);
-      wave.material.opacity = (1 - progress) * 0.7;
+      wave.material.opacity = (1 - progress) * 0.75;
     });
   }
 
   /* =========================================================================
-     4. HUD CALLOUTS & STEPPER SYNCHRONIZATION
-     ========================================================================= */
-
-  function updateStageHUD(progress) {
-    const steps = [
-      { id: "step-1", threshold: 0.22, name: "Khung Vỏ & Chip 3nm" },
-      { id: "step-2", threshold: 0.44, name: "Lắp Ráp Robot" },
-      { id: "step-3", threshold: 0.68, name: "Màng Loa Beryllium" },
-      { id: "step-4", threshold: 0.88, name: "Loa Không Gian 360°" },
-      { id: "step-5", threshold: 1.00, name: "Hệ Sinh Thái 2026" }
-    ];
-
-    let currentStepIdx = 0;
-    for (let i = 0; i < steps.length; i++) {
-      if (progress <= steps[i].threshold) {
-        currentStepIdx = i;
-        break;
-      }
-    }
-
-    document.querySelectorAll(".assembly-step-pill").forEach((pill, idx) => {
-      if (idx === currentStepIdx) {
-        pill.classList.add("active");
-      } else {
-        pill.classList.remove("active");
-      }
-    });
-
-    const percentEl = document.getElementById("assembly-percent-text");
-    if (percentEl) {
-      percentEl.textContent = Math.round(progress * 100) + "%";
-    }
-
-    const progressBar = document.getElementById("assembly-live-progress");
-    if (progressBar) {
-      progressBar.style.width = Math.round(progress * 100) + "%";
-    }
-  }
-
-  function triggerCallout(key, title, subtitle) {
-    const titleEl = document.getElementById("assembly-callout-title");
-    const descEl = document.getElementById("assembly-callout-desc");
-    if (titleEl && titleEl.textContent !== title) {
-      titleEl.textContent = title;
-      if (descEl) descEl.textContent = subtitle;
-
-      const card = document.getElementById("assembly-floating-callout");
-      if (card) {
-        card.classList.remove("animate-pulse-glow");
-        void card.offsetWidth; // retrigger animation
-        card.classList.add("animate-pulse-glow");
-      }
-    }
-  }
-
-  /* =========================================================================
-     5. RENDER LOOP WITH VELVET PARALLAX & PERFORMANCE OPTIMIZATIONS
+     4. RENDER LOOP WITH VELVET PARALLAX & PHYSICS INERTIA DAMPING
      ========================================================================= */
 
   function render() {
@@ -1085,21 +1116,31 @@
     mouse.x += (mouse.targetX - mouse.x) * 0.05;
     mouse.y += (mouse.targetY - mouse.y) * 0.05;
 
-    // Apply Camera Target Interpolation
-    camera.position.x += (camState.pos.x + mouse.x * 2.5 - camera.position.x) * 0.06;
-    camera.position.y += (camState.pos.y - mouse.y * 1.8 - camera.position.y) * 0.06;
-    camera.position.z += (camState.pos.z - camera.position.z) * 0.06;
+    // Smooth Physics Damping on Camera (Awwwards 60-120 FPS Standard)
+    camPosCurrent.x += (camPosTarget.x + mouse.x * 1.8 - camPosCurrent.x) * 0.06;
+    camPosCurrent.y += (camPosTarget.y - mouse.y * 1.4 - camPosCurrent.y) * 0.06;
+    camPosCurrent.z += (camPosTarget.z - camPosCurrent.z) * 0.06;
 
-    camera.lookAt(camState.target.x, camState.target.y, camState.target.z);
+    camLookCurrent.x += (camLookTarget.x - camLookCurrent.x) * 0.06;
+    camLookCurrent.y += (camLookTarget.y - camLookCurrent.y) * 0.06;
+    camLookCurrent.z += (camLookTarget.z - camLookCurrent.z) * 0.06;
+
+    camera.position.copy(camPosCurrent);
+    camera.lookAt(camLookCurrent);
 
     // Subtle ambient particle floating rotation
     if (particleSystem) {
-      particleSystem.rotation.y = Date.now() * 0.00015;
+      particleSystem.rotation.y = Date.now() * 0.00012;
     }
 
     // Subtle pedestal laser rings breathing
     if (pedestalGroup) {
-      pedestalGroup.rotation.y = Date.now() * 0.0001;
+      pedestalGroup.rotation.y = Date.now() * 0.00008;
+    }
+
+    // Energy conduit subtle rotation pulse
+    if (energyConduitMesh) {
+      energyConduitMesh.rotation.y = Date.now() * 0.0001;
     }
 
     renderer.render(scene, camera);
@@ -1107,7 +1148,7 @@
   }
 
   /* =========================================================================
-     6. GSAP SCROLLTRIGGER BINDING (1150vh DURATION PRESERVED)
+     5. GSAP SCROLLTRIGGER (1150vh PURE SCROLL DRIVEN)
      ========================================================================= */
 
   function bindScrollTrigger() {
@@ -1124,102 +1165,21 @@
       scrub: 1.8,
       anticipatePin: 1,
       onUpdate: (self) => {
-        if (!isManualOverride) {
-          setStageProgress(self.progress);
-        }
+        setStageProgress(self.progress);
       }
     });
   }
 
-  /* =========================================================================
-     7. INTERACTIVE CONTROLS: SLIDER, FOCUS BUTTONS, MOUSE DRAG
-     ========================================================================= */
-
   function bindUserInteractions() {
-    const viewport = document.getElementById("assembly-3d-viewport");
-    if (!viewport) return;
-
-    // Mouse Move for 3D Specular Parallax
+    // Mouse Move for subtle 3D Specular Parallax
     window.addEventListener("mousemove", (e) => {
       mouse.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
       mouse.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
     });
-
-    // Manual Exploded View Slider
-    const slider = document.getElementById("assembly-explode-slider");
-    if (slider) {
-      slider.addEventListener("input", (e) => {
-        isManualOverride = true;
-        manualExplodeFactor = parseFloat(e.target.value) / 100;
-        setStageProgress(currentProgress);
-
-        const resetBtn = document.getElementById("assembly-reset-btn");
-        if (resetBtn) resetBtn.style.display = "inline-flex";
-      });
-    }
-
-    // Reset Manual Inspection to Auto Scrollytelling
-    window.resetAssemblyToScroll = function () {
-      isManualOverride = false;
-      const slider = document.getElementById("assembly-explode-slider");
-      if (slider) slider.value = 0;
-      const resetBtn = document.getElementById("assembly-reset-btn");
-      if (resetBtn) resetBtn.style.display = "none";
-      setStageProgress(currentProgress);
-    };
-
-    // Quick Focus Switcher Pills
-    window.focusAssemblyDevice = function (target) {
-      activeFocusTarget = target;
-      isManualOverride = true;
-
-      document.querySelectorAll(".device-focus-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.target === target);
-      });
-
-      if (target === "phone") {
-        camState.pos.set(0, 2.2, 9.5);
-        camState.target.set(0, 1.8, 0);
-        manualExplodeFactor = 0.5;
-      } else if (target === "headphones") {
-        camState.pos.set(0, 2.5, 8.5);
-        camState.target.set(0, 1.8, 0);
-        manualExplodeFactor = 0.6;
-      } else if (target === "speaker") {
-        camState.pos.set(0, 2.8, 9.0);
-        camState.target.set(0, 1.5, 0);
-        manualExplodeFactor = 0.6;
-      } else {
-        camState.pos.set(0, 5.2, 20.0);
-        camState.target.set(0, 1.2, 0);
-        manualExplodeFactor = 0.0;
-      }
-
-      const resetBtn = document.getElementById("assembly-reset-btn");
-      if (resetBtn) resetBtn.style.display = "inline-flex";
-
-      setStageProgress(currentProgress);
-    };
-
-    // Stage stepper click to jump to stage
-    window.jumpToAssemblyStage = function (stageIndex) {
-      const section = document.getElementById("scrolly-masterpiece");
-      if (!section) return;
-
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight - window.innerHeight;
-      const targetScroll = sectionTop + (stageIndex / 4) * sectionHeight;
-
-      if (window.lenisInstance) {
-        window.lenisInstance.scrollTo(targetScroll, { duration: 1.6 });
-      } else {
-        window.scrollTo({ top: targetScroll, behavior: "smooth" });
-      }
-    };
   }
 
   /* =========================================================================
-     8. INITIALIZATION & RESIZE HANDLING
+     6. INITIALIZATION & RESIZE HANDLING
      ========================================================================= */
 
   function init() {
@@ -1231,18 +1191,18 @@
       return;
     }
 
-    // Create Scene
+    // Create Scene with Atmospheric Fog
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x04070d, 0.022);
+    scene.fog = new THREE.FogExp2(0x04070d, 0.018);
 
     // Create Camera
     const width = container.clientWidth || window.innerWidth;
     const height = container.clientHeight || window.innerHeight;
-    camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
-    camera.position.set(camState.pos.x, camState.pos.y, camState.pos.z);
-    camera.lookAt(camState.target.x, camState.target.y, camState.target.z);
+    camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 120);
+    camera.position.copy(camPosCurrent);
+    camera.lookAt(camLookCurrent);
 
-    // Create WebGL Renderer with High-End Tone Mapping & ACES Filmic Look
+    // Create WebGL Renderer with High-End ACES Filmic Tone Mapping
     renderer = new THREE.WebGLRenderer({
       powerPreference: "high-performance",
       antialias: true,
@@ -1251,7 +1211,7 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     renderer.setSize(width, height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.3;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -1260,17 +1220,17 @@
     canvas.className = "assembly-3d-canvas";
     container.insertBefore(canvas, container.firstChild);
 
-    // Build Scene Objects
+    // Build All 3 Ultra-Modern 2026 Devices & Environment
     setupLighting();
     buildEnvironment();
     buildPhone();
     buildHeadphones();
     buildSpeaker();
 
-    // Set initial state
+    // Set Initial State (Progress 0)
     setStageProgress(0);
 
-    // Bind GSAP ScrollTrigger
+    // Bind GSAP ScrollTrigger & Mouse Parallax
     bindScrollTrigger();
     bindUserInteractions();
 
