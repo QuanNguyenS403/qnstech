@@ -44,6 +44,190 @@
 </head>
 
 <body>
+  <!-- ==========================================================================
+       SCOUT MOTORS FORMAT: FLOATING PILL NAVBAR & ACTION SYSTEM
+       ========================================================================== -->
+  <nav class="scout-floating-pill-nav" id="scout-floating-pill-nav">
+    <a href="index.html" class="scout-pill-brand" aria-label="AuraTech Trang chủ">
+      <img src="assets/images/logo.svg" alt="AuraTech Logo">
+    </a>
+
+    <span class="scout-pill-coords">( 21°01'49"N · 105°51'08"E )</span>
+
+    <div class="scout-pill-divider"></div>
+
+    <button type="button" class="scout-pill-cta" onclick="openReservationDrawer()">
+      <span>ĐẶT CỌC $100</span>
+    </button>
+
+    <a href="cart.html" class="icon-btn" title="Giỏ hàng" style="width:38px; height:38px; background:rgba(255,255,255,0.06); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; position:relative; text-decoration:none;">
+      <span>🛒</span>
+      <span class="cart-badge js-cart-count" style="position:absolute; top:-3px; right:-3px;">2</span>
+    </a>
+
+    <button type="button" class="scout-pill-menu-btn" id="scout-menu-trigger" aria-label="Mở menu toàn màn hình" onclick="toggleScoutFullscreenMenu()">
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ==========================================================================
+       SCOUT MOTORS FORMAT: FULLSCREEN FROSTED GLASS MENU DRAWER
+       ========================================================================== -->
+  <div class="scout-fullscreen-menu" id="scout-fullscreen-menu">
+    <div class="scout-menu-inner">
+      <div>
+        <div style="font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:#FF5500; font-weight:700; margin-bottom:1.5rem; letter-spacing:0.08em;">
+          ( 21°01'49.0"N · 105°51'08.0"E ) · HANOI R&amp;D LAB · MENU HỆ THỐNG
+        </div>
+        <ul class="scout-menu-nav-links">
+          <li><a href="index.html" class="scout-menu-nav-link">Trang Chủ</a></li>
+          <li><a href="products.html" class="scout-menu-nav-link active">Sản Phẩm Flagship</a></li>
+          <li><a href="index.html#tech-inspector-section" class="scout-menu-nav-link">Khảo Sát Kỹ Thuật CAD</a></li>
+          <li><a href="index.html#spatial-studio-section" class="scout-menu-nav-link">Phòng Lab Spatial Audio</a></li>
+          <li><a href="index.html#timeline-section" class="scout-menu-nav-link">Hành Trình R&amp;D</a></li>
+          <li><a href="about.html" class="scout-menu-nav-link">Về AuraTech</a></li>
+          <li><a href="blog.html" class="scout-menu-nav-link">Tin Tức Công Nghệ</a></li>
+          <li><a href="contact.html" class="scout-menu-nav-link">Liên Hệ &amp; Hỗ Trợ</a></li>
+        </ul>
+      </div>
+
+      <div class="scout-menu-cards-col">
+        <div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.5rem; letter-spacing:0.06em;">
+          SẢN PHẨM TIÊU BIỂU 2026
+        </div>
+
+        <a href="product-detail.html?id=aura-anc-pro" class="scout-menu-preview-card">
+          <img src="assets/images/prod-headphones.jpg" alt="AuraSonic ANC Pro X1">
+          <div>
+            <span class="badge badge-hot" style="font-size:0.7rem; margin-bottom:0.25rem; display:inline-block;">FLAGSHIP #1</span>
+            <div style="font-weight:800; font-size:1.05rem; color:#FFFFFF;">AuraSonic ANC Pro X1</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Màng Beryllium 45mm • Chống ồn 50dB</div>
+            <div style="font-size:0.92rem; font-weight:800; color:#FF5500; margin-top:0.25rem;">7.490.000₫</div>
+          </div>
+        </a>
+
+        <a href="product-detail.html?id=aura-watch-ultra" class="scout-menu-preview-card">
+          <img src="assets/images/prod-watch.jpg" alt="AuraWatch Titanium S3">
+          <div>
+            <span class="badge badge-new" style="font-size:0.7rem; margin-bottom:0.25rem; display:inline-block;">TITANIUM GRADE 5</span>
+            <div style="font-weight:800; font-size:1.05rem; color:#FFFFFF;">AuraWatch Titanium S3</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Kính Sapphire • Pin 14 Ngày • 10ATM</div>
+            <div style="font-size:0.92rem; font-weight:800; color:#FF5500; margin-top:0.25rem;">9.290.000₫</div>
+          </div>
+        </a>
+
+        <a href="product-detail.html?id=aura-vision-vr" class="scout-menu-preview-card">
+          <img src="assets/images/prod-vr.jpg" alt="AuraVision XR Pro">
+          <div>
+            <span class="badge" style="background:var(--accent-indigo); color:#FFF; font-size:0.7rem; margin-bottom:0.25rem; display:inline-block;">SPATIAL COMPUTING</span>
+            <div style="font-weight:800; font-size:1.05rem; color:#FFFFFF;">AuraVision XR Pro</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Dual Micro-OLED 4K • Độ trễ 11ms</div>
+            <div style="font-size:0.92rem; font-weight:800; color:#FF5500; margin-top:0.25rem;">15.990.000₫</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SCOUT MOTORS FORMAT: SLIDE-OUT RESERVATION & FAST ORDER DRAWER ($100 DEPOSIT)
+       ========================================================================== -->
+  <div class="scout-drawer-backdrop" id="scout-drawer-backdrop" onclick="closeReservationDrawer()"></div>
+  <aside class="scout-reservation-drawer" id="scout-reservation-drawer">
+    <div class="scout-drawer-header">
+      <div>
+        <div style="font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:#FF5500; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;">
+          GIỮ CHỖ SẢN XUẤT 2026 • HOÀN TIỀN 100%
+        </div>
+        <h3 class="scout-drawer-title">ĐẶT TRƯỚC SẢN PHẨM</h3>
+      </div>
+      <button type="button" class="icon-btn" onclick="closeReservationDrawer()" style="color:#FFF; font-size:1.2rem;">✕</button>
+    </div>
+
+    <div class="scout-drawer-body">
+      <div>
+        <label style="font-size:0.82rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.5rem; display:block;">
+          1. CHỌN THIẾT BỊ CÔNG NGHỆ:
+        </label>
+        <div style="display:flex; flex-direction:column; gap:0.65rem;">
+          <div class="scout-select-card active" onclick="selectDrawerProduct('aura-anc-pro', 'AuraSonic ANC Pro X1', 7490000, this)">
+            <img src="assets/images/prod-headphones.jpg" alt="AuraSonic Pro">
+            <div style="flex:1;">
+              <div style="font-weight:800; font-size:0.95rem; color:#FFF;">AuraSonic ANC Pro X1</div>
+              <div style="font-size:0.78rem; color:var(--text-secondary);">Màng Beryllium 45mm • ANC 50dB</div>
+              <div style="font-size:0.88rem; font-weight:800; color:#FF5500;">7.490.000₫</div>
+            </div>
+            <span style="color:#FF5500; font-weight:800;">✓</span>
+          </div>
+
+          <div class="scout-select-card" onclick="selectDrawerProduct('aura-watch-ultra', 'AuraWatch Titanium S3', 9290000, this)">
+            <img src="assets/images/prod-watch.jpg" alt="AuraWatch Ultra">
+            <div style="flex:1;">
+              <div style="font-weight:800; font-size:0.95rem; color:#FFF;">AuraWatch Titanium S3</div>
+              <div style="font-size:0.78rem; color:var(--text-secondary);">Titanium Grade 5 • Sapphire • 14 Ngày</div>
+              <div style="font-size:0.88rem; font-weight:800; color:#FF5500;">9.290.000₫</div>
+            </div>
+            <span style="color:#FF5500; font-weight:800; display:none;">✓</span>
+          </div>
+
+          <div class="scout-select-card" onclick="selectDrawerProduct('aura-vision-vr', 'AuraVision XR Pro', 15990000, this)">
+            <img src="assets/images/prod-vr.jpg" alt="AuraVision XR">
+            <div style="flex:1;">
+              <div style="font-weight:800; font-size:0.95rem; color:#FFF;">AuraVision XR Pro</div>
+              <div style="font-size:0.78rem; color:var(--text-secondary);">Micro-OLED 4K • Độ trễ 11ms</div>
+              <div style="font-size:0.88rem; font-weight:800; color:#FF5500;">15.990.000₫</div>
+            </div>
+            <span style="color:#FF5500; font-weight:800; display:none;">✓</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size:0.82rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.5rem; display:block;">
+          2. CHỌN MÀU SẮC THỰC TẾ:
+        </label>
+        <div style="display:flex; gap:0.5rem;" id="drawer-color-options">
+          <button type="button" class="btn btn-outline btn-sm active" style="flex:1; border-color:#FF5500; color:#FFF;">Đen Vũ Trụ</button>
+          <button type="button" class="btn btn-outline btn-sm" style="flex:1;">Bạc Titan</button>
+          <button type="button" class="btn btn-outline btn-sm" style="flex:1;">Xanh Bắc Cực</button>
+        </div>
+      </div>
+
+      <form id="scout-fast-deposit-form" onsubmit="handleScoutReservationSubmit(event)">
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.35rem;">Họ và tên của bạn:</label>
+          <input type="text" class="form-control" id="deposit-customer-name" placeholder="Nguyễn Văn A" required>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.35rem;">Số điện thoại nhận tin đặt cọc:</label>
+          <input type="tel" class="form-control" id="deposit-customer-phone" placeholder="0912 345 678" required>
+        </div>
+        <div style="margin-bottom:1.5rem;">
+          <label style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.35rem;">Email nhận chứng từ xác nhận:</label>
+          <input type="email" class="form-control" id="deposit-customer-email" placeholder="example@gmail.com" required>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-md); padding:1rem; margin-bottom:1.25rem;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem; font-size:0.85rem;">
+            <span style="color:var(--text-secondary);">Giá niêm yết:</span>
+            <span id="deposit-full-price" style="font-weight:700; color:#FFF;">7.490.000₫</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem; font-size:0.85rem;">
+            <span style="color:var(--text-secondary);">Số tiền đặt cọc giữ chỗ:</span>
+            <span style="font-weight:800; color:#FF5500;">500.000₫ (hoặc $100)</span>
+          </div>
+          <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.4;">
+            * Tiền cọc được hoàn lại 100% bất kỳ lúc nào trước ngày nhận thiết bị nếu bạn đổi ý.
+          </div>
+        </div>
+
+        <button type="submit" class="scout-pill-cta" style="width:100%; justify-content:center; padding:0.85rem; font-size:0.95rem;">
+          XÁC NHẬN ĐẶT CỌC GIỮ CHỖ NGAY →
+        </button>
+      </form>
+    </div>
+  </aside>
   <div id="main-header-wrapper" class="header-wrapper">
     <!-- Top Announcement Bar (Minimalist Luxury) -->
     <div class="topbar">

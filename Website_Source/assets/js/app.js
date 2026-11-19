@@ -2986,3 +2986,269 @@ document.addEventListener("DOMContentLoaded", () => {
   initCareersPage();
   initScrollReveal();
 });
+
+
+/* ==========================================================================
+   SCOUT MOTORS FORMAT UI/UX LOGIC EXTENSION FOR AURATECH
+   - 4-Mode Tech Inspector (Exterior Hotspots, Interior, 360 Drag, CAD Blueprint)
+   - Fullscreen Frosted Glass Navigation Drawer
+   - Slide-Out Reservation Drawer ($100 Deposit Flow)
+   - Auto-hiding Floating Pill Navbar
+   ========================================================================== */
+
+// Hotspots Data for AuraSonic ANC Pro X1
+const SCOUT_HOTSPOTS_DATA = [
+  {
+    badge: "HOTSPOT #01 • MÀNG LOA VẬT LIỆU CAO CẤP",
+    title: "Màng Loa Beryllium 45mm Carbon Nano",
+    desc: "Cấu trúc màng loa siêu nhẹ với độ cứng gấp 4 lần Titanium, tái tạo dải tần rộng từ 10Hz đến 45.000Hz, triệt tiêu hoàn toàn méo tiếng ở âm lượng cực đại.",
+    spec: "THD < 0.05%"
+  },
+  {
+    badge: "HOTSPOT #02 • TRIỆT TIÊU TẠP ÂM ĐA ĐIỂM",
+    title: "Hệ Thống 6 Microphone Hybrid ANC 50dB",
+    desc: "3 micro chùm sóng hướng ngoài bắt tạp âm và 3 micro buồng âm phân tích phản hồi tần số 38.000 lần/giây, triệt tiêu tiếng ồn động cơ và văn phòng hoàn hảo.",
+    spec: "Khử ồn 50dB"
+  },
+  {
+    badge: "HOTSPOT #03 • CÔNG THÁI HỌC VÀ CÁCH ÂM",
+    title: "Đệm Tai Memory Foam Bọc Da Protein",
+    desc: "Chất liệu bọt hoạt tính phân tán áp lực đều 360°, cấu trúc lưới thoáng khí tản nhiệt thụ động, cách âm thụ động lên đến 22dB ngay cả khi chưa bật nguồn.",
+    spec: "Áp suất 4.2N"
+  },
+  {
+    badge: "HOTSPOT #04 • CƠ KHÍ CHÍNH XÁC & ĐIỀU KHIỂN",
+    title: "Khung Hợp Kim Nhôm-Magie & Digital Crown",
+    desc: "Khung hợp kim nhôm-magie cấp hàng không gia công CNC nguyên khối, núm xoay Digital Crown cảm ứng từ tính điều chỉnh âm lượng mượt mà từng nấc 1%.",
+    spec: "Khối lượng 248g"
+  },
+  {
+    badge: "HOTSPOT #05 • TRUYỀN DẪN TÍN HIỆU ĐỈNH CAO",
+    title: "Cổng Type-C Lossless & Jack 3.5mm Mạ Vàng",
+    desc: "Tích hợp bộ giải mã DAC 96kHz/24-bit trực tiếp qua cáp Type-C và cổng analog 3.5mm mạ vàng 24K, tương thích hoàn hảo chuẩn audiophile LDAC và aptX Lossless.",
+    spec: "96kHz/24-bit"
+  }
+];
+
+// 1. Switch Inspector Mode
+window.switchInspectorMode = function (mode) {
+  const tabs = document.querySelectorAll(".inspector-tab-btn");
+  tabs.forEach(tab => {
+    if (tab.getAttribute("data-mode") === mode) {
+      tab.classList.add("active");
+    } else {
+      tab.classList.remove("active");
+    }
+  });
+
+  const panes = document.querySelectorAll(".inspector-view-pane");
+  panes.forEach(pane => pane.classList.remove("active"));
+
+  const targetPane = document.getElementById("pane-" + mode);
+  if (targetPane) {
+    targetPane.classList.add("active");
+  }
+};
+
+// 2. Select Hotspot Pin
+window.selectHotspot = function (index) {
+  const pins = document.querySelectorAll("#pane-exterior .hotspot-pin");
+  pins.forEach((pin, i) => {
+    if (i === index) {
+      pin.classList.add("active");
+    } else {
+      pin.classList.remove("active");
+    }
+  });
+
+  const data = SCOUT_HOTSPOTS_DATA[index];
+  if (!data) return;
+
+  const badgeEl = document.getElementById("hotspot-card-badge");
+  const titleEl = document.getElementById("hotspot-card-title");
+  const descEl = document.getElementById("hotspot-card-desc");
+
+  if (badgeEl) badgeEl.textContent = data.badge;
+  if (titleEl) titleEl.textContent = data.title;
+  if (descEl) descEl.textContent = data.desc;
+};
+
+// 3. 360 Drag Rotator (Using 4 Real Perspective Angles)
+const ROTATOR_IMAGES = [
+  "assets/images/prod-headphones.jpg",
+  "assets/images/prod-headphones-thumb2.jpg",
+  "assets/images/prod-headphones-thumb3.jpg",
+  "assets/images/prod-headphones-thumb4.jpg"
+];
+let rotatorIndex = 0;
+let isDragging360 = false;
+let start360X = 0;
+
+window.start360Drag = function (e) {
+  isDragging360 = true;
+  start360X = e.pageX || (e.touches && e.touches[0].pageX) || 0;
+  document.body.style.userSelect = "none";
+
+  const onMove = function (moveEvent) {
+    if (!isDragging360) return;
+    const currentX = moveEvent.pageX || (moveEvent.touches && moveEvent.touches[0].pageX) || 0;
+    const deltaX = currentX - start360X;
+
+    if (Math.abs(deltaX) > 40) {
+      if (deltaX > 0) {
+        rotatorIndex = (rotatorIndex + 1) % ROTATOR_IMAGES.length;
+      } else {
+        rotatorIndex = (rotatorIndex - 1 + ROTATOR_IMAGES.length) % ROTATOR_IMAGES.length;
+      }
+      const imgEl = document.getElementById("img-rotator-360");
+      if (imgEl) {
+        imgEl.src = ROTATOR_IMAGES[rotatorIndex];
+      }
+      start360X = currentX;
+    }
+  };
+
+  const onEnd = function () {
+    isDragging360 = false;
+    document.body.style.userSelect = "";
+    window.removeEventListener("mousemove", onMove);
+    window.removeEventListener("mouseup", onEnd);
+    window.removeEventListener("touchmove", onMove);
+    window.removeEventListener("touchend", onEnd);
+  };
+
+  window.addEventListener("mousemove", onMove);
+  window.addEventListener("mouseup", onEnd);
+  window.addEventListener("touchmove", onMove);
+  window.addEventListener("touchend", onEnd);
+};
+
+// 4. Fullscreen Frosted Glass Navigation Drawer
+window.toggleScoutFullscreenMenu = function (forceState) {
+  const menuEl = document.getElementById("scout-fullscreen-menu");
+  const triggerBtn = document.getElementById("scout-menu-trigger");
+  if (!menuEl) return;
+
+  const shouldOpen = typeof forceState === "boolean" ? forceState : !menuEl.classList.contains("open");
+  if (shouldOpen) {
+    menuEl.classList.add("open");
+    if (triggerBtn) triggerBtn.classList.add("active");
+    document.body.style.overflow = "hidden";
+  } else {
+    menuEl.classList.remove("open");
+    if (triggerBtn) triggerBtn.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+};
+
+// 5. Reservation Slide-Out Drawer
+let selectedReservationProductId = "aura-anc-pro";
+
+window.openReservationDrawer = function (productId) {
+  const drawerEl = document.getElementById("scout-reservation-drawer");
+  const backdropEl = document.getElementById("scout-drawer-backdrop");
+  if (!drawerEl || !backdropEl) return;
+
+  if (productId) {
+    selectedReservationProductId = productId;
+    const cards = document.querySelectorAll(".scout-select-card");
+    cards.forEach(card => {
+      const match = card.getAttribute("onclick") && card.getAttribute("onclick").includes(productId);
+      if (match) {
+        card.classList.add("active");
+        const check = card.querySelector("span:last-child");
+        if (check) check.style.display = "inline-block";
+      } else {
+        card.classList.remove("active");
+        const check = card.querySelector("span:last-child");
+        if (check) check.style.display = "none";
+      }
+    });
+
+    const priceEl = document.getElementById("deposit-full-price");
+    if (priceEl) {
+      if (productId === "aura-anc-pro") priceEl.textContent = "7.490.000₫";
+      if (productId === "aura-watch-ultra") priceEl.textContent = "9.290.000₫";
+      if (productId === "aura-vision-vr") priceEl.textContent = "15.990.000₫";
+    }
+  }
+
+  drawerEl.classList.add("open");
+  backdropEl.classList.add("open");
+  document.body.style.overflow = "hidden";
+};
+
+window.closeReservationDrawer = function () {
+  const drawerEl = document.getElementById("scout-reservation-drawer");
+  const backdropEl = document.getElementById("scout-drawer-backdrop");
+  if (drawerEl) drawerEl.classList.remove("open");
+  if (backdropEl) backdropEl.classList.remove("open");
+  document.body.style.overflow = "";
+};
+
+window.selectDrawerProduct = function (id, name, price, cardEl) {
+  selectedReservationProductId = id;
+  const cards = document.querySelectorAll(".scout-select-card");
+  cards.forEach(c => {
+    c.classList.remove("active");
+    const check = c.querySelector("span:last-child");
+    if (check) check.style.display = "none";
+  });
+  if (cardEl) {
+    cardEl.classList.add("active");
+    const check = cardEl.querySelector("span:last-child");
+    if (check) check.style.display = "inline-block";
+  }
+  const priceEl = document.getElementById("deposit-full-price");
+  if (priceEl) {
+    priceEl.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+  }
+};
+
+window.handleScoutReservationSubmit = function (e) {
+  e.preventDefault();
+  const name = document.getElementById("deposit-customer-name") ? document.getElementById("deposit-customer-name").value : "";
+  const phone = document.getElementById("deposit-customer-phone") ? document.getElementById("deposit-customer-phone").value : "";
+  const email = document.getElementById("deposit-customer-email") ? document.getElementById("deposit-customer-email").value : "";
+
+  const reservation = {
+    productId: selectedReservationProductId,
+    customerName: name,
+    customerPhone: phone,
+    customerEmail: email,
+    depositAmount: 500000,
+    timestamp: new Date().toISOString()
+  };
+
+  try {
+    const existing = JSON.parse(localStorage.getItem("auratech_reservations") || "[]");
+    existing.push(reservation);
+    localStorage.setItem("auratech_reservations", JSON.stringify(existing));
+  } catch (err) {
+    console.warn("Storage err:", err);
+  }
+
+  window.closeReservationDrawer();
+  if (typeof window.showToast === "function") {
+    window.showToast("🎉 Đặt cọc thành công! Mã giữ chỗ đã được gửi về email " + email);
+  } else {
+    alert("🎉 Đặt cọc thành công! Mã giữ chỗ đã được gửi về email " + email);
+  }
+};
+
+// 6. Floating Navbar Auto-Hide on Rapid Scroll Down
+(function initFloatingNavScroll() {
+  let lastScrollY = window.scrollY;
+  const navEl = document.getElementById("scout-floating-pill-nav");
+  if (!navEl) return;
+
+  window.addEventListener("scroll", function () {
+    const currentScrollY = window.scrollY;
+    if (currentScrollY > 150 && currentScrollY > lastScrollY + 15) {
+      navEl.classList.add("hidden-nav");
+    } else if (currentScrollY < lastScrollY - 10 || currentScrollY < 100) {
+      navEl.classList.remove("hidden-nav");
+    }
+    lastScrollY = currentScrollY;
+  }, { passive: true });
+})();

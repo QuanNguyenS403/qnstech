@@ -93,6 +93,193 @@
 </head>
 
 <body>
+  <!-- ==========================================================================
+       SCOUT MOTORS FORMAT: FLOATING PILL NAVBAR & ACTION SYSTEM
+       ========================================================================== -->
+  <nav class="scout-floating-pill-nav" id="scout-floating-pill-nav">
+    <a href="index.html" class="scout-pill-brand" aria-label="AuraTech Trang chủ">
+      <img src="assets/images/logo.svg" alt="AuraTech Logo">
+    </a>
+
+    <span class="scout-pill-coords">( 21°01'49"N · 105°51'08"E )</span>
+
+    <div class="scout-pill-divider"></div>
+
+    <button type="button" class="scout-pill-cta" onclick="openReservationDrawer('aura-anc-pro')">
+      <span>ĐẶT CỌC $100</span>
+    </button>
+
+    <a href="cart.html" class="icon-btn" title="Giỏ hàng" style="width:38px; height:38px; background:rgba(255,255,255,0.06); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; position:relative; text-decoration:none;">
+      <span>🛒</span>
+      <span class="cart-badge js-cart-count" style="position:absolute; top:-3px; right:-3px;">2</span>
+    </a>
+
+    <button type="button" class="scout-pill-menu-btn" id="scout-menu-trigger" aria-label="Mở menu toàn màn hình" onclick="toggleScoutFullscreenMenu()">
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ==========================================================================
+       SCOUT MOTORS FORMAT: FULLSCREEN FROSTED GLASS MENU DRAWER
+       ========================================================================== -->
+  <div class="scout-fullscreen-menu" id="scout-fullscreen-menu">
+    <div class="scout-menu-inner">
+      <div>
+        <div style="font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:#FF5500; font-weight:700; margin-bottom:1.5rem; letter-spacing:0.08em;">
+          ( 21°01'49.0"N · 105°51'08.0"E ) · HANOI R&amp;D LAB · MENU HỆ THỐNG
+        </div>
+        <ul class="scout-menu-nav-links">
+          <li><a href="index.html" class="scout-menu-nav-link active">Trang Chủ</a></li>
+          <li><a href="products.html" class="scout-menu-nav-link">Sản Phẩm Flagship</a></li>
+          <li><a href="#tech-inspector-section" class="scout-menu-nav-link" onclick="toggleScoutFullscreenMenu(false)">Khảo Sát Kỹ Thuật CAD</a></li>
+          <li><a href="#spatial-studio-section" class="scout-menu-nav-link" onclick="toggleScoutFullscreenMenu(false)">Phòng Lab Spatial Audio</a></li>
+          <li><a href="#timeline-section" class="scout-menu-nav-link" onclick="toggleScoutFullscreenMenu(false)">Hành Trình R&amp;D</a></li>
+          <li><a href="about.html" class="scout-menu-nav-link">Về AuraTech</a></li>
+          <li><a href="blog.html" class="scout-menu-nav-link">Tin Tức Công Nghệ</a></li>
+          <li><a href="contact.html" class="scout-menu-nav-link">Liên Hệ &amp; Hỗ Trợ</a></li>
+        </ul>
+      </div>
+
+      <div class="scout-menu-cards-col">
+        <div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.5rem; letter-spacing:0.06em;">
+          SẢN PHẨM TIÊU BIỂU 2026
+        </div>
+
+        <a href="product-detail.html?id=aura-anc-pro" class="scout-menu-preview-card">
+          <img src="assets/images/prod-headphones.jpg" alt="AuraSonic ANC Pro X1">
+          <div>
+            <span class="badge badge-hot" style="font-size:0.7rem; margin-bottom:0.25rem; display:inline-block;">FLAGSHIP #1</span>
+            <div style="font-weight:800; font-size:1.05rem; color:#FFFFFF;">AuraSonic ANC Pro X1</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Màng Beryllium 45mm • Chống ồn 50dB</div>
+            <div style="font-size:0.92rem; font-weight:800; color:#FF5500; margin-top:0.25rem;">7.490.000₫</div>
+          </div>
+        </a>
+
+        <a href="product-detail.html?id=aura-watch-ultra" class="scout-menu-preview-card">
+          <img src="assets/images/prod-watch.jpg" alt="AuraWatch Titanium S3">
+          <div>
+            <span class="badge badge-new" style="font-size:0.7rem; margin-bottom:0.25rem; display:inline-block;">TITANIUM GRADE 5</span>
+            <div style="font-weight:800; font-size:1.05rem; color:#FFFFFF;">AuraWatch Titanium S3</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Kính Sapphire • Pin 14 Ngày • 10ATM</div>
+            <div style="font-size:0.92rem; font-weight:800; color:#FF5500; margin-top:0.25rem;">9.290.000₫</div>
+          </div>
+        </a>
+
+        <a href="product-detail.html?id=aura-vision-vr" class="scout-menu-preview-card">
+          <img src="assets/images/prod-vr.jpg" alt="AuraVision XR Pro">
+          <div>
+            <span class="badge" style="background:var(--accent-indigo); color:#FFF; font-size:0.7rem; margin-bottom:0.25rem; display:inline-block;">SPATIAL COMPUTING</span>
+            <div style="font-weight:800; font-size:1.05rem; color:#FFFFFF;">AuraVision XR Pro</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Dual Micro-OLED 4K • Độ trễ 11ms</div>
+            <div style="font-size:0.92rem; font-weight:800; color:#FF5500; margin-top:0.25rem;">15.990.000₫</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SCOUT MOTORS FORMAT: SLIDE-OUT RESERVATION & FAST ORDER DRAWER ($100 DEPOSIT)
+       ========================================================================== -->
+  <div class="scout-drawer-backdrop" id="scout-drawer-backdrop" onclick="closeReservationDrawer()"></div>
+  <aside class="scout-reservation-drawer" id="scout-reservation-drawer">
+    <div class="scout-drawer-header">
+      <div>
+        <div style="font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:#FF5500; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;">
+          GIỮ CHỖ SẢN XUẤT 2026 • HOÀN TIỀN 100%
+        </div>
+        <h3 class="scout-drawer-title">ĐẶT TRƯỚC SẢN PHẨM</h3>
+      </div>
+      <button type="button" class="icon-btn" onclick="closeReservationDrawer()" style="color:#FFF; font-size:1.2rem;">✕</button>
+    </div>
+
+    <div class="scout-drawer-body">
+      <!-- Select Product -->
+      <div>
+        <label style="font-size:0.82rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.5rem; display:block;">
+          1. CHỌN THIẾT BỊ CÔNG NGHỆ:
+        </label>
+        <div style="display:flex; flex-direction:column; gap:0.65rem;">
+          <div class="scout-select-card active" onclick="selectDrawerProduct('aura-anc-pro', 'AuraSonic ANC Pro X1', 7490000, this)">
+            <img src="assets/images/prod-headphones.jpg" alt="AuraSonic Pro">
+            <div style="flex:1;">
+              <div style="font-weight:800; font-size:0.95rem; color:#FFF;">AuraSonic ANC Pro X1</div>
+              <div style="font-size:0.78rem; color:var(--text-secondary);">Màng Beryllium 45mm • ANC 50dB</div>
+              <div style="font-size:0.88rem; font-weight:800; color:#FF5500;">7.490.000₫</div>
+            </div>
+            <span style="color:#FF5500; font-weight:800;">✓</span>
+          </div>
+
+          <div class="scout-select-card" onclick="selectDrawerProduct('aura-watch-ultra', 'AuraWatch Titanium S3', 9290000, this)">
+            <img src="assets/images/prod-watch.jpg" alt="AuraWatch Ultra">
+            <div style="flex:1;">
+              <div style="font-weight:800; font-size:0.95rem; color:#FFF;">AuraWatch Titanium S3</div>
+              <div style="font-size:0.78rem; color:var(--text-secondary);">Titanium Grade 5 • Sapphire • 14 Ngày</div>
+              <div style="font-size:0.88rem; font-weight:800; color:#FF5500;">9.290.000₫</div>
+            </div>
+            <span style="color:#FF5500; font-weight:800; display:none;">✓</span>
+          </div>
+
+          <div class="scout-select-card" onclick="selectDrawerProduct('aura-vision-vr', 'AuraVision XR Pro', 15990000, this)">
+            <img src="assets/images/prod-vr.jpg" alt="AuraVision XR">
+            <div style="flex:1;">
+              <div style="font-weight:800; font-size:0.95rem; color:#FFF;">AuraVision XR Pro</div>
+              <div style="font-size:0.78rem; color:var(--text-secondary);">Micro-OLED 4K • Độ trễ 11ms</div>
+              <div style="font-size:0.88rem; font-weight:800; color:#FF5500;">15.990.000₫</div>
+            </div>
+            <span style="color:#FF5500; font-weight:800; display:none;">✓</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Color Variant Selection -->
+      <div>
+        <label style="font-size:0.82rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.5rem; display:block;">
+          2. CHỌN MÀU SẮC THỰC TẾ:
+        </label>
+        <div style="display:flex; gap:0.5rem;" id="drawer-color-options">
+          <button type="button" class="btn btn-outline btn-sm active" style="flex:1; border-color:#FF5500; color:#FFF;">Đen Vũ Trụ</button>
+          <button type="button" class="btn btn-outline btn-sm" style="flex:1;">Bạc Titan</button>
+          <button type="button" class="btn btn-outline btn-sm" style="flex:1;">Xanh Bắc Cực</button>
+        </div>
+      </div>
+
+      <!-- Fast Deposit Form -->
+      <form id="scout-fast-deposit-form" onsubmit="handleScoutReservationSubmit(event)">
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.35rem;">Họ và tên của bạn:</label>
+          <input type="text" class="form-control" id="deposit-customer-name" placeholder="Nguyễn Văn A" required>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.35rem;">Số điện thoại nhận tin đặt cọc:</label>
+          <input type="tel" class="form-control" id="deposit-customer-phone" placeholder="0912 345 678" required>
+        </div>
+        <div style="margin-bottom:1.5rem;">
+          <label style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.35rem;">Email nhận chứng từ xác nhận:</label>
+          <input type="email" class="form-control" id="deposit-customer-email" placeholder="example@gmail.com" required>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-md); padding:1rem; margin-bottom:1.25rem;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem; font-size:0.85rem;">
+            <span style="color:var(--text-secondary);">Giá niêm yết:</span>
+            <span id="deposit-full-price" style="font-weight:700; color:#FFF;">7.490.000₫</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem; font-size:0.85rem;">
+            <span style="color:var(--text-secondary);">Số tiền đặt cọc giữ chỗ:</span>
+            <span style="font-weight:800; color:#FF5500;">500.000₫ (hoặc $100)</span>
+          </div>
+          <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.4;">
+            * Tiền cọc được hoàn lại 100% bất kỳ lúc nào trước ngày nhận thiết bị nếu bạn đổi ý.
+          </div>
+        </div>
+
+        <button type="submit" class="scout-pill-cta" style="width:100%; justify-content:center; padding:0.85rem; font-size:0.95rem;">
+          XÁC NHẬN ĐẶT CỌC GIỮ CHỖ NGAY →
+        </button>
+      </form>
+    </div>
+  </aside>
   <!-- Persistent Header System (Auto-hides on hero, reveals on Engineered For Tomorrow) -->
   <div id="main-header-wrapper" class="header-wrapper header-auto-hide">
     <!-- Top Announcement Bar (Minimalist Luxury) -->
@@ -158,12 +345,201 @@
   <main>
 
     <!-- ==========================================================================
-         CINEMATIC 3D ROBOTIC ASSEMBLY SCROLLYTELLING (1150vh PURE 3D EXPERIENCE)
-         Devices: AuraPhone Titanium Pro, AuraSonic ANC Pro, AuraSphere 360°
+         REAL-WORLD FLAGSHIP LIFESTYLE SCROLLYTELLING (1150vh CONTINUOUS LIVING CINEMATIC)
+         Devices: AuraSonic ANC Pro X1, AuraWatch Titanium S3, AuraPhone 16 Pro Flagship
          ========================================================================== -->
     <section id="scrolly-masterpiece" class="scrolly-section">
       <div class="assembly-3d-viewport" id="assembly-3d-viewport">
-        <!-- Pure WebGL 3D Canvas mounted by assembly-3d-engine.js -->
+        <!-- Fullscreen Floating Real-World Lifestyle HUD -->
+        <div class="scrolly-lifestyle-hud" id="scrolly-lifestyle-hud">
+          <!-- Top Timeline Stepper Bar -->
+          <div class="scrolly-top-stepper">
+            <div class="scrolly-step-pill active" data-step="0">
+              <span class="step-num">01</span>
+              <span class="step-label">08:30 Sáng tạo</span>
+            </div>
+            <div class="scrolly-step-pill" data-step="1">
+              <span class="step-num">02</span>
+              <span class="step-label">17:45 Hoàng hôn</span>
+            </div>
+            <div class="scrolly-step-pill" data-step="2">
+              <span class="step-num">03</span>
+              <span class="step-label">20:30 Thư giãn</span>
+            </div>
+            <div class="scrolly-step-pill" data-step="3">
+              <span class="step-num">04</span>
+              <span class="step-label">Đồng hành</span>
+            </div>
+          </div>
+
+          <!-- Floating Lifestyle Story Card -->
+          <div class="scrolly-story-card" id="scrolly-story-card">
+            <div class="story-card-inner">
+              <div class="scrolly-badge-row">
+                <span class="scrolly-pulse-dot"></span>
+                <span class="scrolly-phase-badge" id="scrolly-phase-badge">08:30 AM • TẬP TRUNG SÁNG TẠO</span>
+              </div>
+              <h2 class="scrolly-story-title" id="scrolly-story-title">Tai nghe AuraSonic ANC Pro X1</h2>
+              <div class="scrolly-story-subtitle" id="scrolly-story-subtitle">Màng loa Beryllium 45mm • Chống ồn thích ứng 50dB</div>
+              <p class="scrolly-story-desc" id="scrolly-story-desc">
+                Tách biệt hoàn toàn tiếng ồn văn phòng hiện đại để bạn đắm chìm vào công việc sáng tạo. Đệm tai memory foam thoáng khí và khung hợp kim nhôm-magie siêu nhẹ cho cảm giác êm ái suốt ngày dài.
+              </p>
+              <div class="scrolly-spec-tags" id="scrolly-spec-tags">
+                <span class="scrolly-spec-tag">Chống ồn 50dB</span>
+                <span class="scrolly-spec-tag">Màng loa Beryllium</span>
+                <span class="scrolly-spec-tag">LDAC Lossless</span>
+                <span class="scrolly-spec-tag">Pin 60 Giờ</span>
+              </div>
+              <a href="product-detail.html?id=aura-anc-pro" class="scrolly-action-btn" id="scrolly-action-btn">Khám phá AuraSonic Pro →</a>
+            </div>
+          </div>
+
+          <!-- Bottom Smooth Progress Indicator -->
+          <div class="scrolly-progress-track">
+            <div class="scrolly-progress-fill" id="scrolly-progress-fill"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SCOUT MOTORS FORMAT: INTERACTIVE 4-MODE TECH INSPECTOR (FLAGSHIP SHOWCASE)
+         Modes: EXTERIOR HOTSPOTS | KHOANG ÂM HỌC (TEARDOWN) | XOAY 360° | BẢN VẼ KỸ THUẬT CAD
+         ========================================================================== -->
+    <section class="scout-inspector-section" id="tech-inspector-section">
+      <div class="container">
+        <div class="inspector-header-wrap">
+          <div class="inspector-coords-badge">( 21°01'49.0"N · 105°51'08.0"E ) · HANOI R&amp;D LAB · HI-RES AUDIO</div>
+          <h2 class="inspector-headline">KHÁM PHÁ CHI TIẾT <span class="scout-underline">AURASONIC ANC PRO X1</span></h2>
+          <p class="inspector-subline">Khám phá từng chi tiết cơ khí, màng loa Beryllium 45mm, hệ thống chống ồn Hybrid ANC 50dB và bản vẽ kiến trúc kỹ thuật đa chiều theo chuẩn công nghiệp.</p>
+        </div>
+
+        <!-- 4-Mode Navigation Tabs (Scout Motors Style) -->
+        <div class="inspector-tabs-bar">
+          <button type="button" class="inspector-tab-btn active" data-mode="exterior" onclick="switchInspectorMode('exterior')">
+            <span>🔍</span> Ngoại thất &amp; Điểm ghim
+          </button>
+          <button type="button" class="inspector-tab-btn" data-mode="interior" onclick="switchInspectorMode('interior')">
+            <span>⚙️</span> Khoang Âm học
+          </button>
+          <button type="button" class="inspector-tab-btn" data-mode="view360" onclick="switchInspectorMode('view360')">
+            <span>🔄</span> Xoay 360° Đa chiều
+          </button>
+          <button type="button" class="inspector-tab-btn" data-mode="cad" onclick="switchInspectorMode('cad')">
+            <span>📐</span> Bản vẽ Kỹ thuật CAD
+          </button>
+        </div>
+
+        <!-- Interactive Stage -->
+        <div class="inspector-stage" id="inspector-stage">
+          <!-- View 1: Exterior Hotspots -->
+          <div class="inspector-view-pane active" id="pane-exterior">
+            <img src="assets/images/prod-headphones.jpg" alt="AuraSonic ANC Pro X1 Exterior" class="inspector-product-img" id="inspector-main-img">
+
+            <!-- Glowing Hexagonal Hotspot Pins (Scout Motors Style) -->
+            <!-- Pin 1: Beryllium Driver -->
+            <div class="hotspot-pin active" style="top: 55%; left: 42%;" onclick="selectHotspot(0)">
+              <div class="hotspot-pulse-ring"></div>
+              <div class="hotspot-hex">01</div>
+            </div>
+            <!-- Pin 2: 50dB Hybrid ANC 6 Mics -->
+            <div class="hotspot-pin" style="top: 45%; left: 32%;" onclick="selectHotspot(1)">
+              <div class="hotspot-pulse-ring"></div>
+              <div class="hotspot-hex">02</div>
+            </div>
+            <!-- Pin 3: Memory Foam Protein Earpad -->
+            <div class="hotspot-pin" style="top: 68%; left: 40%;" onclick="selectHotspot(2)">
+              <div class="hotspot-pulse-ring"></div>
+              <div class="hotspot-hex">03</div>
+            </div>
+            <!-- Pin 4: Aluminum-Magnesium Headband & Digital Crown -->
+            <div class="hotspot-pin" style="top: 22%; left: 50%;" onclick="selectHotspot(3)">
+              <div class="hotspot-pulse-ring"></div>
+              <div class="hotspot-hex">04</div>
+            </div>
+            <!-- Pin 5: Type-C & Lossless LDAC DAC -->
+            <div class="hotspot-pin" style="top: 76%; left: 56%;" onclick="selectHotspot(4)">
+              <div class="hotspot-pulse-ring"></div>
+              <div class="hotspot-hex">05</div>
+            </div>
+
+            <!-- Flyout Detail Card -->
+            <div class="hotspot-detail-card" id="hotspot-detail-card">
+              <div class="hotspot-card-badge" id="hotspot-card-badge">HOTSPOT #01 • MÀNG LOA VẬT LIỆU CAO CẤP</div>
+              <h4 class="hotspot-card-title" id="hotspot-card-title">Màng Loa Beryllium 45mm Carbon Nano</h4>
+              <p class="hotspot-card-desc" id="hotspot-card-desc">Cấu trúc màng loa siêu nhẹ với độ cứng gấp 4 lần Titanium, tái tạo dải tần rộng từ 10Hz đến 45.000Hz, triệt tiêu hoàn toàn méo tiếng ở âm lượng cực đại.</p>
+              <div style="margin-top: 0.85rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                <span style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#00F0FF; font-weight:700;">THD &lt; 0.05%</span>
+                <button type="button" class="btn btn-primary btn-sm" onclick="openReservationDrawer('aura-anc-pro')">Đặt cọc ngay (7.490.000₫)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- View 2: Interior / Acoustic Teardown -->
+          <div class="inspector-view-pane" id="pane-interior">
+            <img src="assets/images/prod-headphones-thumb3.jpg" alt="AuraSonic ANC Pro X1 Khoang Âm học" class="inspector-product-img">
+            <div class="hotspot-detail-card" style="bottom: 1.5rem; right: 1.5rem;">
+              <div class="hotspot-card-badge">KHOANG ÂM HỌC KÉP • ACOUSTIC MATRIX</div>
+              <h4 class="hotspot-card-title">Kiến Trúc Triệt Tiêu Sóng Đứng</h4>
+              <p class="hotspot-card-desc">Buồng cộng hưởng độc lập chia tách dải trầm và dải trung-cao. Tích hợp vi xử lý DSP 96kHz/24-bit xử lý âm thanh vòm Spatial 360° với độ trễ dưới 15ms.</p>
+              <div style="margin-top:0.75rem; display:flex; gap:0.4rem; flex-wrap:wrap;">
+                <span class="kbd-tag">DSP 96kHz</span>
+                <span class="kbd-tag">Dual-Chamber</span>
+                <span class="kbd-tag">Neodymium N52</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- View 3: 360 Interactive Drag Rotator -->
+          <div class="inspector-view-pane" id="pane-view360" style="cursor: grab;" onmousedown="start360Drag(event)" ontouchstart="start360Drag(event)">
+            <img src="assets/images/prod-headphones.jpg" alt="360 View" class="inspector-product-img" id="img-rotator-360">
+            <div class="rotator-hint">
+              <span>← KÉO CHUỘT ĐỂ XOAY 360° ĐA CHIỀU →</span>
+            </div>
+          </div>
+
+          <!-- View 4: CAD Blueprint Architectural Dimensions (Scout Motors Style) -->
+          <div class="inspector-view-pane" id="pane-cad" style="position:relative;">
+            <div class="cad-blueprint-layer">
+              <div class="cad-blueprint-header">
+                <div>
+                  <strong>BẢN VẼ KỸ THUẬT: AURASONIC ANC PRO X1</strong><br>
+                  <span>MÃ HỒ SƠ: DWG-AUR-2026-X1 • TỶ LỆ 1:1</span>
+                </div>
+                <div style="text-align:right;">
+                  <span>TIÊU CHUẨN: MIL-STD-810H / HI-RES WIRELESS</span><br>
+                  <span>VẬT LIỆU: HỢP KIM AL-MG / BERYLLIUM / MEMORY FOAM</span>
+                </div>
+              </div>
+
+              <!-- Vector Schematics with Real Dimensions -->
+              <div style="position:relative; width:100%; height:380px; display:flex; align-items:center; justify-content:center;">
+                <img src="assets/images/prod-headphones-thumb2.jpg" alt="CAD Blueprint Model" style="max-height:300px; opacity:0.85; filter: drop-shadow(0 0 15px rgba(0, 240, 255, 0.4));">
+
+                <!-- Dimension Line: Height 185 mm -->
+                <div style="position:absolute; right:15%; top:15%; height:70%; border-right:1px dashed #00F0FF; display:flex; align-items:center;">
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#00F0FF; background:#0B1622; padding:2px 6px; transform:translateX(50%);">185 mm</span>
+                </div>
+
+                <!-- Dimension Line: Width 170 mm -->
+                <div style="position:absolute; bottom:10%; width:50%; border-bottom:1px dashed #00F0FF; display:flex; justify-content:center;">
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#00F0FF; background:#0B1622; padding:2px 6px; transform:translateY(50%);">170 mm</span>
+                </div>
+
+                <!-- Dimension Line: Earcup Diameter 92 mm -->
+                <div style="position:absolute; left:18%; top:50%; width:90px; border-top:1px dashed #00F0FF; display:flex; justify-content:center;">
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:#00F0FF; background:#0B1622; padding:2px 4px; transform:translateY(-50%);">Ø 92 mm</span>
+                </div>
+              </div>
+
+              <div class="cad-blueprint-header" style="border-top:1px dashed rgba(0,240,255,0.3); padding-top:0.75rem;">
+                <div>TRỌNG LƯỢNG TỊNH: 248 GRAM</div>
+                <div>ĐÁP ỨNG TẦN SỐ: 10Hz - 45.000Hz</div>
+                <div>PIN LI-PO: 1200mAh (60 GIỜ)</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -559,6 +935,20 @@
             📍 Trụ sở R&amp;D: Hai Bà Trưng, Hà Nội<br>
             ✉️ Email: support@quannguyens.id.vn • Hotline: 1900 6886
           </div>
+          <div style="margin-top:1.25rem; display:flex; align-items:center; gap:1rem;">
+            <svg class="rotating-stamp-badge" viewBox="0 0 100 100" style="width:72px; height:72px;">
+              <path id="stamp-circle" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none" stroke="rgba(255,85,0,0.35)" stroke-width="1.2" stroke-dasharray="3,3" />
+              <text font-family="'JetBrains Mono', monospace" font-size="7.2" font-weight="700" fill="#FF5500" letter-spacing="1.8">
+                <textPath href="#stamp-circle">★ AURATECH VIETNAM ★ HANOI LAB ★ SINCE 2022 </textPath>
+              </text>
+              <circle cx="50" cy="50" r="18" fill="rgba(255,85,0,0.08)" stroke="#FF5500" stroke-width="1.5" />
+              <text x="50" y="54" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="900" fill="#FFFFFF" text-anchor="middle">AT</text>
+            </svg>
+            <div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:var(--text-muted); line-height:1.4;">
+              <strong style="color:#FFF;">TIÊU CHUẨN R&amp;D QUỐC TẾ</strong><br>
+              Hi-Res Audio Wireless • Matter 2.0 • ISO 9001
+            </div>
+          </div>
         </div>
 
         <div>
@@ -615,7 +1005,7 @@
     </div>
   </div>
 
-  <!-- Next-Gen 3D Robotic Assembly Engine & Main Application Script -->
+  <!-- Real-World Flagship Lifestyle Scrollytelling Engine & Main Application Script -->
   <script src="assets/js/assembly-3d-engine.js"></script>
   <script src="assets/js/app.js"></script>
 </body>

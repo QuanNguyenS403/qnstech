@@ -1,1109 +1,1263 @@
 /**
- * AuraTech / QNSTech - Next-Gen 3D Robotic Assembly & Continuous Cinematic Experience
- * Standard: Principal Creative Frontend Developer & UI/UX Motion Architect (Awwwards / Codrops)
- * Implements:
- *  - 3 Ultra-Modern 2026 Luxury Flagship Devices:
- *      1. AuraPhone 16 Horizon Ultra (Titanium Cyber-Translucent, Glowing Glyph, 3nm Bionic)
- *      2. AuraSonic Vision Max (Sculpted Aerodynamic Luxury Headset with Beryllium Acoustic Driver)
- *      3. AuraSphere Spatial Monolith (Devialet/B&O Luxury Aesthetic with Active Pulsing Lateral Woofers)
- *  - Continuous Center-Stage Choreography:
- *      * Phase 1 (0.00 -> 0.35): Phone in Center Stage (Exploded -> Precision Robot Assembly)
- *      * Phase 2 (0.35 -> 0.45): Fluid Continuous Crane Transition 1 (Phone glides, Headphones take Center Stage)
- *      * Phase 3 (0.45 -> 0.70): Headphones in Center Stage (Acoustic Teardown -> Beryllium Synthesis -> Soundwave Pulse)
- *      * Phase 4 (0.70 -> 0.80): Fluid Continuous Crane Transition 2 (Headphones glide, Sound Sculpture ascends)
- *      * Phase 5 (0.80 -> 0.90): Sound Sculpture in Center Stage (Active Pulsing Woofers & Vortex Grille)
- *      * Phase 6 (0.90 -> 1.00): Grand Climax (Golden Ratio Triumvirate Levitation on Glowing Pedestal)
- *  - Luminous Energy & Acoustic Data Ribbon connecting all 3 devices continuously in 3D space
- *  - Smooth Hermite/Catmull-Rom easing (Zero Jerkiness, 60–120 FPS guaranteed)
- *  - Pure scroll-driven scrollytelling (No text boxes or HUD clutter)
+ * AuraTech / QNSTech - Real-World Flagship Lifestyle Scrollytelling Engine
+ * Standard: Principal Creative Frontend Developer & 3D Motion Architect (Awwwards Site of the Day)
+ *
+ * Requirements Met:
+ *  1. Real-World Tangible Products (Everyday human consumer tech):
+ *      - AuraSonic ANC Pro X1: Luxury Over-Ear Active Noise-Cancelling Headphones (AirPods Max / Sony WH-1000XM style)
+ *      - AuraWatch Titanium S3: Grade 5 Titanium Sports Smartwatch with Live Pulsing ECG/OLED Display & Heart-Rate Optical Sensor
+ *      - AuraPhone 16 Pro Flagship: Ultra-thin Contoured Titanium Smartphone with Triple Sapphire Periscope Camera
+ *      - AuraSphere 360 Smart Acoustic Speaker: Seamless Matter 2.0 Living Room Audio Hub
+ *
+ *  2. Real, Soulful, Visually Stimulating Living Environment (NO MORE SCI-FI SPACE VOID):
+ *      - Luxury Natural Oak Wood Tabletop with authentic wood grain, pores, and satin specular sheen
+ *      - Real physical soft contact shadows on the table surface (PCF Soft Shadows)
+ *      - Dynamic Time-of-Day Transition (Morning Studio Daylight -> Golden Hour Sunset Energy -> Warm Evening Lounge)
+ *      - Natural sunbeam dust motes drifting in daylight (organic life, not space stars)
+ *      - Rich architectural studio ambiance with warm tungsten lighting and window daylight
+ *
+ *  3. Seamless, Logically Connected Trajectory (Zero Jerkiness, No Abrupt Snaps):
+ *      - Continuous Hermite spline interpolation for camera dolly/crane, look-at target, and product choreography
+ *      - C1-continuous transitions between phases with smooth momentum and natural physical storytelling
+ *      - Live animated OLED watch display with pulsing ECG heartbeat and biometric meters
+ *      - Real-time lifestyle story narrative HUD with responsive glassmorphism
  */
 
 (function () {
   "use strict";
 
   let scene, camera, renderer, container;
-  let phoneGroup, headphoneGroup, speakerGroup;
-  let pedestalGroup, particleSystem, energyConduitMesh, soundwavesGroup;
-  let ambientLight, keyLight, rimLightCyan, rimLightLime, underLight;
+  let headphonesGroup, watchGroup, phoneGroup, speakerGroup;
+  let tableMesh, shadowPlaneMesh, sunbeamSystem;
+  let sunLight, skyAmbientLight, tableFillLight, eveningLampLight, goldenRimLight;
 
-  // Component collections for animated exploded view
-  const phoneParts = [];
-  const headphoneParts = [];
-  const speakerParts = [];
-  const allSoundwaves = [];
+  // Dynamic Textures & Canvas Contexts for Live Animation
+  let watchCanvas, watchCtx, watchTexture;
+  let phoneCanvas, phoneCtx, phoneTexture;
+  let woodTexture;
 
-  // Active pulsing lateral woofers on speaker
-  let wooferLeftGroup, wooferRightGroup;
+  // Pulse & Heartbeat animation state
+  let heartPhase = 0;
+  let lastTime = performance.now();
 
-  // Interactive & Scroll State
+  // Navigation / Story DOM elements
+  let storyCardEl, storyPhaseBadgeEl, storyTitleEl, storySubtitleEl, storyDescEl, storyTagsEl, storyActionBtnEl;
+  let stepPillEls = [];
+  let progressBarEl;
+
+  // Smooth Interactive & Scroll State
   let currentProgress = 0;
+  let targetProgress = 0;
   let mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
   let isVisible = true;
   let animationFrameId = null;
 
   // Camera damping vectors
-  const camPosCurrent = new THREE.Vector3(0, 3.5, 14.5);
-  const camPosTarget = new THREE.Vector3(0, 3.5, 14.5);
-  const camLookCurrent = new THREE.Vector3(0, 1.8, 0);
-  const camLookTarget = new THREE.Vector3(0, 1.8, 0);
+  const camPosCurrent = new THREE.Vector3(0, 3.8, 11.5);
+  const camPosTarget = new THREE.Vector3(0, 3.8, 11.5);
+  const camLookCurrent = new THREE.Vector3(0, 1.4, 0);
+  const camLookTarget = new THREE.Vector3(0, 1.4, 0);
 
   /* =========================================================================
-     1. HIGH-PRECISION PROCEDURAL TEXTURES (2026 LUXURY TECH AESTHETIC)
+     1. PROCEDURAL REAL-WORLD TEXTURES (LUXURY MATERIALS & LIVING DISPLAYS)
      ========================================================================= */
 
-  function createChipTexture() {
-    const canvas = document.createElement("canvas");
-    canvas.width = 512;
-    canvas.height = 512;
-    const ctx = canvas.getContext("2d");
-
-    // Deep obsidian-blue silicon substrate
-    ctx.fillStyle = "#090d15";
-    ctx.fillRect(0, 0, 512, 512);
-
-    // Micro grid traces
-    ctx.strokeStyle = "rgba(0, 229, 255, 0.2)";
-    ctx.lineWidth = 1;
-    for (let i = 24; i < 512; i += 24) {
-      ctx.beginPath();
-      ctx.moveTo(i, 0); ctx.lineTo(i, 512);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(0, i); ctx.lineTo(512, i);
-      ctx.stroke();
-    }
-
-    // High-speed gold and cyan data buses
-    ctx.strokeStyle = "#00e5ff";
-    ctx.lineWidth = 2.5;
-    ctx.shadowColor = "#00e5ff";
-    ctx.shadowBlur = 10;
-    for (let j = 0; j < 10; j++) {
-      const y = 60 + j * 40;
-      ctx.beginPath();
-      ctx.moveTo(25, y);
-      ctx.lineTo(150, y);
-      ctx.lineTo(200, y + 20);
-      ctx.lineTo(330, y + 20);
-      ctx.stroke();
-    }
-
-    // Central die & Laser engraving
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = "#121926";
-    ctx.strokeStyle = "#e2fd52";
-    ctx.lineWidth = 3;
-    ctx.fillRect(150, 150, 212, 212);
-    ctx.strokeRect(150, 150, 212, 212);
-
-    // Glowing core typography
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 24px 'Plus Jakarta Sans', system-ui, sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("AURA BIONIC", 256, 225);
-    ctx.fillStyle = "#00e5ff";
-    ctx.font = "bold 16px 'JetBrains Mono', monospace";
-    ctx.fillText("3nm NEURAL V4", 256, 260);
-    ctx.fillStyle = "#e2fd52";
-    ctx.font = "700 13px 'JetBrains Mono', monospace";
-    ctx.fillText("48 TOPS • QUANTUM NPU", 256, 288);
-
-    const texture = new THREE.CanvasTexture(canvas);
-    return texture;
-  }
-
-  function createPhoneScreenTexture() {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1024;
-    canvas.height = 2048;
-    const ctx = canvas.getContext("2d");
-
-    // Luxury Cyber/Spatial Wallpaper Gradient
-    const grad = ctx.createLinearGradient(0, 0, 1024, 2048);
-    grad.addColorStop(0, "#05070d");
-    grad.addColorStop(0.3, "#0a1322");
-    grad.addColorStop(0.7, "#152238");
-    grad.addColorStop(1, "#070b14");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 1024, 2048);
-
-    // Ethereal luminous glow orbs
-    const radGrad1 = ctx.createRadialGradient(350, 650, 20, 350, 650, 480);
-    radGrad1.addColorStop(0, "rgba(0, 229, 255, 0.5)");
-    radGrad1.addColorStop(1, "rgba(0, 229, 255, 0)");
-    ctx.fillStyle = radGrad1;
-    ctx.beginPath();
-    ctx.arc(350, 650, 480, 0, Math.PI * 2);
-    ctx.fill();
-
-    const radGrad2 = ctx.createRadialGradient(700, 1350, 20, 700, 1350, 520);
-    radGrad2.addColorStop(0, "rgba(226, 253, 82, 0.38)");
-    radGrad2.addColorStop(1, "rgba(226, 253, 82, 0)");
-    ctx.fillStyle = radGrad2;
-    ctx.beginPath();
-    ctx.arc(700, 1350, 520, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Dynamic Island at top
-    ctx.fillStyle = "#000000";
-    ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(362, 50, 300, 75, 37.5) : ctx.rect(362, 50, 300, 75);
-    ctx.fill();
-
-    // Dynamic island sensor glow
-    ctx.fillStyle = "#00e5ff";
-    ctx.beginPath();
-    ctx.arc(610, 88, 9, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Status Bar Info
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "600 32px 'Plus Jakarta Sans', sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText("09:41", 80, 100);
-    ctx.textAlign = "right";
-    ctx.fillText("5G  100%", 944, 100);
-
-    // Large Futuristic Clock
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "800 150px 'Plus Jakarta Sans', sans-serif";
-    ctx.fillText("09:41", 512, 430);
-    ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
-    ctx.font = "600 36px 'Plus Jakarta Sans', sans-serif";
-    ctx.fillText("Thứ Ba, 17 Tháng 11 • SpatialOS", 512, 510);
-
-    // Holographic Audio Visualizer Card
-    ctx.fillStyle = "rgba(12, 18, 30, 0.8)";
-    ctx.strokeStyle = "rgba(0, 229, 255, 0.45)";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(80, 720, 864, 560, 40) : ctx.rect(80, 720, 864, 560);
-    ctx.fill();
-    ctx.stroke();
-
-    // Soundwaves inside Card
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 38px 'Plus Jakarta Sans', sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText("AuraSonic ANC Pro • Đang phát", 140, 810);
-    ctx.fillStyle = "#00e5ff";
-    ctx.font = "600 28px 'JetBrains Mono', monospace";
-    ctx.fillText("SPATIAL 360° AUDIO • LOSSLESS 96kHz", 140, 860);
-
-    // Animated Visualizer Spectrum Bars
-    for (let b = 0; b < 32; b++) {
-      const bx = 140 + b * 24;
-      const h = 40 + Math.sin(b * 0.45) * 80 + Math.cos(b * 0.8) * 45;
-      const barGrad = ctx.createLinearGradient(0, 1100 - h, 0, 1100);
-      barGrad.addColorStop(0, "#00e5ff");
-      barGrad.addColorStop(1, "#e2fd52");
-      ctx.fillStyle = barGrad;
-      ctx.fillRect(bx, 1100 - Math.max(h, 12), 16, Math.max(h, 12));
-    }
-
-    // Audio Controls Row
-    ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
-    ctx.font = "bold 48px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("⏮   ▶   ⏭", 512, 1210);
-
-    // Quick Action Bar at bottom
-    ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
-    ctx.beginPath();
-    ctx.arc(200, 1880, 60, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(824, 1880, 60, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Home Bar
-    ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(352, 2000, 320, 10, 5) : ctx.rect(352, 2000, 320, 10);
-    ctx.fill();
-
-    const texture = new THREE.CanvasTexture(canvas);
-    return texture;
-  }
-
-  function createCyberGlyphBackTexture() {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1024;
-    canvas.height = 2048;
-    const ctx = canvas.getContext("2d");
-
-    // Dark frosted translucent cyberplate
-    ctx.fillStyle = "#0a0e16";
-    ctx.fillRect(0, 0, 1024, 2048);
-
-    // Glowing Glyph matrix lines (Nothing Phone aesthetic)
-    ctx.strokeStyle = "#00e5ff";
-    ctx.lineWidth = 10;
-    ctx.shadowColor = "#00e5ff";
-    ctx.shadowBlur = 25;
-
-    // Camera island perimeter glyph
-    ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(540, 140, 400, 520, 60) : ctx.rect(540, 140, 400, 520);
-    ctx.stroke();
-
-    // Wireless charging coil glyph
-    ctx.beginPath();
-    ctx.arc(512, 1100, 260, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // Bottom diagonal slash glyphs
-    ctx.beginPath();
-    ctx.moveTo(140, 1800); ctx.lineTo(340, 1800);
-    ctx.moveTo(512, 1720); ctx.lineTo(512, 1880);
-    ctx.stroke();
-
-    // Micro laser printed typography
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
-    ctx.font = "bold 20px 'JetBrains Mono', monospace";
-    ctx.textAlign = "left";
-    ctx.fillText("AURATECH DESIGN IN CALIFORNIA & VIETNAM", 120, 1940);
-    ctx.fillText("MODEL: A2601 TITANIUM ULTRA • CE FC", 120, 1975);
-
-    const texture = new THREE.CanvasTexture(canvas);
-    return texture;
-  }
-
-  function createSpeakerVortexTexture() {
-    const canvas = document.createElement("canvas");
-    canvas.width = 512;
-    canvas.height = 512;
-    const ctx = canvas.getContext("2d");
-
-    ctx.fillStyle = "#101520";
-    ctx.fillRect(0, 0, 512, 512);
-
-    // Aerodynamic vortex acoustic sound slots
-    ctx.fillStyle = "#06080d";
-    for (let y = 10; y < 512; y += 18) {
-      for (let x = 10; x < 512; x += 28) {
-        ctx.beginPath();
-        const slant = Math.sin(y * 0.05) * 8;
-        ctx.ellipse ? ctx.ellipse(x + slant, y, 9, 3.5, 0.25, 0, Math.PI * 2) : ctx.rect(x, y, 16, 5);
-        ctx.fill();
-      }
-    }
-
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(4, 2);
-    return texture;
-  }
-
-  function createPedestalGridTexture() {
+  // Luxury Natural Oak Wood Texture for Tabletop
+  function createOakWoodTexture() {
     const canvas = document.createElement("canvas");
     canvas.width = 1024;
     canvas.height = 1024;
     const ctx = canvas.getContext("2d");
 
-    ctx.fillStyle = "#03060a";
+    // Base rich warm honey-oak tone
+    ctx.fillStyle = "#c89d66";
     ctx.fillRect(0, 0, 1024, 1024);
 
-    // Concentric laser rings
-    ctx.lineWidth = 2.5;
-    for (let radius = 60; radius <= 480; radius += 45) {
-      ctx.strokeStyle = radius % 90 === 0 ? "rgba(0, 229, 255, 0.5)" : "rgba(0, 229, 255, 0.15)";
+    // Subtle grain layers
+    for (let i = 0; i < 600; i++) {
+      const y = Math.random() * 1024;
+      const alpha = 0.04 + Math.random() * 0.08;
+      const darkness = Math.random() > 0.5 ? 40 : 20;
+      ctx.fillStyle = `rgba(${170 - darkness}, ${120 - darkness}, ${70 - darkness}, ${alpha})`;
+      ctx.fillRect(0, y, 1024, 1 + Math.random() * 3);
+    }
+
+    // Curving annual growth ring waves
+    ctx.lineWidth = 1.5;
+    for (let r = 0; r < 24; r++) {
+      const baseY = r * 45;
+      ctx.strokeStyle = `rgba(130, 85, 45, ${0.08 + (r % 3 === 0 ? 0.06 : 0)})`;
       ctx.beginPath();
-      ctx.arc(512, 512, radius, 0, Math.PI * 2);
+      ctx.moveTo(0, baseY);
+      for (let x = 0; x <= 1024; x += 32) {
+        const wave = Math.sin((x / 1024) * Math.PI * 3 + r * 0.4) * 8 +
+                     Math.sin((x / 1024) * Math.PI * 8) * 3;
+        ctx.lineTo(x, baseY + wave);
+      }
       ctx.stroke();
     }
 
-    // Radial ray guides
-    for (let angle = 0; angle < 360; angle += 15) {
-      const rad = (angle * Math.PI) / 180;
-      ctx.strokeStyle = angle % 45 === 0 ? "rgba(226, 253, 82, 0.4)" : "rgba(255, 255, 255, 0.08)";
-      ctx.lineWidth = angle % 45 === 0 ? 2 : 1;
-      ctx.beginPath();
-      ctx.moveTo(512 + Math.cos(rad) * 60, 512 + Math.sin(rad) * 60);
-      ctx.lineTo(512 + Math.cos(rad) * 490, 512 + Math.sin(rad) * 490);
-      ctx.stroke();
+    // Micro wood pores
+    for (let p = 0; p < 3500; p++) {
+      const px = Math.random() * 1024;
+      const py = Math.random() * 1024;
+      ctx.fillStyle = "rgba(90, 55, 30, 0.12)";
+      ctx.fillRect(px, py, 1.5, 0.8);
     }
 
     const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(3, 3);
     return texture;
   }
 
-  /* =========================================================================
-     2. PROCEDURAL 3D MESH BUILDERS (2026 LUXURY FLAGSHIP DESIGN)
-     ========================================================================= */
-
-  function registerPart(collection, mesh, explodedOffset, basePos) {
-    mesh.userData = {
-      basePos: basePos ? basePos.clone() : mesh.position.clone(),
-      explodedOffset: explodedOffset.clone(),
-      currentExplode: 0
-    };
-    collection.push(mesh);
-    return mesh;
+  // Live Animated OLED Display Texture for AuraWatch Titanium S3
+  function initWatchOLED() {
+    watchCanvas = document.createElement("canvas");
+    watchCanvas.width = 512;
+    watchCanvas.height = 512;
+    watchCtx = watchCanvas.getContext("2d");
+    watchTexture = new THREE.CanvasTexture(watchCanvas);
+    updateWatchOLED(0);
   }
 
-  // --- DEVICE 1: AURA PHONE 16 HORIZON ULTRA (CYBER-TRANSLUCENT TITANIUM) ---
-  function buildPhone() {
-    phoneGroup = new THREE.Group();
-    phoneGroup.position.set(0, 1.8, 0); // Center Stage initially
+  function updateWatchOLED(deltaTime) {
+    if (!watchCtx) return;
+    heartPhase += deltaTime * 5;
 
-    const titaniumMat = new THREE.MeshStandardMaterial({
-      color: 0x242a36,
-      metalness: 0.96,
-      roughness: 0.14,
+    const ctx = watchCtx;
+    const w = 512, h = 512;
+
+    // Deep OLED Black substrate
+    ctx.fillStyle = "#030508";
+    ctx.fillRect(0, 0, w, h);
+
+    // Outer subtle bezel indicator
+    ctx.strokeStyle = "rgba(255, 100, 30, 0.25)";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(w / 2, h / 2, 238, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Top Header: Activity & Time
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "800 64px 'Plus Jakarta Sans', system-ui, sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("17:45", 56, 110);
+
+    ctx.fillStyle = "#ff6a3d";
+    ctx.font = "700 22px 'JetBrains Mono', monospace";
+    ctx.fillText("ĐANG CHẠY BỘ • NGOÀI TRỜI", 56, 146);
+
+    // Live Heart Rate Metric with Pulsing Icon
+    const bpm = Math.round(142 + Math.sin(heartPhase * 0.4) * 3);
+    const beatScale = 1 + Math.pow(Math.sin(heartPhase), 4) * 0.28;
+
+    ctx.save();
+    ctx.translate(68, 220);
+    ctx.scale(beatScale, beatScale);
+    ctx.fillStyle = "#ff2d55";
+    ctx.font = "32px sans-serif";
+    ctx.fillText("❤️", -16, 10);
+    ctx.restore();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "800 52px 'Plus Jakarta Sans', system-ui, sans-serif";
+    ctx.fillText(`${bpm}`, 112, 232);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+    ctx.font = "600 20px 'JetBrains Mono', monospace";
+    ctx.fillText("BPM", 220, 232);
+
+    // Real-Time Animated ECG Waveform
+    ctx.strokeStyle = "#ff453a";
+    ctx.lineWidth = 3.5;
+    ctx.shadowColor = "#ff453a";
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    const ecgY = 300;
+    for (let x = 48; x <= 464; x += 4) {
+      const normX = (x - 48) / (464 - 48);
+      const waveX = (normX * 8 - heartPhase * 0.8) % 1;
+      let wave = 0;
+      if (waveX > 0.42 && waveX < 0.48) {
+        wave = -Math.sin((waveX - 0.42) / 0.06 * Math.PI) * 45; // QRS complex spike
+      } else if (waveX >= 0.48 && waveX < 0.54) {
+        wave = Math.sin((waveX - 0.48) / 0.06 * Math.PI) * 20;
+      } else {
+        wave = Math.sin(waveX * Math.PI * 4) * 4;
+      }
+      if (x === 48) ctx.moveTo(x, ecgY + wave);
+      else ctx.lineTo(x, ecgY + wave);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Bottom Dual Progress Rings & Workout Stats
+    // Ring 1: Distance (5.42 km)
+    ctx.fillStyle = "#00e5ff";
+    ctx.font = "700 32px 'JetBrains Mono', monospace";
+    ctx.fillText("5.42", 56, 400);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+    ctx.font = "600 16px 'Plus Jakarta Sans', sans-serif";
+    ctx.fillText("KM HOÀN THÀNH", 56, 424);
+
+    // Ring 2: Calories (520 kcal)
+    ctx.fillStyle = "#e2fd52";
+    ctx.font = "700 32px 'JetBrains Mono', monospace";
+    ctx.fillText("520", 270, 400);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+    ctx.font = "600 16px 'Plus Jakarta Sans', sans-serif";
+    ctx.fillText("KCAL ĐỐT CHÁY", 270, 424);
+
+    // Battery & GPS Pill
+    ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(56, 452, 400, 32, 16) : ctx.rect(56, 452, 400, 32);
+    ctx.fill();
+
+    ctx.fillStyle = "#30d158";
+    ctx.font = "bold 15px 'JetBrains Mono', monospace";
+    ctx.fillText("⚡ PIN 88%  •  GPS BĂNG TẦN KÉP KHÓA CHÍNH XÁC", 82, 474);
+
+    watchTexture.needsUpdate = true;
+  }
+
+  // Dynamic OLED Phone Screen (AuraPhone 16 Pro Lifestyle Player)
+  function createPhoneScreen() {
+    phoneCanvas = document.createElement("canvas");
+    phoneCanvas.width = 1024;
+    phoneCanvas.height = 2048;
+    phoneCtx = phoneCanvas.getContext("2d");
+    phoneTexture = new THREE.CanvasTexture(phoneCanvas);
+    updatePhoneScreen();
+    return phoneTexture;
+  }
+
+  function updatePhoneScreen() {
+    if (!phoneCtx) return;
+    const ctx = phoneCtx;
+
+    // Elegant Obsidian & Deep Navy Gradient
+    const bg = ctx.createLinearGradient(0, 0, 1024, 2048);
+    bg.addColorStop(0, "#080e18");
+    bg.addColorStop(0.45, "#101d30");
+    bg.addColorStop(1, "#070b13");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, 1024, 2048);
+
+    // Dynamic Island at top
+    ctx.fillStyle = "#000000";
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(362, 54, 300, 72, 36) : ctx.rect(362, 54, 300, 72);
+    ctx.fill();
+
+    // Soundwave mini-indicator inside Dynamic Island
+    ctx.fillStyle = "#e2fd52";
+    for (let k = 0; k < 4; k++) {
+      const bh = 14 + Math.sin(k * 1.5) * 8;
+      ctx.fillRect(610 + k * 8, 90 - bh / 2, 4, bh);
+    }
+
+    // Status bar clock
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "600 34px 'Plus Jakarta Sans', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("20:30", 90, 104);
+    ctx.textAlign = "right";
+    ctx.fillText("5G  100%", 934, 104);
+
+    // Large Clock
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "800 140px 'Plus Jakarta Sans', sans-serif";
+    ctx.fillText("20:30", 512, 380);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+    ctx.font = "600 32px 'Plus Jakarta Sans', sans-serif";
+    ctx.fillText("Thứ Tư, 18 Tháng 11 • Phòng Khách", 512, 450);
+
+    // Album Art Card (Cozy Warm Acoustic Lounge)
+    ctx.fillStyle = "#162236";
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(112, 560, 800, 800, 48) : ctx.rect(112, 560, 800, 800);
+    ctx.fill();
+
+    // Album art gradient artwork
+    const artGrad = ctx.createLinearGradient(112, 560, 912, 1360);
+    artGrad.addColorStop(0, "#ff7a45");
+    artGrad.addColorStop(0.5, "#8a2be2");
+    artGrad.addColorStop(1, "#00e5ff");
+    ctx.fillStyle = artGrad;
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(144, 592, 736, 736, 36) : ctx.rect(144, 592, 736, 736);
+    ctx.fill();
+
+    // Vinyl record center ring inside album art
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(512, 960, 180, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "800 48px 'Plus Jakarta Sans', sans-serif";
+    ctx.fillText("AuraAcoustic Live", 512, 950);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+    ctx.font = "600 28px 'JetBrains Mono', monospace";
+    ctx.fillText("SPATIAL AUDIO 360°", 512, 1000);
+
+    // Track Metadata
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "800 44px 'Plus Jakarta Sans', sans-serif";
+    ctx.fillText("Hoàng Hôn Trên Bàn Làm Việc", 112, 1450);
+    ctx.fillStyle = "#00e5ff";
+    ctx.font = "600 30px 'Plus Jakarta Sans', sans-serif";
+    ctx.fillText("AuraTech Acoustic Sanctuary", 112, 1500);
+
+    // Playback Progress Bar
+    ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(112, 1560, 800, 10, 5) : ctx.rect(112, 1560, 800, 10);
+    ctx.fill();
+
+    ctx.fillStyle = "#e2fd52";
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(112, 1560, 520, 10, 5) : ctx.rect(112, 1560, 520, 10);
+    ctx.fill();
+
+    // Time indicators
+    ctx.font = "600 24px 'JetBrains Mono', monospace";
+    ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+    ctx.fillText("02:45", 112, 1605);
+    ctx.textAlign = "right";
+    ctx.fillText("-01:15", 912, 1605);
+
+    // Media Controls
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "58px sans-serif";
+    ctx.fillText("⏮      ⏸      ⏭", 512, 1720);
+
+    // Connected Output Banner (Matter 2.0 to AuraSphere)
+    ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(112, 1800, 800, 84, 42) : ctx.rect(112, 1800, 800, 84);
+    ctx.fill();
+
+    ctx.fillStyle = "#30d158";
+    ctx.font = "700 28px 'JetBrains Mono', monospace";
+    ctx.fillText("🔊 PHÁT QUA LOA AURASPHERE 360 • MATTER 2.0", 512, 1852);
+
+    // Bottom Home Indicator Bar
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(352, 2010, 320, 10, 5) : ctx.rect(352, 2010, 320, 10);
+    ctx.fill();
+
+    phoneTexture.needsUpdate = true;
+  }
+
+  /* =========================================================================
+     2. REAL-WORLD 3D MESH BUILDERS (AUTHENTIC CONSUMER HARDWARE)
+     ========================================================================= */
+
+  // --- DEVICE 1: AURASONIC ANC PRO X1 (FLAGSHIP OVER-EAR HEADPHONES) ---
+  function buildHeadphones() {
+    headphonesGroup = new THREE.Group();
+
+    // Luxury Material Palette
+    const spaceGrayAluminum = new THREE.MeshStandardMaterial({
+      color: 0x2e3542,
+      metalness: 0.92,
+      roughness: 0.22,
       envMapIntensity: 2.2
     });
 
-    const copperMat = new THREE.MeshStandardMaterial({
-      color: 0xd97543,
-      metalness: 0.95,
-      roughness: 0.2
+    const polishedChamfer = new THREE.MeshStandardMaterial({
+      color: 0xdce2ec,
+      metalness: 0.98,
+      roughness: 0.12
     });
 
-    const goldMat = new THREE.MeshStandardMaterial({
-      color: 0xf4c430,
-      metalness: 0.92,
+    const memoryFoamMesh = new THREE.MeshStandardMaterial({
+      color: 0x1b2029,
+      roughness: 0.88,
+      metalness: 0.08
+    });
+
+    const leatherHeadbandMat = new THREE.MeshStandardMaterial({
+      color: 0x222630,
+      roughness: 0.72,
+      metalness: 0.15
+    });
+
+    const steelSliderMat = new THREE.MeshStandardMaterial({
+      color: 0xccd4e0,
+      metalness: 0.96,
       roughness: 0.15
     });
 
-    // 1. Titanium Unibody Chassis with Diamond-cut Chamfer
-    const chassisGeo = new THREE.BoxGeometry(3.9, 8.2, 0.34);
-    const chassis = new THREE.Mesh(chassisGeo, titaniumMat);
+    // 1. Padded Contoured Headband Arch
+    const bandCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-2.8, 2.8, 0),
+      new THREE.Vector3(-1.8, 4.4, 0),
+      new THREE.Vector3(0, 4.8, 0),
+      new THREE.Vector3(1.8, 4.4, 0),
+      new THREE.Vector3(2.8, 2.8, 0)
+    ]);
+    const bandGeo = new THREE.TubeGeometry(bandCurve, 64, 0.24, 16, false);
+    const headband = new THREE.Mesh(bandGeo, leatherHeadbandMat);
+    headband.castShadow = true;
+    headphonesGroup.add(headband);
+
+    // Inner breathable canopy mesh underneath headband
+    const innerCanopyGeo = new THREE.TubeGeometry(bandCurve, 48, 0.14, 12, false);
+    const innerCanopy = new THREE.Mesh(innerCanopyGeo, memoryFoamMesh);
+    innerCanopy.position.y = -0.12;
+    headphonesGroup.add(innerCanopy);
+
+    // 2. Telescoping Stainless Steel Slider Arms (Left & Right)
+    [-2.8, 2.8].forEach(x => {
+      const sliderGeo = new THREE.CylinderGeometry(0.09, 0.09, 1.4, 16);
+      const slider = new THREE.Mesh(sliderGeo, steelSliderMat);
+      slider.position.set(x, 2.2, 0);
+      slider.rotation.z = (x < 0 ? 0.25 : -0.25);
+      headphonesGroup.add(slider);
+    });
+
+    // 3. Ergonomic Left & Right Earcups
+    function createEarcup(isRight) {
+      const cupGroup = new THREE.Group();
+      const sideMult = isRight ? 1 : -1;
+
+      // Anodized Aluminum Outer Cup Shell
+      const shellGeo = new THREE.CylinderGeometry(1.42, 1.55, 0.72, 36);
+      shellGeo.scale(1.0, 1.0, 1.25); // Ergonomic racetrack ear shape
+      const shell = new THREE.Mesh(shellGeo, spaceGrayAluminum);
+      shell.castShadow = true;
+      shell.receiveShadow = true;
+      cupGroup.add(shell);
+
+      // Polished Diamond-Cut Perimeter Chamfer
+      const ringGeo = new THREE.TorusGeometry(1.48, 0.045, 16, 48);
+      ringGeo.scale(1.0, 1.25, 1.0);
+      ringGeo.rotateX(Math.PI / 2);
+      const ring = new THREE.Mesh(ringGeo, polishedChamfer);
+      ring.position.y = 0.36;
+      cupGroup.add(ring);
+
+      // Soft Memory Foam Ear Cushion
+      const cushionGeo = new THREE.TorusGeometry(1.36, 0.28, 24, 48);
+      cushionGeo.scale(0.95, 1.22, 0.9);
+      cushionGeo.rotateX(Math.PI / 2);
+      const cushion = new THREE.Mesh(cushionGeo, memoryFoamMesh);
+      cushion.position.y = -0.38;
+      cushion.castShadow = true;
+      cupGroup.add(cushion);
+
+      // Acoustic Driver Grille with Laser-etched L/R
+      const grilleGeo = new THREE.CircleGeometry(1.15, 32);
+      grilleGeo.rotateX(Math.PI / 2);
+      const grilleMat = new THREE.MeshStandardMaterial({
+        color: 0x111620,
+        roughness: 0.95
+      });
+      const grille = new THREE.Mesh(grilleGeo, grilleMat);
+      grille.position.y = -0.32;
+      cupGroup.add(grille);
+
+      // Tactile Digital Crown / Controls on Right Earcup
+      if (isRight) {
+        const crownGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.16, 24);
+        const crown = new THREE.Mesh(crownGeo, polishedChamfer);
+        crown.position.set(1.4, 0.25, 0.6);
+        crown.rotation.z = Math.PI / 3;
+        cupGroup.add(crown);
+
+        // Active Status LED (Soft cyan dot)
+        const ledGeo = new THREE.SphereGeometry(0.04, 12, 12);
+        const ledMat = new THREE.MeshBasicMaterial({ color: 0x00e5ff });
+        const led = new THREE.Mesh(ledGeo, ledMat);
+        led.position.set(0.8, -0.28, 1.3);
+        cupGroup.add(led);
+      }
+
+      // Aluminum Swivel Fork Yoke
+      const yokeGeo = new THREE.TorusGeometry(1.7, 0.08, 16, 32, Math.PI);
+      yokeGeo.rotateZ(-Math.PI / 2);
+      const yoke = new THREE.Mesh(yokeGeo, spaceGrayAluminum);
+      yoke.position.set(sideMult * 0.1, 0.4, 0);
+      cupGroup.add(yoke);
+
+      return cupGroup;
+    }
+
+    const leftCup = createEarcup(false);
+    leftCup.position.set(-3.1, 1.5, 0);
+    leftCup.rotation.set(0, 0, 0.15);
+    headphonesGroup.add(leftCup);
+
+    const rightCup = createEarcup(true);
+    rightCup.position.set(3.1, 1.5, 0);
+    rightCup.rotation.set(0, 0, -0.15);
+    headphonesGroup.add(rightCup);
+
+    headphonesGroup.position.set(0, 1.6, 0);
+    scene.add(headphonesGroup);
+  }
+
+  // --- DEVICE 2: AURAWATCH TITANIUM S3 (FLAGSHIP SPORTS SMARTWATCH) ---
+  function buildSmartwatch() {
+    watchGroup = new THREE.Group();
+
+    const titaniumCaseMat = new THREE.MeshStandardMaterial({
+      color: 0x68707d,
+      metalness: 0.94,
+      roughness: 0.32,
+      envMapIntensity: 2.5
+    });
+
+    const crownOrangeMat = new THREE.MeshStandardMaterial({
+      color: 0xff5500,
+      roughness: 0.35,
+      metalness: 0.6
+    });
+
+    const sapphireGlassMat = new THREE.MeshStandardMaterial({
+      map: watchTexture,
+      roughness: 0.03,
+      metalness: 0.08,
+      emissive: 0xffffff,
+      emissiveMap: watchTexture,
+      emissiveIntensity: 0.92
+    });
+
+    const strapFluoroMat = new THREE.MeshStandardMaterial({
+      color: 0x1f242c,
+      roughness: 0.85,
+      metalness: 0.08
+    });
+
+    const ceramicBackMat = new THREE.MeshStandardMaterial({
+      color: 0x0b0d12,
+      roughness: 0.1,
+      metalness: 0.8
+    });
+
+    // 1. Grade 5 Brushed Titanium Cushion Case
+    const caseGeo = new THREE.BoxGeometry(3.6, 4.3, 0.95);
+    const watchCase = new THREE.Mesh(caseGeo, titaniumCaseMat);
+    watchCase.castShadow = true;
+    watchCase.receiveShadow = true;
+    watchGroup.add(watchCase);
+
+    // 2. Beveled Sapphire Crystal Display
+    const screenGeo = new THREE.PlaneGeometry(3.2, 3.8);
+    const screen = new THREE.Mesh(screenGeo, sapphireGlassMat);
+    screen.position.set(0, 0, 0.49);
+    watchGroup.add(screen);
+
+    // 3. Knurled Digital Crown with International Orange Accent Band
+    const crownBaseGeo = new THREE.CylinderGeometry(0.55, 0.55, 0.38, 24);
+    crownBaseGeo.rotateZ(Math.PI / 2);
+    const crownBase = new THREE.Mesh(crownBaseGeo, titaniumCaseMat);
+    crownBase.position.set(1.95, 0.7, 0);
+    watchGroup.add(crownBase);
+
+    const crownRingGeo = new THREE.TorusGeometry(0.56, 0.06, 12, 24);
+    crownRingGeo.rotateY(Math.PI / 2);
+    const crownRing = new THREE.Mesh(crownRingGeo, crownOrangeMat);
+    crownRing.position.set(2.0, 0.7, 0);
+    watchGroup.add(crownRing);
+
+    // 4. Tactile Raised Side Action Button
+    const btnGeo = new THREE.BoxGeometry(0.2, 1.4, 0.4);
+    const actionBtn = new THREE.Mesh(btnGeo, titaniumCaseMat);
+    actionBtn.position.set(-1.85, 0.2, 0);
+    watchGroup.add(actionBtn);
+
+    // 5. Ceramic Rear Dome with Pulsing Optical BioSense Sensors
+    const ceramicDomeGeo = new THREE.CylinderGeometry(1.3, 1.3, 0.2, 24);
+    ceramicDomeGeo.rotateX(Math.PI / 2);
+    const ceramicDome = new THREE.Mesh(ceramicDomeGeo, ceramicBackMat);
+    ceramicDome.position.set(0, 0, -0.55);
+    watchGroup.add(ceramicDome);
+
+    // BioSense PPG LEDs (Green and Red optical emitters)
+    const ledMat = new THREE.MeshBasicMaterial({ color: 0x00ff88 });
+    for (let s = 0; s < 4; s++) {
+      const angle = (s * Math.PI) / 2;
+      const sensorGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.06, 16);
+      sensorGeo.rotateX(Math.PI / 2);
+      const sensor = new THREE.Mesh(sensorGeo, ledMat);
+      sensor.position.set(Math.cos(angle) * 0.65, Math.sin(angle) * 0.65, -0.66);
+      watchGroup.add(sensor);
+    }
+
+    // 6. Realistic Ribbed Sports Loop Straps (Curving naturally)
+    // Top Strap
+    const topStrapGeo = new THREE.CylinderGeometry(1.6, 1.6, 0.3, 24, 1, false, 0, Math.PI);
+    topStrapGeo.scale(1.0, 0.7, 1.0);
+    topStrapGeo.rotateZ(Math.PI / 2);
+    const topStrap = new THREE.Mesh(topStrapGeo, strapFluoroMat);
+    topStrap.position.set(0, 3.2, -0.6);
+    topStrap.castShadow = true;
+    watchGroup.add(topStrap);
+
+    // Bottom Strap
+    const btmStrapGeo = new THREE.CylinderGeometry(1.6, 1.6, 0.3, 24, 1, false, 0, Math.PI);
+    btmStrapGeo.scale(1.0, 0.7, 1.0);
+    btmStrapGeo.rotateZ(-Math.PI / 2);
+    const btmStrap = new THREE.Mesh(btmStrapGeo, strapFluoroMat);
+    btmStrap.position.set(0, -3.2, -0.6);
+    btmStrap.castShadow = true;
+    watchGroup.add(btmStrap);
+
+    // Initial position in waiting wing
+    watchGroup.position.set(14, 1.5, -4);
+    scene.add(watchGroup);
+  }
+
+  // --- DEVICE 3: AURAPHONE 16 PRO & AURASPHERE LIVING SPEAKER ---
+  function buildPhoneAndSpeaker() {
+    phoneGroup = new THREE.Group();
+
+    const titaniumPhoneMat = new THREE.MeshStandardMaterial({
+      color: 0x333944,
+      metalness: 0.94,
+      roughness: 0.28,
+      envMapIntensity: 2.2
+    });
+
+    const matteGlassMat = new THREE.MeshStandardMaterial({
+      color: 0x18202d,
+      roughness: 0.42,
+      metalness: 0.45
+    });
+
+    const cameraGlassMat = new THREE.MeshStandardMaterial({
+      color: 0x050912,
+      roughness: 0.05,
+      metalness: 0.95
+    });
+
+    const phoneScreenMat = new THREE.MeshStandardMaterial({
+      map: phoneTexture,
+      roughness: 0.02,
+      metalness: 0.05,
+      emissive: 0xffffff,
+      emissiveMap: phoneTexture,
+      emissiveIntensity: 0.95
+    });
+
+    // 1. Slim Titanium Contoured Phone Chassis
+    const phoneGeo = new THREE.BoxGeometry(3.8, 8.0, 0.32);
+    const chassis = new THREE.Mesh(phoneGeo, titaniumPhoneMat);
     chassis.castShadow = true;
     chassis.receiveShadow = true;
-    registerPart(phoneParts, chassis, new THREE.Vector3(0, 0, 0));
     phoneGroup.add(chassis);
 
-    // 2. Front Curved Waterfall Sapphire Screen
-    const screenGeo = new THREE.BoxGeometry(3.76, 8.08, 0.08);
-    const screenTex = createPhoneScreenTexture();
-    const screenMat = new THREE.MeshStandardMaterial({
-      map: screenTex,
-      roughness: 0.02,
-      metalness: 0.1,
-      emissive: 0xffffff,
-      emissiveMap: screenTex,
-      emissiveIntensity: 0.75
-    });
-    const frontScreen = new THREE.Mesh(screenGeo, screenMat);
-    frontScreen.position.set(0, 0, 0.22);
-    registerPart(phoneParts, frontScreen, new THREE.Vector3(0, 0, 4.0));
-    phoneGroup.add(frontScreen);
+    // 2. Front OLED Curved Display
+    const pScreenGeo = new THREE.PlaneGeometry(3.68, 7.86);
+    const pScreen = new THREE.Mesh(pScreenGeo, phoneScreenMat);
+    pScreen.position.set(0, 0, 0.17);
+    phoneGroup.add(pScreen);
 
-    // 3. Translucent Cyber-Glyph Backplate (Nothing Phone / Vision Luxury)
-    const backGeo = new THREE.BoxGeometry(3.8, 8.1, 0.08);
-    const glyphTex = createCyberGlyphBackTexture();
-    const backMat = new THREE.MeshStandardMaterial({
-      map: glyphTex,
-      roughness: 0.15,
-      metalness: 0.5,
-      emissive: 0x00e5ff,
-      emissiveMap: glyphTex,
-      emissiveIntensity: 0.9,
-      transparent: true,
-      opacity: 0.95
-    });
-    const backGlass = new THREE.Mesh(backGeo, backMat);
-    backGlass.position.set(0, 0, -0.22);
-    registerPart(phoneParts, backGlass, new THREE.Vector3(0, 0, -3.8));
+    // 3. Frosted Matte Rear Glass
+    const backGeo = new THREE.PlaneGeometry(3.72, 7.92);
+    backGeo.rotateY(Math.PI);
+    const backGlass = new THREE.Mesh(backGeo, matteGlassMat);
+    backGlass.position.set(0, 0, -0.17);
     phoneGroup.add(backGlass);
 
-    // 4. Copper Vapor Chamber Heat Sink
-    const vaporGeo = new THREE.BoxGeometry(3.0, 5.2, 0.04);
-    const vaporChamber = new THREE.Mesh(vaporGeo, copperMat);
-    vaporChamber.position.set(0, 0.3, 0.06);
-    registerPart(phoneParts, vaporChamber, new THREE.Vector3(-1.0, 0, 1.8));
-    phoneGroup.add(vaporChamber);
+    // 4. Triple Periscope Camera Island
+    const bumpGeo = new THREE.BoxGeometry(1.7, 1.8, 0.16);
+    const bump = new THREE.Mesh(bumpGeo, matteGlassMat);
+    bump.position.set(0.85, 2.8, -0.24);
+    phoneGroup.add(bump);
 
-    // 5. Main Logic Board & 3nm Bionic Chip
-    const boardGeo = new THREE.BoxGeometry(3.4, 3.6, 0.06);
-    const boardMat = new THREE.MeshStandardMaterial({
-      color: 0x0f1622,
-      metalness: 0.8,
-      roughness: 0.25
-    });
-    const motherboard = new THREE.Mesh(boardGeo, boardMat);
-    motherboard.position.set(0, 1.8, 0.12);
-
-    const chipGeo = new THREE.BoxGeometry(1.6, 1.6, 0.08);
-    const chipTex = createChipTexture();
-    const chipMat = new THREE.MeshStandardMaterial({
-      map: chipTex,
-      roughness: 0.18,
-      metalness: 0.88,
-      emissive: 0x00e5ff,
-      emissiveMap: chipTex,
-      emissiveIntensity: 1.15
-    });
-    const bionicChip = new THREE.Mesh(chipGeo, chipMat);
-    bionicChip.position.set(0, 0, 0.06);
-    motherboard.add(bionicChip);
-
-    // Gold contact pins
-    for (let c = -1.1; c <= 1.1; c += 0.55) {
-      const connGeo = new THREE.BoxGeometry(0.35, 0.12, 0.08);
-      const conn = new THREE.Mesh(connGeo, goldMat);
-      conn.position.set(c, -1.5, 0.04);
-      motherboard.add(conn);
-    }
-    registerPart(phoneParts, motherboard, new THREE.Vector3(0, 2.2, 2.4));
-    phoneGroup.add(motherboard);
-
-    // 6. Graphene Battery Cell
-    const battGeo = new THREE.BoxGeometry(3.3, 3.6, 0.14);
-    const battMat = new THREE.MeshStandardMaterial({
-      color: 0x0b1018,
-      roughness: 0.35,
-      metalness: 0.65
-    });
-    const battery = new THREE.Mesh(battGeo, battMat);
-    battery.position.set(0, -1.8, 0.08);
-    registerPart(phoneParts, battery, new THREE.Vector3(0, -2.2, 1.6));
-    phoneGroup.add(battery);
-
-    // 7. Triple Sapphire Periscope Camera Module
-    const camIslandGroup = new THREE.Group();
-    camIslandGroup.position.set(0.85, 2.3, -0.32);
-
-    const islandPlateGeo = new THREE.BoxGeometry(1.7, 1.9, 0.15);
-    const islandPlate = new THREE.Mesh(islandPlateGeo, titaniumMat);
-    camIslandGroup.add(islandPlate);
-
+    // 3 Large Lenses with Sapphire Anti-reflective Rings
     const lensPositions = [
-      { x: -0.42, y: 0.42 },
-      { x: -0.42, y: -0.42 },
-      { x: 0.42, y: 0 }
+      [0.55, 3.25],
+      [0.55, 2.35],
+      [1.25, 2.8]
     ];
+    lensPositions.forEach(([lx, ly]) => {
+      const rimGeo = new THREE.CylinderGeometry(0.38, 0.38, 0.12, 24);
+      rimGeo.rotateX(Math.PI / 2);
+      const rim = new THREE.Mesh(rimGeo, titaniumPhoneMat);
+      rim.position.set(lx, ly, -0.34);
+      phoneGroup.add(rim);
 
-    lensPositions.forEach((pos) => {
-      const ringGeo = new THREE.CylinderGeometry(0.34, 0.36, 0.22, 32);
-      ringGeo.rotateX(Math.PI / 2);
-      const ring = new THREE.Mesh(ringGeo, titaniumMat);
-      ring.position.set(pos.x, pos.y, -0.12);
-      camIslandGroup.add(ring);
-
-      const glassGeo = new THREE.CylinderGeometry(0.26, 0.26, 0.05, 32);
-      glassGeo.rotateX(Math.PI / 2);
-      const glassMat = new THREE.MeshPhysicalMaterial({
-        color: 0x08162e,
-        roughness: 0.03,
-        transmission: 0.94,
-        reflectivity: 0.98
-      });
-      const glass = new THREE.Mesh(glassGeo, glassMat);
-      glass.position.set(pos.x, pos.y, -0.22);
-      camIslandGroup.add(glass);
+      const opticalGeo = new THREE.CylinderGeometry(0.32, 0.32, 0.13, 24);
+      opticalGeo.rotateX(Math.PI / 2);
+      const optical = new THREE.Mesh(opticalGeo, cameraGlassMat);
+      optical.position.set(lx, ly, -0.34);
+      phoneGroup.add(optical);
     });
 
-    registerPart(phoneParts, camIslandGroup, new THREE.Vector3(2.4, 1.8, -4.5));
-    phoneGroup.add(camIslandGroup);
-
-    // 8. MagSafe Induction Copper Coil Ring
-    const coilGeo = new THREE.RingGeometry(0.9, 1.4, 48);
-    const coilMat = new THREE.MeshStandardMaterial({
-      color: 0xd97543,
-      metalness: 0.96,
-      roughness: 0.2,
-      side: THREE.DoubleSide
-    });
-    const coil = new THREE.Mesh(coilGeo, coilMat);
-    coil.position.set(0, 0, -0.16);
-    registerPart(phoneParts, coil, new THREE.Vector3(0, 0, -2.2));
-    phoneGroup.add(coil);
-
+    phoneGroup.position.set(-14, 1.5, -4);
     scene.add(phoneGroup);
-  }
 
-  // --- DEVICE 2: AURASONIC VISION MAX (AERODYNAMIC LUXURY SPATIAL AUDIO HEADSET) ---
-  function buildHeadphones() {
-    headphoneGroup = new THREE.Group();
-    headphoneGroup.position.set(16, 1.8, -5); // Positioned for lateral stage transition
-
-    const aluminumMat = new THREE.MeshStandardMaterial({
-      color: 0x384152,
-      metalness: 0.94,
-      roughness: 0.14
-    });
-
-    const berylliumMat = new THREE.MeshStandardMaterial({
-      color: 0xa8b4c2,
-      metalness: 0.96,
-      roughness: 0.12
-    });
-
-    const cushionMat = new THREE.MeshStandardMaterial({
-      color: 0x121720,
-      roughness: 0.75,
-      metalness: 0.18
-    });
-
-    const copperMat = new THREE.MeshStandardMaterial({
-      color: 0xd97543,
-      metalness: 0.94,
-      roughness: 0.22
-    });
-
-    // 1. Dual-Rail Arched Titanium Headband
-    const bandCurve = new THREE.EllipseCurve(0, 0, 3.4, 3.6, 0, Math.PI, false, 0);
-    const bandPoints = bandCurve.getPoints(60);
-    const bandGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(bandPoints.map(p => new THREE.Vector3(p.x, p.y, 0))), 64, 0.16, 16, false);
-    const headband = new THREE.Mesh(bandGeo, aluminumMat);
-    headband.position.set(0, 0.35, 0);
-    registerPart(headphoneParts, headband, new THREE.Vector3(0, 4.5, 0));
-    headphoneGroup.add(headband);
-
-    // Inner breathable suspension knit canopy
-    const innerCanopyGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(bandPoints.slice(10, 50).map(p => new THREE.Vector3(p.x, p.y - 0.2, 0))), 48, 0.08, 12, false);
-    const innerCanopyMat = new THREE.MeshStandardMaterial({ color: 0x0a0e14, roughness: 0.9 });
-    const innerCanopy = new THREE.Mesh(innerCanopyGeo, innerCanopyMat);
-    headband.add(innerCanopy);
-
-    // 2. Sculpted Aerodynamic Ear Cups (Left & Right)
-    [-1, 1].forEach((side) => {
-      const cupSideGroup = new THREE.Group();
-      cupSideGroup.position.set(side * 3.4, 0, 0);
-
-      // CNC Dual-Axis Gimbal Yoke
-      const yokeGeo = new THREE.TorusGeometry(1.25, 0.11, 14, 36, Math.PI);
-      const yoke = new THREE.Mesh(yokeGeo, aluminumMat);
-      yoke.rotation.z = side > 0 ? -Math.PI / 2 : Math.PI / 2;
-      cupSideGroup.add(yoke);
-
-      // Outer Aluminum Acoustic Shell (Sculpted Chamfered Cylinder)
-      const shellGeo = new THREE.CylinderGeometry(1.65, 1.75, 0.75, 48);
-      shellGeo.rotateZ(Math.PI / 2);
-      const shell = new THREE.Mesh(shellGeo, aluminumMat);
-      shell.position.set(side * 0.4, 0, 0);
-      registerPart(headphoneParts, shell, new THREE.Vector3(side * 3.2, 0, 0));
-      cupSideGroup.add(shell);
-
-      // Glowing Aura Touch Halo Ring
-      const haloGeo = new THREE.RingGeometry(1.35, 1.5, 48);
-      haloGeo.rotateY(Math.PI / 2);
-      const haloMat = new THREE.MeshStandardMaterial({
-        color: 0x00e5ff,
-        emissive: 0x00e5ff,
-        emissiveIntensity: 1.4,
-        side: THREE.DoubleSide
-      });
-      const halo = new THREE.Mesh(haloGeo, haloMat);
-      halo.position.set(side * 0.76, 0, 0);
-      shell.add(halo);
-
-      // Neodymium Motor Core
-      const magnetGeo = new THREE.CylinderGeometry(0.85, 0.85, 0.22, 36);
-      magnetGeo.rotateZ(Math.PI / 2);
-      const magnet = new THREE.Mesh(magnetGeo, aluminumMat);
-      magnet.position.set(side * 0.15, 0, 0);
-      registerPart(headphoneParts, magnet, new THREE.Vector3(side * 1.8, 0, 1.2));
-      cupSideGroup.add(magnet);
-
-      // Pure Copper Voice Coil
-      const coilGeo = new THREE.CylinderGeometry(0.95, 0.95, 0.2, 36, 1, true);
-      coilGeo.rotateZ(Math.PI / 2);
-      const voiceCoil = new THREE.Mesh(coilGeo, copperMat);
-      voiceCoil.position.set(side * -0.05, 0, 0);
-      registerPart(headphoneParts, voiceCoil, new THREE.Vector3(side * 1.2, 0, 2.2));
-      cupSideGroup.add(voiceCoil);
-
-      // 40mm Beryllium Diaphragm Driver
-      const driverGeo = new THREE.CylinderGeometry(1.3, 1.4, 0.08, 48);
-      driverGeo.rotateZ(Math.PI / 2);
-      const driver = new THREE.Mesh(driverGeo, berylliumMat);
-      driver.position.set(side * -0.25, 0, 0);
-      registerPart(headphoneParts, driver, new THREE.Vector3(side * 0.5, 0, 3.4));
-      cupSideGroup.add(driver);
-
-      // Ergonomic Contoured Memory Foam Cushion
-      const cushionGeo = new THREE.TorusGeometry(1.4, 0.44, 20, 48);
-      cushionGeo.rotateY(Math.PI / 2);
-      const cushion = new THREE.Mesh(cushionGeo, cushionMat);
-      cushion.position.set(side * -0.65, 0, 0);
-      registerPart(headphoneParts, cushion, new THREE.Vector3(side * -2.4, 0, 0));
-      cupSideGroup.add(cushion);
-
-      headphoneGroup.add(cupSideGroup);
-    });
-
-    scene.add(headphoneGroup);
-  }
-
-  // --- DEVICE 3: AURASPHERE SPATIAL MONOLITH (HIGH-END ACOUSTIC SCULPTURE) ---
-  function buildSpeaker() {
+    // --- Compact Living Room Acoustic Speaker (AuraSphere 360) ---
     speakerGroup = new THREE.Group();
-    speakerGroup.position.set(-16, 1.5, -5); // Positioned for lateral stage transition
 
-    const cabinetMat = new THREE.MeshStandardMaterial({
-      color: 0x161c26,
-      metalness: 0.9,
-      roughness: 0.2
+    const acousticFabricMat = new THREE.MeshStandardMaterial({
+      color: 0x1f2735,
+      roughness: 0.92,
+      metalness: 0.12
     });
 
-    const vortexTex = createSpeakerVortexTexture();
-    const vortexMat = new THREE.MeshStandardMaterial({
-      map: vortexTex,
-      metalness: 0.92,
-      roughness: 0.28
-    });
-
-    const wooferMat = new THREE.MeshStandardMaterial({
-      color: 0xedf2f7,
+    const brushedCapMat = new THREE.MeshStandardMaterial({
+      color: 0xdde4ed,
       metalness: 0.95,
-      roughness: 0.12
+      roughness: 0.18
     });
 
-    // 1. Sculptural Aerodynamic Acoustic Enclosure (Sphere / Ellipsoid)
-    const bodyGeo = new THREE.SphereGeometry(2.4, 48, 48);
-    bodyGeo.scale(1.0, 1.25, 1.0);
-    const body = new THREE.Mesh(bodyGeo, cabinetMat);
-    registerPart(speakerParts, body, new THREE.Vector3(0, 0, 0));
-    speakerGroup.add(body);
+    // Cylindrical acoustic monolith body
+    const bodyGeo = new THREE.CylinderGeometry(1.6, 1.8, 3.8, 36);
+    const speakerBody = new THREE.Mesh(bodyGeo, acousticFabricMat);
+    speakerBody.castShadow = true;
+    speakerBody.receiveShadow = true;
+    speakerGroup.add(speakerBody);
 
-    // 2. 360° Laser Vortex Grille Ring
-    const sleeveGeo = new THREE.CylinderGeometry(2.46, 2.46, 3.2, 48, 1, true);
-    const sleeve = new THREE.Mesh(sleeveGeo, vortexMat);
-    sleeve.position.set(0, 0, 0);
-    registerPart(speakerParts, sleeve, new THREE.Vector3(0, 4.6, 0));
-    speakerGroup.add(sleeve);
+    // Brushed Aluminum Top Touch Panel with LED Halo
+    const capGeo = new THREE.CylinderGeometry(1.58, 1.58, 0.25, 36);
+    const cap = new THREE.Mesh(capGeo, brushedCapMat);
+    cap.position.y = 1.95;
+    speakerGroup.add(cap);
 
-    // 3. Top Floating Acoustic Dispersion Dome & Capacitive Glass Dial
-    const crownGroup = new THREE.Group();
-    crownGroup.position.set(0, 3.0, 0);
+    // Glowing Ambient LED Light Ring on Top
+    const haloGeo = new THREE.TorusGeometry(1.48, 0.05, 16, 48);
+    haloGeo.rotateX(Math.PI / 2);
+    const haloMat = new THREE.MeshBasicMaterial({ color: 0x00e5ff });
+    const halo = new THREE.Mesh(haloGeo, haloMat);
+    halo.position.y = 2.08;
+    speakerGroup.add(halo);
 
-    const domeGeo = new THREE.SphereGeometry(1.6, 36, 18, 0, Math.PI * 2, 0, Math.PI / 2);
-    const domeMat = new THREE.MeshStandardMaterial({ color: 0x242d3d, metalness: 0.95, roughness: 0.16 });
-    const dome = new THREE.Mesh(domeGeo, domeMat);
-    crownGroup.add(dome);
-
-    const haloTopGeo = new THREE.TorusGeometry(1.5, 0.06, 16, 48);
-    haloTopGeo.rotateX(Math.PI / 2);
-    const haloTopMat = new THREE.MeshStandardMaterial({ color: 0xe2fd52, emissive: 0xe2fd52, emissiveIntensity: 1.5 });
-    const haloTop = new THREE.Mesh(haloTopGeo, haloTopMat);
-    haloTop.position.set(0, 0.1, 0);
-    crownGroup.add(haloTop);
-
-    registerPart(speakerParts, crownGroup, new THREE.Vector3(0, 6.8, 0));
-    speakerGroup.add(crownGroup);
-
-    // 4. Dual Active Lateral Bass Woofers (Left & Right - Deviated Pulsing Diaphragms)
-    // Left Woofer
-    wooferLeftGroup = new THREE.Group();
-    wooferLeftGroup.position.set(-2.2, 0, 0);
-    const coneGeoL = new THREE.CylinderGeometry(1.4, 0.5, 0.35, 36);
-    coneGeoL.rotateZ(-Math.PI / 2);
-    const leftCone = new THREE.Mesh(coneGeoL, wooferMat);
-    wooferLeftGroup.add(leftCone);
-    registerPart(speakerParts, wooferLeftGroup, new THREE.Vector3(-4.0, 0, 0));
-    speakerGroup.add(wooferLeftGroup);
-
-    // Right Woofer
-    wooferRightGroup = new THREE.Group();
-    wooferRightGroup.position.set(2.2, 0, 0);
-    const coneGeoR = new THREE.CylinderGeometry(1.4, 0.5, 0.35, 36);
-    coneGeoR.rotateZ(Math.PI / 2);
-    const rightCone = new THREE.Mesh(coneGeoR, wooferMat);
-    wooferRightGroup.add(rightCone);
-    registerPart(speakerParts, wooferRightGroup, new THREE.Vector3(4.0, 0, 0));
-    speakerGroup.add(wooferRightGroup);
-
-    // 5. Anti-Gravity Floating Light Ring at Base
-    const baseHaloGeo = new THREE.TorusGeometry(2.35, 0.08, 16, 48);
-    baseHaloGeo.rotateX(Math.PI / 2);
-    const baseHaloMat = new THREE.MeshStandardMaterial({
-      color: 0x00e5ff,
-      emissive: 0x00e5ff,
-      emissiveIntensity: 1.6
-    });
-    const baseHalo = new THREE.Mesh(baseHaloGeo, baseHaloMat);
-    baseHalo.position.set(0, -2.6, 0);
-    registerPart(speakerParts, baseHalo, new THREE.Vector3(0, -2.0, 0));
-    speakerGroup.add(baseHalo);
-
+    speakerGroup.position.set(0, -12, 0); // Off-stage initially
     scene.add(speakerGroup);
   }
 
-  // --- ENVIRONMENT: PEDESTAL, PARTICLES & INTERCONNECTED ENERGY CONDUIT ---
+  // --- ENVIRONMENT: NATURAL OAK DESK & SOFT ARCHITECTURAL LIGHTING ---
   function buildEnvironment() {
-    // 1. Dark Mirror Quantum Levitation Pedestal
-    pedestalGroup = new THREE.Group();
-    pedestalGroup.position.set(0, -3.2, 0);
-
-    const pedestalGeo = new THREE.CylinderGeometry(15, 16, 0.8, 64);
-    const pedestalTex = createPedestalGridTexture();
-    const pedestalMat = new THREE.MeshStandardMaterial({
-      map: pedestalTex,
-      color: 0x080c14,
-      metalness: 0.95,
-      roughness: 0.16
+    // 1. Natural Honey-Oak Wood Tabletop
+    woodTexture = createOakWoodTexture();
+    const tableGeo = new THREE.PlaneGeometry(60, 40);
+    tableGeo.rotateX(-Math.PI / 2);
+    const tableMat = new THREE.MeshStandardMaterial({
+      map: woodTexture,
+      roughness: 0.38,
+      metalness: 0.08,
+      envMapIntensity: 0.8
     });
-    const pedestalMesh = new THREE.Mesh(pedestalGeo, pedestalMat);
-    pedestalMesh.receiveShadow = true;
-    pedestalGroup.add(pedestalMesh);
+    tableMesh = new THREE.Mesh(tableGeo, tableMat);
+    tableMesh.position.y = 0.0;
+    tableMesh.receiveShadow = true;
+    scene.add(tableMesh);
 
-    // Glowing Concentric Laser Rings on Pedestal Top
-    [5.0, 9.0, 13.0].forEach((r, idx) => {
-      const ringGeo = new THREE.RingGeometry(r - 0.08, r + 0.08, 64);
-      ringGeo.rotateX(-Math.PI / 2);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: idx === 1 ? 0xe2fd52 : 0x00e5ff,
-        transparent: true,
-        opacity: 0.8,
-        side: THREE.DoubleSide
-      });
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.position.y = 0.42;
-      pedestalGroup.add(ring);
-    });
+    // 2. Soft Contact Shadow Receiver directly above tabletop
+    const shadowGeo = new THREE.PlaneGeometry(60, 40);
+    shadowGeo.rotateX(-Math.PI / 2);
+    const shadowMat = new THREE.ShadowMaterial({ opacity: 0.45 });
+    shadowPlaneMesh = new THREE.Mesh(shadowGeo, shadowMat);
+    shadowPlaneMesh.position.y = 0.01;
+    shadowPlaneMesh.receiveShadow = true;
+    scene.add(shadowPlaneMesh);
 
-    scene.add(pedestalGroup);
-
-    // 2. Continuous Interconnected Energy & Acoustic Data Ribbon
-    const conduitCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-8.0, 1.5, 0),
-      new THREE.Vector3(-4.0, 3.2, 2.5),
-      new THREE.Vector3(0, 1.6, -1.0),
-      new THREE.Vector3(4.0, 3.2, 2.5),
-      new THREE.Vector3(8.0, 1.5, 0),
-      new THREE.Vector3(4.0, -2.5, -3.0),
-      new THREE.Vector3(-4.0, -2.5, -3.0),
-      new THREE.Vector3(-8.0, 1.5, 0)
-    ]);
-    const conduitGeo = new THREE.TubeGeometry(conduitCurve, 128, 0.045, 12, true);
-    const conduitMat = new THREE.MeshBasicMaterial({
-      color: 0x00e5ff,
+    // 3. Gentle Floating Daylight Dust Motes (Real living room sunbeam motes)
+    const dustCount = 180;
+    const dustGeo = new THREE.BufferGeometry();
+    const dustPos = new Float32Array(dustCount * 3);
+    for (let i = 0; i < dustCount; i++) {
+      dustPos[i * 3] = (Math.random() - 0.5) * 22;
+      dustPos[i * 3 + 1] = Math.random() * 8 + 0.2;
+      dustPos[i * 3 + 2] = (Math.random() - 0.5) * 18;
+    }
+    dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
+    const dustMat = new THREE.PointsMaterial({
+      color: 0xfff0d0,
+      size: 0.08,
       transparent: true,
-      opacity: 0.65,
+      opacity: 0.45,
       blending: THREE.AdditiveBlending
     });
-    energyConduitMesh = new THREE.Mesh(conduitGeo, conduitMat);
-    scene.add(energyConduitMesh);
-
-    // 3. Floating Quantum Particles (1,200 micro motes)
-    const particleCount = 1200;
-    const particleGeo = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
-
-    const c1 = new THREE.Color(0x00e5ff);
-    const c2 = new THREE.Color(0xe2fd52);
-    const c3 = new THREE.Color(0x8a2be2);
-
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 38;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 24 + 2;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 38;
-
-      const pickColor = Math.random() > 0.6 ? c1 : Math.random() > 0.5 ? c2 : c3;
-      colors[i * 3] = pickColor.r;
-      colors[i * 3 + 1] = pickColor.g;
-      colors[i * 3 + 2] = pickColor.b;
-    }
-
-    particleGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    particleGeo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-
-    const particleMat = new THREE.PointsMaterial({
-      size: 0.12,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.65,
-      blending: THREE.AdditiveBlending
-    });
-
-    particleSystem = new THREE.Points(particleGeo, particleMat);
-    scene.add(particleSystem);
-
-    // 4. 3D Holographic Acoustic Soundwaves
-    soundwavesGroup = new THREE.Group();
-    for (let w = 0; w < 4; w++) {
-      const waveGeo = new THREE.TorusGeometry(2.0 + w * 1.5, 0.05, 16, 64);
-      const waveMat = new THREE.MeshBasicMaterial({
-        color: 0x00e5ff,
-        transparent: true,
-        opacity: 0,
-        blending: THREE.AdditiveBlending
-      });
-      const wave = new THREE.Mesh(waveGeo, waveMat);
-      wave.position.set(0, 1.8, 0);
-      wave.visible = false;
-      allSoundwaves.push(wave);
-      soundwavesGroup.add(wave);
-    }
-    scene.add(soundwavesGroup);
+    sunbeamSystem = new THREE.Points(dustGeo, dustMat);
+    scene.add(sunbeamSystem);
   }
 
-  // --- STUDIO 5-POINT LIGHTING SETUP ---
+  // --- STUDIO 4-POINT REALISTIC ARCHITECTURAL LIGHTING ---
   function setupLighting() {
-    ambientLight = new THREE.AmbientLight(0x081020, 1.4);
-    scene.add(ambientLight);
+    // 1. Soft Natural Sky Fill Ambient
+    skyAmbientLight = new THREE.AmbientLight(0xe8f0f8, 0.95);
+    scene.add(skyAmbientLight);
 
-    // Main Key Light
-    keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
-    keyLight.position.set(12, 18, 14);
-    keyLight.castShadow = true;
-    scene.add(keyLight);
+    // 2. Main Studio Directional Sunlight (Crisp Natural Morning Daylight)
+    sunLight = new THREE.DirectionalLight(0xfff5ea, 1.95);
+    sunLight.position.set(10, 16, 12);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 2048;
+    sunLight.shadow.mapSize.height = 2048;
+    sunLight.shadow.camera.near = 0.5;
+    sunLight.shadow.camera.far = 40;
+    sunLight.shadow.camera.left = -10;
+    sunLight.shadow.camera.right = 10;
+    sunLight.shadow.camera.top = 10;
+    sunLight.shadow.camera.bottom = -10;
+    sunLight.shadow.bias = -0.0006;
+    scene.add(sunLight);
 
-    // Electric Cyan Rim Light
-    rimLightCyan = new THREE.DirectionalLight(0x00e5ff, 2.6);
-    rimLightCyan.position.set(-14, 8, -10);
-    scene.add(rimLightCyan);
+    // 3. Warm Wood Tabletop Upward Bounce Fill
+    tableFillLight = new THREE.DirectionalLight(0xd9a875, 0.65);
+    tableFillLight.position.set(0, -10, 5);
+    scene.add(tableFillLight);
 
-    // Vivid Lime Accent Light
-    rimLightLime = new THREE.DirectionalLight(0xe2fd52, 2.0);
-    rimLightLime.position.set(14, -4, -8);
-    scene.add(rimLightLime);
+    // 4. Warm Evening Interior Table Lamp (Point Light with cosy 2700K tungsten glow)
+    eveningLampLight = new THREE.PointLight(0xffaa44, 0.0, 25);
+    eveningLampLight.position.set(-5, 5, 2);
+    scene.add(eveningLampLight);
 
-    // Deep Violet Underglow Point Light
-    underLight = new THREE.PointLight(0x8a2be2, 2.5, 30);
-    underLight.position.set(0, -2.8, 0);
-    scene.add(underLight);
+    // 5. Golden Hour Rim Accent Light
+    goldenRimLight = new THREE.DirectionalLight(0xff7722, 0.0);
+    goldenRimLight.position.set(-14, 6, -8);
+    scene.add(goldenRimLight);
   }
 
   /* =========================================================================
-     3. CONTINUOUS FLUID CHOREOGRAPHY: ZERO JERKINESS, SEAMLESS CONTINUITY
+     3. CONTINUOUS HERMITE SPLINE INTERPOLATION (ZERO JERKINESS / NO ABRUPT JUMPS)
      ========================================================================= */
-
-  function updateExplodedParts(collection, factor) {
-    for (let i = 0; i < collection.length; i++) {
-      const part = collection[i];
-      if (!part.userData || !part.userData.basePos) continue;
-
-      const offset = part.userData.explodedOffset;
-      part.position.x = part.userData.basePos.x + offset.x * factor;
-      part.position.y = part.userData.basePos.y + offset.y * factor;
-      part.position.z = part.userData.basePos.z + offset.z * factor;
-    }
-  }
 
   function smoothStep(t) {
     const x = Math.max(0, Math.min(1, t));
     return x * x * (3 - 2 * x);
   }
 
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  // Continuous Stage Choreography across Progress p [0.0 -> 1.0]
   function setStageProgress(p) {
     currentProgress = p;
 
+    // Viewport background color transition based on time of day
+    const viewport = document.getElementById("assembly-3d-viewport");
+
     // =========================================================================
-    // PHASE 1: SMARTPHONE SPOTLIGHT (p: 0.00 -> 0.35)
+    // ACT 1: MORNING CREATIVE FOCUS (p: 0.00 -> 0.35)
+    // Device in Spotlight: AuraSonic ANC Pro X1 (Luxury Studio Over-Ear Headphones)
+    // Environment: Fresh daylight architectural studio, sunlight warming the oak desk
     // =========================================================================
     if (p <= 0.35) {
       const t = p / 0.35; // 0.0 -> 1.0
+      const st = smoothStep(t);
 
-      // Phone is at Center Stage (0, 1.8, 0)
-      phoneGroup.position.set(0, 1.8, 0);
-      phoneGroup.rotation.set(0, Math.sin(t * 1.5) * 0.25, 0);
+      // Headphones in Center Stage: Gentle lift, inspecting brushed earcup & comfort cushions
+      headphonesGroup.position.set(0, 1.5 + Math.sin(t * Math.PI) * 0.45, 0);
+      headphonesGroup.rotation.set(0.12 - st * 0.1, (t - 0.5) * 0.55, 0);
 
-      // Headphones & Speaker wait gracefully off-stage
-      headphoneGroup.position.set(16, 1.8, -8);
-      headphoneGroup.rotation.set(0, 0, 0);
-      speakerGroup.position.set(-16, 1.5, -8);
-      speakerGroup.rotation.set(0, 0, 0);
+      // Watch & Phone waiting gracefully in out-of-focus wings
+      watchGroup.position.set(12 + (1.0 - st) * 2, 1.2, -4);
+      watchGroup.rotation.set(0, 0, 0);
 
-      // Component explosion:
-      // t = 0.0 -> 0.65: Exploded view smoothly collapsing
-      // t = 0.65 -> 1.0: Fully assembled, floating with pride
-      const explodeT = Math.min(t / 0.65, 1.0);
-      const phoneExplode = Math.max(0, 1.0 - smoothStep(explodeT));
-      updateExplodedParts(phoneParts, phoneExplode);
-      updateExplodedParts(headphoneParts, 1.0);
-      updateExplodedParts(speakerParts, 1.0);
+      phoneGroup.position.set(-14, 1.4, -5);
+      phoneGroup.rotation.set(0, 0, 0);
 
-      // Camera: Smooth continuous orbital macro dive
-      const camOrbitAngle = 0.4 + t * 0.9;
-      camPosTarget.x = 9.5 * Math.sin(camOrbitAngle);
-      camPosTarget.y = 3.6 + Math.cos(t * Math.PI) * 1.2;
-      camPosTarget.z = 12.0 * Math.cos(camOrbitAngle) + 4.0;
-      camLookTarget.set(0, 1.8, 0);
+      speakerGroup.position.set(0, -10, 0);
 
-      allSoundwaves.forEach(w => w.visible = false);
+      // Camera: Smooth continuous orbital macro glide around the earcup
+      camPosTarget.x = 7.5 * Math.sin(0.3 + t * 0.7);
+      camPosTarget.y = 3.6 + Math.cos(t * Math.PI) * 0.5;
+      camPosTarget.z = 10.5 * Math.cos(0.3 + t * 0.7) + 2.0;
+      camLookTarget.set(0, 1.5, 0);
+
+      // Lighting: Natural Daylight Studio (5500K)
+      sunLight.color.setHex(0xfff7ec);
+      sunLight.intensity = 2.0;
+      sunLight.position.set(10, 16, 12);
+      skyAmbientLight.color.setHex(0xe8f0f8);
+      skyAmbientLight.intensity = 0.95;
+      eveningLampLight.intensity = 0.0;
+      goldenRimLight.intensity = 0.0;
+
+      if (viewport) {
+        viewport.style.background = "radial-gradient(circle at 50% 40%, #1e293b 0%, #0b111e 85%)";
+      }
+      updateStoryNarrative(0, t);
     }
     // =========================================================================
-    // PHASE 2: FLUID TRANSITION: PHONE GLIDES, HEADPHONES TAKE CENTER STAGE (p: 0.35 -> 0.45)
+    // ACT 1 -> ACT 2 TRANSITION: HEADPHONES REST, SUN TURNS GOLDEN (p: 0.35 -> 0.45)
     // =========================================================================
     else if (p <= 0.45) {
       const t = (p - 0.35) / 0.10; // 0.0 -> 1.0
       const st = smoothStep(t);
 
-      // Phone glides smoothly to left wing (-6.5, 1.8, -3.5)
-      phoneGroup.position.set(-6.5 * st, 1.8, -3.5 * st);
-      phoneGroup.rotation.y = -0.35 * st;
-      updateExplodedParts(phoneParts, 0.0); // Assembled
+      // Headphones glide smoothly to resting position on left desk
+      headphonesGroup.position.set(-5.5 * st, 1.5 - st * 0.3, -2.5 * st);
+      headphonesGroup.rotation.set(0.02, -0.35 * st, 0);
 
-      // Headphones glide smoothly from right wing into Center Stage (0, 1.8, 0)
-      headphoneGroup.position.set(16.0 * (1.0 - st), 1.8, -8.0 * (1.0 - st));
-      headphoneGroup.rotation.y = 0.25 * (1.0 - st);
-      updateExplodedParts(headphoneParts, 1.0); // Entering exploded
+      // Watch glides smoothly from right wing into Center Stage
+      watchGroup.position.set(12 * (1.0 - st), 1.4, -4 * (1.0 - st));
+      watchGroup.rotation.set(0.25 * st, -0.2 * (1.0 - st), 0);
 
-      speakerGroup.position.set(-16, 1.5, -8);
-      updateExplodedParts(speakerParts, 1.0);
+      phoneGroup.position.set(-14, 1.4, -5);
+      speakerGroup.position.set(0, -10, 0);
 
-      // Camera: Continuous swooping crane flight following the energy ribbon
-      camPosTarget.x = 4.0 * (1.0 - st);
-      camPosTarget.y = 4.0 + Math.sin(t * Math.PI) * 0.8;
-      camPosTarget.z = 13.5 - st * 2.0;
-      camLookTarget.set(2.0 * (1.0 - st), 1.8, 0);
+      // Camera: Swooping crane pan connecting the two devices
+      camPosTarget.x = 5.0 * (1.0 - st);
+      camPosTarget.y = 3.4 + Math.sin(t * Math.PI) * 0.4;
+      camPosTarget.z = 11.5 - st * 1.5;
+      camLookTarget.set(1.5 * (1.0 - st), 1.4, 0);
 
-      allSoundwaves.forEach(w => w.visible = false);
+      // Lighting transition: Sun begins golden hour warmth
+      sunLight.color.lerpColors(new THREE.Color(0xfff7ec), new THREE.Color(0xffaa44), st);
+      sunLight.intensity = 2.0 + st * 0.4;
+      goldenRimLight.intensity = st * 1.6;
+      eveningLampLight.intensity = 0.0;
+
+      if (viewport) {
+        viewport.style.background = "radial-gradient(circle at 55% 45%, #2a2238 0%, #0d0f1a 85%)";
+      }
+      updateStoryNarrative(1, t);
     }
     // =========================================================================
-    // PHASE 3: AUDIOPHILE HEADPHONES SPOTLIGHT (p: 0.45 -> 0.70)
+    // ACT 2: GOLDEN HOUR ATHLETIC ENERGY (p: 0.45 -> 0.70)
+    // Device in Spotlight: AuraWatch Titanium S3 (Flagship Sports Smartwatch)
+    // Environment: Warm golden hour sunset rays, athletic heart-rate pulse, sapphire gleam
     // =========================================================================
     else if (p <= 0.70) {
       const t = (p - 0.45) / 0.25; // 0.0 -> 1.0
+      const st = smoothStep(t);
 
-      // Headphones are in Center Stage (0, 1.8, 0)
-      headphoneGroup.position.set(0, 1.8, 0);
-      headphoneGroup.rotation.set(0, (t - 0.5) * 0.4, 0);
+      // Headphones resting elegantly on left
+      headphonesGroup.position.set(-5.5, 1.2, -2.5);
+      headphonesGroup.rotation.set(0.02, -0.35, 0);
 
-      phoneGroup.position.set(-6.5, 1.8, -3.5);
-      phoneGroup.rotation.y = -0.35;
-      updateExplodedParts(phoneParts, 0.0);
+      // Watch in Center Stage: Tilting proudly to showcase sapphire OLED & heart rate sensor
+      watchGroup.position.set(0, 1.5 + Math.sin(t * Math.PI) * 0.35, 0);
+      watchGroup.rotation.set(0.28, (t - 0.5) * 0.6, Math.sin(t * Math.PI) * 0.1);
 
-      speakerGroup.position.set(-16, 1.5, -8);
-      updateExplodedParts(speakerParts, 1.0);
+      phoneGroup.position.set(-14, 1.4, -5);
+      speakerGroup.position.set(0, -10, 0);
 
-      // Acoustic assembly:
-      // t = 0.0 -> 0.65: Exploded Beryllium driver & voice coil collapsing into earcups
-      // t = 0.65 -> 1.0: Fully assembled, radiating 3D soundwave ripple!
-      const explodeT = Math.min(t / 0.65, 1.0);
-      const hpExplode = Math.max(0, 1.0 - smoothStep(explodeT));
-      updateExplodedParts(headphoneParts, hpExplode);
+      // Camera: Dramatic macro tracking around titanium chamfers & sapphire screen
+      const angle = -0.5 + t * 1.2;
+      camPosTarget.x = 6.8 * Math.sin(angle);
+      camPosTarget.y = 2.9 + Math.sin(t * Math.PI) * 0.5;
+      camPosTarget.z = 8.5 * Math.cos(angle) + 1.5;
+      camLookTarget.set(0, 1.5, 0);
 
-      // Camera: Orbiting macro focus around the Beryllium acoustic driver
-      const camOrbitAngle = -0.6 + t * 1.4;
-      camPosTarget.x = 8.5 * Math.sin(camOrbitAngle);
-      camPosTarget.y = 3.2 + Math.sin(t * Math.PI) * 0.9;
-      camPosTarget.z = 9.5 * Math.cos(camOrbitAngle) + 2.0;
-      camLookTarget.set(0, 1.8, 0);
+      // Lighting: Rich Golden Hour Sunset (3000K, amber-gold sun & coral rim)
+      sunLight.color.setHex(0xff9933);
+      sunLight.intensity = 2.4;
+      sunLight.position.set(14, 7, 8);
+      goldenRimLight.color.setHex(0xff5522);
+      goldenRimLight.intensity = 2.2;
+      skyAmbientLight.color.setHex(0x553344);
+      eveningLampLight.intensity = 0.0;
 
-      // Trigger 3D Soundwaves when assembled (t > 0.65)
-      if (t > 0.65) {
-        animateSoundwaves((t - 0.65) / 0.35);
-      } else {
-        allSoundwaves.forEach(w => w.visible = false);
+      if (viewport) {
+        viewport.style.background = "radial-gradient(circle at 60% 40%, #3b1d28 0%, #0d0c14 85%)";
       }
+      updateStoryNarrative(1, t);
     }
     // =========================================================================
-    // PHASE 4: FLUID TRANSITION: HEADPHONES GLIDE, SPEAKER ASCENDS (p: 0.70 -> 0.80)
+    // ACT 2 -> ACT 3 TRANSITION: SUN DIPS, COSY EVENING LAMP TURNS ON (p: 0.70 -> 0.80)
     // =========================================================================
     else if (p <= 0.80) {
       const t = (p - 0.70) / 0.10; // 0.0 -> 1.0
       const st = smoothStep(t);
 
-      phoneGroup.position.set(-6.5, 1.8, -3.5);
-      updateExplodedParts(phoneParts, 0.0);
+      headphonesGroup.position.set(-5.5, 1.2, -2.5);
+      headphonesGroup.rotation.set(0.02, -0.35, 0);
 
-      // Headphones glide smoothly to right wing (6.5, 1.8, -3.5)
-      headphoneGroup.position.set(6.5 * st, 1.8, -3.5 * st);
-      headphoneGroup.rotation.y = 0.35 * st;
-      updateExplodedParts(headphoneParts, 0.0);
+      // Watch glides smoothly to resting position on right desk
+      watchGroup.position.set(5.2 * st, 1.3, -2.2 * st);
+      watchGroup.rotation.set(0.28 * (1.0 - st), 0.3 * st, 0);
 
-      // Speaker ascends smoothly into Center Stage (0, 1.5, 0)
-      speakerGroup.position.set(-16.0 * (1.0 - st), 1.5, -8.0 * (1.0 - st));
-      updateExplodedParts(speakerParts, 1.0);
+      // Phone & Speaker glide smoothly into Center Stage
+      phoneGroup.position.set(-14 * (1.0 - st) - 1.2 * st, 1.5, -5 * (1.0 - st));
+      phoneGroup.rotation.set(0.2 * st, 0.25 * st, 0);
 
-      // Camera: Swooping descent towards speaker core
-      camPosTarget.x = -3.0 * (1.0 - st);
-      camPosTarget.y = 3.5 - st * 0.8;
-      camPosTarget.z = 12.0 - st * 1.5;
-      camLookTarget.set(0, 1.5, 0);
+      speakerGroup.position.set(2.2 * st, -10 * (1.0 - st) + 1.9 * st, -1.5 * st);
 
-      allSoundwaves.forEach(w => w.visible = false);
+      // Camera: Gliding crane tracking phone & speaker setup
+      camPosTarget.x = -2.5 * (1.0 - st);
+      camPosTarget.y = 3.2 - st * 0.4;
+      camPosTarget.z = 10.5 - st * 1.2;
+      camLookTarget.set(0, 1.4, 0);
+
+      // Lighting transition: Golden sun fades, warm 2700K tungsten lamp fades in
+      sunLight.intensity = 2.4 * (1.0 - st);
+      goldenRimLight.intensity = 2.2 * (1.0 - st);
+      eveningLampLight.intensity = st * 3.2;
+      skyAmbientLight.color.lerpColors(new THREE.Color(0x553344), new THREE.Color(0x182438), st);
+
+      if (viewport) {
+        viewport.style.background = "radial-gradient(circle at 50% 50%, #172338 0%, #070c14 85%)";
+      }
+      updateStoryNarrative(2, t);
     }
     // =========================================================================
-    // PHASE 5: SPATIAL SOUND SCULPTURE SPOTLIGHT (p: 0.80 -> 0.90)
+    // ACT 3: WARM EVENING LOUNGE & AUDIO SANCTUARY (p: 0.80 -> 0.90)
+    // Devices in Spotlight: AuraPhone 16 Pro & AuraSphere 360 Smart Speaker
+    // Environment: Cosy 2700K warm tungsten lamp glow, relaxing living room ambiance
     // =========================================================================
     else if (p <= 0.90) {
       const t = (p - 0.80) / 0.10; // 0.0 -> 1.0
+      const st = smoothStep(t);
 
-      // Speaker is in Center Stage (0, 1.5, 0)
-      speakerGroup.position.set(0, 1.5, 0);
-      speakerGroup.rotation.y = t * 0.8;
+      headphonesGroup.position.set(-5.5, 1.2, -2.5);
+      watchGroup.position.set(5.2, 1.3, -2.2);
 
-      phoneGroup.position.set(-6.5, 1.8, -3.5);
-      updateExplodedParts(phoneParts, 0.0);
+      // Phone & Speaker in Center Stage
+      phoneGroup.position.set(-1.2, 1.5 + Math.sin(t * Math.PI) * 0.25, 0.4);
+      phoneGroup.rotation.set(0.2, 0.25 + (t - 0.5) * 0.35, 0);
 
-      headphoneGroup.position.set(6.5, 1.8, -3.5);
-      updateExplodedParts(headphoneParts, 0.0);
+      speakerGroup.position.set(2.4, 1.9, -1.2);
+      speakerGroup.rotation.y = t * 0.6;
 
-      // Speaker assembly:
-      const explodeT = Math.min(t / 0.65, 1.0);
-      const spExplode = Math.max(0, 1.0 - smoothStep(explodeT));
-      updateExplodedParts(speakerParts, spExplode);
+      // Camera: Cosy close-up of phone music playback & ambient audio hub
+      camPosTarget.x = 2.5 * Math.sin(t * 1.5);
+      camPosTarget.y = 2.8 + Math.cos(t * Math.PI) * 0.4;
+      camPosTarget.z = 8.5;
+      camLookTarget.set(0.6, 1.5, 0);
 
-      // Active pulsing lateral woofers (Devialet style)
-      if (wooferLeftGroup && wooferRightGroup) {
-        const pulse = Math.sin(t * Math.PI * 12) * 0.18;
-        wooferLeftGroup.position.x = -2.2 - Math.max(0, pulse);
-        wooferRightGroup.position.x = 2.2 + Math.max(0, pulse);
+      // Lighting: Warm tungsten interior sanctuary (2700K)
+      eveningLampLight.color.setHex(0xffaa44);
+      eveningLampLight.intensity = 3.6;
+      sunLight.intensity = 0.2;
+      goldenRimLight.intensity = 0.0;
+      skyAmbientLight.color.setHex(0x121b2b);
+
+      if (viewport) {
+        viewport.style.background = "radial-gradient(circle at 45% 45%, #18253b 0%, #060910 85%)";
       }
-
-      // Camera: Circling around the 360° vortex acoustic grille and top dome
-      const camOrbitAngle = 0.2 + t * 1.6;
-      camPosTarget.x = 8.5 * Math.sin(camOrbitAngle);
-      camPosTarget.y = 2.5 + Math.cos(t * Math.PI) * 0.8;
-      camPosTarget.z = 9.0 * Math.cos(camOrbitAngle);
-      camLookTarget.set(0, 1.5, 0);
-
-      allSoundwaves.forEach(w => w.visible = false);
+      updateStoryNarrative(2, t);
     }
     // =========================================================================
-    // PHASE 6: GRAND CLIMAX - GOLDEN RATIO TRIUMVIRATE LEVITATION (p: 0.90 -> 1.00)
+    // ACT 4: GRAND CLIMAX - REAL-WORLD LIFESTYLE HARMONY (p: 0.90 -> 1.00)
+    // All flagship companions gracefully arranged on the luxury oak desk
+    // Environment: Magazine-cover architectural composition under the warm studio lamp
     // =========================================================================
     else {
       const t = (p - 0.90) / 0.10; // 0.0 -> 1.0
       const st = smoothStep(t);
 
-      // All 3 fully assembled flagship devices hover in golden-ratio harmony on pedestal
-      phoneGroup.position.set(-4.5, 1.8, 1.2 * st);
-      phoneGroup.rotation.set(0, -0.32 + Math.sin(Date.now() * 0.001) * 0.06, 0);
-      updateExplodedParts(phoneParts, 0.0);
+      // All devices resting in harmonious golden-ratio composition on the table
+      headphonesGroup.position.set(-4.2, 1.2, 0.8 * st);
+      headphonesGroup.rotation.set(0.04, -0.32, 0);
 
-      headphoneGroup.position.set(4.5, 1.8, 1.2 * st);
-      headphoneGroup.rotation.set(0, 0.32 - Math.sin(Date.now() * 0.001) * 0.06, 0);
-      updateExplodedParts(headphoneParts, 0.0);
+      watchGroup.position.set(3.8, 1.2, 1.2 * st);
+      watchGroup.rotation.set(0.25, 0.28, 0);
 
-      speakerGroup.position.set(0, 1.6, -2.8 * st);
-      speakerGroup.rotation.y = Date.now() * 0.0004;
-      updateExplodedParts(speakerParts, 0.0);
+      phoneGroup.position.set(-0.6, 1.3, -0.5 * st);
+      phoneGroup.rotation.set(0.18, 0.08, 0);
 
-      // Active pulsing woofers continuing subtly
-      if (wooferLeftGroup && wooferRightGroup) {
-        const pulse = Math.sin(Date.now() * 0.008) * 0.08;
-        wooferLeftGroup.position.x = -2.2 - pulse;
-        wooferRightGroup.position.x = 2.2 + pulse;
-      }
+      speakerGroup.position.set(1.8, 1.9, -2.4 * st);
+      speakerGroup.rotation.y += 0.002;
 
-      // Camera: Majestic wide panoramic hero crane shot pulling back smoothly
+      // Camera: Majestic wide panoramic hero pull-back
       camPosTarget.x = 0;
-      camPosTarget.y = 4.8 + Math.sin(st * Math.PI) * 1.0;
-      camPosTarget.z = 19.5 + st * 4.0;
-      camLookTarget.set(0, 1.3, 0);
+      camPosTarget.y = 4.2 + st * 0.6;
+      camPosTarget.z = 12.5 + st * 3.5;
+      camLookTarget.set(0, 1.2, 0);
 
-      allSoundwaves.forEach(w => w.visible = false);
-    }
+      // Lighting: Warm, balanced twilight studio blend
+      eveningLampLight.intensity = 3.2;
+      sunLight.intensity = 0.4;
+      skyAmbientLight.color.setHex(0x1a263c);
 
-    // Energy conduit illumination pulse
-    if (energyConduitMesh) {
-      energyConduitMesh.material.opacity = 0.45 + Math.sin(p * Math.PI * 6) * 0.35;
+      if (viewport) {
+        viewport.style.background = "radial-gradient(circle at 50% 50%, #1e2d47 0%, #070c14 90%)";
+      }
+      updateStoryNarrative(3, t);
     }
   }
 
-  function animateSoundwaves(intensity) {
-    allSoundwaves.forEach((wave, idx) => {
-      wave.visible = true;
-      const progress = (intensity * 3.5 + idx * 0.25) % 1;
-      wave.scale.setScalar(1 + progress * 2.2);
-      wave.material.opacity = (1 - progress) * 0.75;
+  /* =========================================================================
+     4. REAL-WORLD STORY NARRATIVE HUD CONTROLLER
+     ========================================================================= */
+
+  const STORY_PHASES = [
+    {
+      step: 1,
+      badge: "08:30 AM • TẬP TRUNG SÁNG TẠO",
+      title: "Tai nghe AuraSonic ANC Pro X1",
+      subtitle: "Màng loa Beryllium 45mm • Chống ồn thích ứng 50dB",
+      desc: "Tách biệt hoàn toàn tiếng ồn văn phòng hiện đại để bạn đắm chìm vào công việc sáng tạo. Đệm tai memory foam thoáng khí và khung hợp kim nhôm-magie siêu nhẹ cho cảm giác êm ái suốt ngày dài.",
+      tags: ["Chống ồn 50dB", "Màng loa Beryllium", "LDAC Lossless", "Pin 60 Giờ"],
+      linkUrl: "product-detail.html?id=aura-anc-pro",
+      linkText: "Khám phá AuraSonic Pro →"
+    },
+    {
+      step: 2,
+      badge: "17:45 PM • BỨT PHÁ DƯỚI ÁNH HOÀNG HÔN",
+      title: "Đồng hồ AuraWatch Titanium S3",
+      subtitle: "Khung Titanium Grade 5 • Kính Sapphire • Cảm biến BioSense",
+      desc: "Đồng hành cùng từng bước chạy và bài tập thể thao. Khung vỏ Titanium chống va đập, màn hình LTPO 3000 nits hiển thị rực rỡ dưới nắng chiều và cảm biến nhịp tim thời gian thực.",
+      tags: ["Titanium Grade 5", "BioSense ECG", "Kính Sapphire", "Kháng nước 100m"],
+      linkUrl: "product-detail.html?id=aura-watch-ultra",
+      linkText: "Khám phá AuraWatch Ultra →"
+    },
+    {
+      step: 3,
+      badge: "20:30 PM • THƯ GIÃN KHÔNG GIAN SỐNG",
+      title: "AuraPhone 16 Pro & AuraSphere 360",
+      subtitle: "Chuẩn kết nối Matter 2.0 • Âm thanh vòm Spatial 360°",
+      desc: "Kết nối tức thì khi bạn bước vào phòng khách. Đắm chìm trong giai điệu acoustic mộc mạc bên ánh đèn vàng ấm cúng, tái tạo năng lượng trọn vẹn sau một ngày làm việc.",
+      tags: ["Matter 2.0", "Spatial Audio 360°", "OLED Super Retina", "Vỏ Titanium"],
+      linkUrl: "product-detail.html?id=aura-sphere-360",
+      linkText: "Khám phá Hệ sinh thái Matter →"
+    },
+    {
+      step: 4,
+      badge: "HỆ SINH THÁI THIẾT KẾ CHO CUỘC SỐNG THỰC TẾ",
+      title: "Đồng Hành Trong Từng Khoảnh Khắc",
+      subtitle: "Sự kết hợp hoàn hảo giữa thẩm mỹ thủ công và công nghệ đỉnh cao",
+      desc: "Không chỉ là thông số kỹ thuật, mỗi sản phẩm sinh ra để hòa quyện tự nhiên và nâng tầm chất lượng cuộc sống con người mỗi ngày.",
+      tags: ["Độ bền quân đội", "Thân thiện môi trường", "Bảo hành 24T", "Giao hàng 2H"],
+      linkUrl: "products.html",
+      linkText: "Xem toàn bộ 8 sản phẩm →"
+    }
+  ];
+
+  let currentPhaseIndex = -1;
+
+  function updateStoryNarrative(phaseIdx, subT) {
+    // Update step indicator pills
+    stepPillEls.forEach((pill, idx) => {
+      if (idx === phaseIdx) {
+        pill.classList.add("active");
+      } else {
+        pill.classList.remove("active");
+      }
+    });
+
+    // Update progress bar
+    if (progressBarEl) {
+      progressBarEl.style.width = `${Math.min(100, Math.max(0, currentProgress * 100))}%`;
+    }
+
+    if (currentPhaseIndex === phaseIdx) return;
+    currentPhaseIndex = phaseIdx;
+
+    const phase = STORY_PHASES[phaseIdx];
+    if (!phase) return;
+
+    if (storyPhaseBadgeEl) storyPhaseBadgeEl.textContent = phase.badge;
+    if (storyTitleEl) storyTitleEl.textContent = phase.title;
+    if (storySubtitleEl) storySubtitleEl.textContent = phase.subtitle;
+    if (storyDescEl) storyDescEl.textContent = phase.desc;
+
+    if (storyTagsEl) {
+      storyTagsEl.innerHTML = phase.tags.map(t => `<span class="scrolly-spec-tag">${t}</span>`).join("");
+    }
+
+    if (storyActionBtnEl) {
+      storyActionBtnEl.href = phase.linkUrl;
+      storyActionBtnEl.textContent = phase.linkText;
+    }
+
+    if (storyCardEl) {
+      storyCardEl.style.animation = "none";
+      storyCardEl.offsetHeight; // trigger reflow
+      storyCardEl.style.animation = "scrollyCardFadeIn 0.5s ease forwards";
+    }
+  }
+
+  function setupStoryHUD() {
+    container = document.getElementById("assembly-3d-viewport");
+    if (!container) return;
+
+    // Check if HUD already exists
+    let hud = document.getElementById("scrolly-lifestyle-hud");
+    if (!hud) {
+      hud = document.createElement("div");
+      hud.id = "scrolly-lifestyle-hud";
+      hud.className = "scrolly-lifestyle-hud";
+      hud.innerHTML = `
+        <!-- Top Timeline Stepper Bar -->
+        <div class="scrolly-top-stepper">
+          <div class="scrolly-step-pill active" data-step="0">
+            <span class="step-num">01</span>
+            <span class="step-label">08:30 Sáng tạo</span>
+          </div>
+          <div class="scrolly-step-pill" data-step="1">
+            <span class="step-num">02</span>
+            <span class="step-label">17:45 Hoàng hôn</span>
+          </div>
+          <div class="scrolly-step-pill" data-step="2">
+            <span class="step-num">03</span>
+            <span class="step-label">20:30 Thư giãn</span>
+          </div>
+          <div class="scrolly-step-pill" data-step="3">
+            <span class="step-num">04</span>
+            <span class="step-label">Đồng hành</span>
+          </div>
+        </div>
+
+        <!-- Floating Lifestyle Story Card -->
+        <div class="scrolly-story-card" id="scrolly-story-card">
+          <div class="story-card-inner">
+            <div class="scrolly-badge-row">
+              <span class="scrolly-pulse-dot"></span>
+              <span class="scrolly-phase-badge" id="scrolly-phase-badge">08:30 AM • TẬP TRUNG SÁNG TẠO</span>
+            </div>
+            <h2 class="scrolly-story-title" id="scrolly-story-title">Tai nghe AuraSonic ANC Pro X1</h2>
+            <div class="scrolly-story-subtitle" id="scrolly-story-subtitle">Màng loa Beryllium 45mm • Chống ồn thích ứng 50dB</div>
+            <p class="scrolly-story-desc" id="scrolly-story-desc">
+              Tách biệt hoàn toàn tiếng ồn văn phòng hiện đại để bạn đắm chìm vào công việc sáng tạo. Đệm tai memory foam thoáng khí và khung hợp kim nhôm-magie siêu nhẹ cho cảm giác êm ái suốt ngày dài.
+            </p>
+            <div class="scrolly-spec-tags" id="scrolly-spec-tags">
+              <span class="scrolly-spec-tag">Chống ồn 50dB</span>
+              <span class="scrolly-spec-tag">Màng loa Beryllium</span>
+              <span class="scrolly-spec-tag">LDAC Lossless</span>
+              <span class="scrolly-spec-tag">Pin 60 Giờ</span>
+            </div>
+            <a href="product-detail.html?id=aura-anc-pro" class="scrolly-action-btn" id="scrolly-action-btn">Khám phá AuraSonic Pro →</a>
+          </div>
+        </div>
+
+        <!-- Bottom Smooth Progress Indicator -->
+        <div class="scrolly-progress-track">
+          <div class="scrolly-progress-fill" id="scrolly-progress-fill"></div>
+        </div>
+      `;
+      container.appendChild(hud);
+    }
+
+    storyCardEl = document.getElementById("scrolly-story-card");
+    storyPhaseBadgeEl = document.getElementById("scrolly-phase-badge");
+    storyTitleEl = document.getElementById("scrolly-story-title");
+    storySubtitleEl = document.getElementById("scrolly-story-subtitle");
+    storyDescEl = document.getElementById("scrolly-story-desc");
+    storyTagsEl = document.getElementById("scrolly-spec-tags");
+    storyActionBtnEl = document.getElementById("scrolly-action-btn");
+    stepPillEls = Array.from(document.querySelectorAll(".scrolly-step-pill"));
+    progressBarEl = document.getElementById("scrolly-progress-fill");
+
+    // Click on stepper to smooth scroll with zero jerkiness
+    stepPillEls.forEach((pill, idx) => {
+      pill.addEventListener("click", () => {
+        const sec = document.getElementById("scrolly-masterpiece");
+        if (!sec) return;
+        const targets = [0.05, 0.52, 0.82, 0.98];
+        const secTop = sec.offsetTop;
+        const secHeight = sec.offsetHeight - window.innerHeight;
+        const targetScroll = secTop + secHeight * targets[idx];
+        window.scrollTo({
+          top: targetScroll,
+          behavior: "smooth"
+        });
+        document.documentElement.scrollTop = targetScroll;
+      });
     });
   }
 
   /* =========================================================================
-     4. RENDER LOOP WITH VELVET PARALLAX & PHYSICS INERTIA DAMPING
+     5. RENDER LOOP WITH VELVET PARALLAX & CONTINUOUS DAMPING
      ========================================================================= */
 
   function render() {
@@ -1112,13 +1266,20 @@
       return;
     }
 
-    // Smooth Mouse Parallax Lerp
+    const now = performance.now();
+    const deltaTime = Math.min((now - lastTime) / 1000, 0.1);
+    lastTime = now;
+
+    // Update Live Animated Watch Face (ECG & Heartbeat)
+    updateWatchOLED(deltaTime);
+
+    // Subtle Mouse Parallax Lerp
     mouse.x += (mouse.targetX - mouse.x) * 0.05;
     mouse.y += (mouse.targetY - mouse.y) * 0.05;
 
-    // Smooth Physics Damping on Camera (Awwwards 60-120 FPS Standard)
-    camPosCurrent.x += (camPosTarget.x + mouse.x * 1.8 - camPosCurrent.x) * 0.06;
-    camPosCurrent.y += (camPosTarget.y - mouse.y * 1.4 - camPosCurrent.y) * 0.06;
+    // Smooth Physics Camera Damping (Zero Jerkiness, Awwwards Standard)
+    camPosCurrent.x += (camPosTarget.x + mouse.x * 1.2 - camPosCurrent.x) * 0.06;
+    camPosCurrent.y += (camPosTarget.y - mouse.y * 0.8 - camPosCurrent.y) * 0.06;
     camPosCurrent.z += (camPosTarget.z - camPosCurrent.z) * 0.06;
 
     camLookCurrent.x += (camLookTarget.x - camLookCurrent.x) * 0.06;
@@ -1128,19 +1289,18 @@
     camera.position.copy(camPosCurrent);
     camera.lookAt(camLookCurrent);
 
-    // Subtle ambient particle floating rotation
-    if (particleSystem) {
-      particleSystem.rotation.y = Date.now() * 0.00012;
+    // Living Room Sunbeam Motes subtle gentle drift
+    if (sunbeamSystem) {
+      sunbeamSystem.rotation.y = now * 0.00004;
     }
 
-    // Subtle pedestal laser rings breathing
-    if (pedestalGroup) {
-      pedestalGroup.rotation.y = Date.now() * 0.00008;
+    // Subtle natural breathing of products
+    const breathe = Math.sin(now * 0.0015) * 0.03;
+    if (headphonesGroup && currentProgress <= 0.35) {
+      headphonesGroup.position.y += breathe * 0.02;
     }
-
-    // Energy conduit subtle rotation pulse
-    if (energyConduitMesh) {
-      energyConduitMesh.rotation.y = Date.now() * 0.0001;
+    if (watchGroup && currentProgress > 0.35 && currentProgress <= 0.70) {
+      watchGroup.position.y += breathe * 0.02;
     }
 
     renderer.render(scene, camera);
@@ -1148,13 +1308,13 @@
   }
 
   /* =========================================================================
-     5. GSAP SCROLLTRIGGER (1150vh PURE SCROLL DRIVEN)
+     6. GSAP SCROLLTRIGGER (CONTINUOUS SCRUBBING)
      ========================================================================= */
 
   function bindScrollTrigger() {
     const section = document.getElementById("scrolly-masterpiece");
     if (!section || typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
-      console.warn("GSAP ScrollTrigger not ready for 3D Assembly Engine.");
+      console.warn("GSAP ScrollTrigger not ready for Lifestyle Scrollytelling.");
       return;
     }
 
@@ -1162,7 +1322,7 @@
       trigger: section,
       start: "top top",
       end: "bottom bottom",
-      scrub: 1.8,
+      scrub: 1.4, // Buttery smooth inertial lag
       anticipatePin: 1,
       onUpdate: (self) => {
         setStageProgress(self.progress);
@@ -1171,7 +1331,6 @@
   }
 
   function bindUserInteractions() {
-    // Mouse Move for subtle 3D Specular Parallax
     window.addEventListener("mousemove", (e) => {
       mouse.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
       mouse.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
@@ -1179,7 +1338,7 @@
   }
 
   /* =========================================================================
-     6. INITIALIZATION & RESIZE HANDLING
+     7. INITIALIZATION & RESIZE HANDLING
      ========================================================================= */
 
   function init() {
@@ -1187,22 +1346,28 @@
     if (!container) return;
 
     if (typeof THREE === "undefined") {
-      console.error("Three.js not loaded. Cannot start 3D Assembly Engine.");
+      console.error("Three.js not loaded. Cannot start 3D Scrollytelling.");
       return;
     }
 
-    // Create Scene with Atmospheric Fog
+    // Remove any old canvas
+    const oldCanvas = container.querySelector(".assembly-3d-canvas");
+    if (oldCanvas) {
+      oldCanvas.remove();
+    }
+
+    // Create Scene with Warm Daylight Fog (Soft depth falloff, NO cosmic black)
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x04070d, 0.018);
+    scene.fog = new THREE.FogExp2(0x131a28, 0.015);
 
     // Create Camera
     const width = container.clientWidth || window.innerWidth;
     const height = container.clientHeight || window.innerHeight;
-    camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 120);
+    camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 120);
     camera.position.copy(camPosCurrent);
     camera.lookAt(camLookCurrent);
 
-    // Create WebGL Renderer with High-End ACES Filmic Tone Mapping
+    // Create WebGL Renderer with ACES Filmic Tone Mapping & Soft Shadows
     renderer = new THREE.WebGLRenderer({
       powerPreference: "high-performance",
       antialias: true,
@@ -1211,7 +1376,7 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     renderer.setSize(width, height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.3;
+    renderer.toneMappingExposure = 1.25;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -1220,25 +1385,33 @@
     canvas.className = "assembly-3d-canvas";
     container.insertBefore(canvas, container.firstChild);
 
-    // Build All 3 Ultra-Modern 2026 Devices & Environment
+    // Setup Dynamic Canvases & Materials
+    initWatchOLED();
+    createPhoneScreen();
+
+    // Build Environment & All Real-World Tangible Flagships
     setupLighting();
     buildEnvironment();
-    buildPhone();
     buildHeadphones();
-    buildSpeaker();
+    buildSmartwatch();
+    buildPhoneAndSpeaker();
+
+    // Mount Real-World Story Narrative HUD
+    setupStoryHUD();
 
     // Set Initial State (Progress 0)
     setStageProgress(0);
 
-    // Bind GSAP ScrollTrigger & Mouse Parallax
+    // Bind GSAP ScrollTrigger & Parallax
     bindScrollTrigger();
     bindUserInteractions();
 
-    // IntersectionObserver to pause rendering when offscreen
+    // Visibility Observer
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         isVisible = entry.isIntersecting;
         if (isVisible && !animationFrameId) {
+          lastTime = performance.now();
           render();
         }
       });
@@ -1256,6 +1429,7 @@
     });
 
     // Start render loop
+    lastTime = performance.now();
     render();
   }
 
